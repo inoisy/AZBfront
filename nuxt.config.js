@@ -1,0 +1,142 @@
+const pkg = require('./package')
+const backendUrl = process.env.BACKEND_URL || "http://localhost:1337/"
+
+module.exports = {
+  mode: 'universal',
+  // router: {
+  // routes: [{
+  //   name: "catalog-category-subCategory-filter",
+  //   path: "/catalog/:category/:subCategory/:filter",
+  //   component: "pages/catalog/_category/_subCategory/index.vue"
+  // }],
+  // extendRoutes(nuxtRoutes, resolve) {
+  //   nuxtRoutes.splice(0, nuxtRoutes.length, ...routes.map((route) => {
+  //     return {
+  //       ...route,
+  //       component: resolve(__dirname, route.component)
+  //     }
+  //   }))
+  // },
+  // },
+  // routes: [{
+  //   path: '/about-us',
+  //   name: 'about_us',
+  //   component: 'pages/aboutus',
+  //   alias: [
+  //     '/qui-sommes-nous',
+  //     '/quienes-somos'
+  //   ]
+  // }, {
+  //   path: '/about-us/:id',
+  //   name: 'about_us-id',
+  //   component: 'pages/aboutus-id',
+
+  // }],
+  env: {
+    baseUrl: backendUrl,
+    imageBaseUrl: process.env.IMAGE_BASE_URL || "http://localhost:1337"
+    //  imageBaseUrl: imageBaseUrl,
+    //  formFrom: process.env.FORM_FROM || 'hydroservice24ru@gmail.com',
+  },
+  /*
+   ** Headers of the page
+   */
+  head: {
+    title: pkg.name,
+    meta: [{
+        charset: 'utf-8'
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: pkg.description
+      }
+    ],
+    link: [{
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/favicon.ico'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&amp;subset=cyrillic'
+      }, {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css?family=Material+Icons'
+      }
+    ]
+  },
+
+  /*
+   ** Customize the progress-bar color
+   */
+  loading: {
+    color: '#fff'
+  },
+
+  /*
+   ** Global CSS
+   */
+  css: [
+    '~/assets/style/app.styl'
+  ],
+
+  /*
+   ** Plugins to load before mounting the App
+   */
+  plugins: [
+    '@/plugins/vuetify',
+    '@/plugins/debounce',
+    '@/plugins/instant',
+    // [, {
+    //   ssr: false
+    // }],
+    // {
+    //   src: '@/plugins/affix',
+    //   ssr: false
+    // },
+  ],
+
+  /*
+   ** Nuxt.js modules
+   */
+  modules: [
+    // Doc: https://github.com/nuxt-community/axios-module#usage
+    '@nuxtjs/axios',
+    '@nuxtjs/apollo'
+  ],
+  /*
+   ** Axios module configuration
+   */
+  axios: {
+    // See https://github.com/nuxt-community/axios-module#options
+  },
+  apollo: {
+
+    errorHandler(error) {
+      console.log('%cError', 'background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;', error.message)
+    },
+    clientConfigs: {
+      default: {
+        httpEndpoint: backendUrl + 'graphql',
+
+      },
+
+    }
+  },
+  /*
+   ** Build configuration
+   */
+  build: {
+    /*
+     ** You can extend webpack config here
+     */
+    extend(config, ctx) {
+
+    }
+  }
+}
