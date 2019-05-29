@@ -1,14 +1,14 @@
 <template>
   <div>
     <section class="grey lighten-2">
-      <v-container>
+      <v-container id="main-wrapper">
         <breadcrumbs class="pl-1 mb-4" :items="breadcrumbs"/>
         <!-- {{manufacturerCurr}} -->
         <h1 class="display-5 mb-5 font-weight-bold">{{category.name }}</h1>
       </v-container>
     </section>
     <v-container class="pt-5 d-flex">
-      <v-layout class="d-flex all-wrapper">
+      <v-layout class="d-flex all-wrapper" id="contentWrapper">
         <div class="menu-wrapper" v-if="showFilters || manufacturers && manufacturers.length>1">
           <sticky-menu class="menu-child">
             <slot>
@@ -235,6 +235,9 @@ export default {
     };
   },
   computed: {
+    headerHeight() {
+      return this.$vuetify.breakpoint.mdAndUp ? 140 : 80;
+    },
     showFilters() {
       return Object.keys(this.category.filters).length > 0;
     },
@@ -285,6 +288,9 @@ export default {
   },
   watch: {
     async manufacturerSelected(val) {
+      // await this.$vuetify.goTo("#contentWrapper", {
+      //   offset: this.headerHeight
+      // });
       const manufacturer = this.manufacturers.find(item => item.id === val);
 
       await this.$store.dispatch("fetchProducts", {
@@ -310,6 +316,14 @@ export default {
       }
     },
     async pageCurr(val) {
+      await this.$vuetify.goTo("#contentWrapper", {
+        offset: this.headerHeight
+      });
+
+      // console.log(
+      //   "TCL: pageCurr -> this.$vuetify",
+      //   this.$vuetify.goTo("#main-wrapper")
+      // );
       await this.$store.dispatch("fetchProducts", {
         categoryId: this.category.id,
         filters: this.dataFilters,
@@ -347,6 +361,10 @@ export default {
       this.manufacturerSelected = null;
     },
     async checkboxChange() {
+      // await this.$vuetify.goTo("#contentWrapper", {
+      //   offset: this.headerHeight
+      // });
+
       await this.$store.commit("filters", this.dataFilters);
       this.pageCurr = 1;
       await this.$store.dispatch("fetchProducts", {

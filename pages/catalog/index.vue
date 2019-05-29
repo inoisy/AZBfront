@@ -23,12 +23,8 @@
               <h2 class="display-3 font-weight-bold" style="padding-right:56px;">{{item.name}}</h2>
               <p>{{item.description}}</p>
 
-              <div class="img-wrapper pa-2">
-                <img
-                  v-if="item.img && item.img.url"
-                  :src="imageBaseUrl+item.img.url"
-                  class="d-block ma-auto"
-                >
+              <div class="img-wrapper pa-2" v-if="item.img && item.img.url">
+                <img :src="imageBaseUrl+item.img.url" class="d-block ma-auto">
               </div>
               <!-- </div> -->
             </v-card>

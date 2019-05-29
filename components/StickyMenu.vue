@@ -55,7 +55,8 @@ export default {
       this.sidebar.marginBottom =
         this.sidebar.innerHeight -
         (this.sidebar.clientRect + elem.offsetHeight) +
-        this.sidebar.toolbarHeight;
+        this.sidebar.toolbarHeight +
+        20;
     },
     onScroll() {
       this.sidebar.windowScrollTop =

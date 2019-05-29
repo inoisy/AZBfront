@@ -32,27 +32,68 @@
         </div>
       </div>
       <div class="toolbar-bottom">
-        <v-btn to="/" class="fill-height logo-link ma-0 py-2 ml-2" color="transparent" flat>
+        <v-btn
+          :class="searchActive ? 'hidden-sm-and-down' : ''"
+          to="/"
+          class="fill-height logo-link ma-0 py-2 ml-2"
+          color="transparent"
+          flat
+        >
           <img class="logo-img d-block" :src="require('~/assets/azblogo.png')">
         </v-btn>
-        <v-spacer></v-spacer>
-        <autocomplete-search class/>
-        <div class="hidden-md-and-down fill-height ml-3">
-          <v-btn
-            class="fill-height ma-0"
-            v-for="item in menuItems"
-            :key="item.name"
-            ripple
-            :to="item.to"
-            nuxt
-            flat
-          >{{item.name}}</v-btn>
-        </div>
+        <v-spacer v-if="!searchActive"></v-spacer>
+        <v-btn v-if="!searchActive" @click="searchActive=true" class icon>
+          <v-icon>search</v-icon>
+        </v-btn>
+        <autocomplete-search v-if="searchActive" @searchChange="searchActive=$event"/>
+        <v-btn v-if="searchActive" icon @click="searchActive = false">
+          <v-icon>close</v-icon>
+        </v-btn>
+        <div v-if="!searchActive" class="hidden-md-and-down fill-height ml-3" style="display:flex">
+          <template v-for="(item,index) in menuItems">
+            <v-menu
+              :key="index"
+              v-if="item.items && item.items.length>0"
+              class="fill-height"
+              style="display:flex"
+              open-on-hover
+              offset-y
+              left
+              transition="slide-y-transition"
+            >
+              <v-btn class="fill-height ma-0 header-link" slot="activator" flat nuxt :to="item.to">
+                {{item.name}}
+                <v-icon>arrow_drop_down</v-icon>
+              </v-btn>
 
-        <v-btn class="toolbar-top-btn ml-2 hidden-md-and-up" icon>
+              <v-list>
+                <v-list-tile
+                  v-for="(child, index) in item.items"
+                  :key="index"
+                  nuxt
+                  :to="`${item.to}/${child.slug}`"
+                >
+                  <!-- :to="item.forms && item.forms.length > 0 ? localePath({ name: 'catalog-slug', params: { slug: item.forms[0].slug } }) :  localePath({ name: 'about-slug', params: { slug: item.slug } })" -->
+
+                  <v-list-tile-title>{{ child.name }}</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+            <v-btn
+              v-else
+              flat
+              nuxt
+              exact
+              :key="index"
+              class="ma-0 fill-height header-link"
+              :to="item.to"
+            >{{item.name}}</v-btn>
+          </template>
+        </div>
+        <v-btn v-if="!searchActive" class="toolbar-top-btn ml-2 hidden-md-and-up" icon>
           <v-icon class style="color:currentcolor">phone</v-icon>
         </v-btn>
-        <v-btn icon class="ml-2 hidden-lg-and-up mr-3" @click="drawer=!drawer">
+        <v-btn v-if="!searchActive" icon class="ml-2 hidden-lg-and-up mr-3" @click="drawer=!drawer">
           <v-icon>menu</v-icon>
         </v-btn>
       </div>
@@ -87,29 +128,39 @@
           >{{item.name}}</v-btn>
         </v-layout>
         <v-layout row wrap class="mb-4">
-          <v-flex xs12 sm4 class="contact-wrapper px-3 display-flex align-center">
-            <div class="icon-wrapper">
-              <!-- <img class :src="require('~/assets/pin.svg')" style> -->
-              <v-icon class="ma-auto" x-large dark>phone</v-icon>
-            </div>
-            <span class="subheading white--text">{{contacts.tel}}</span>
+          <v-flex xs12 md4 class="contact-wrapper px-3 display-flex align-center">
+            <a
+              :href="`tel:${contacts.tel}`"
+              class="contact-link display-flex white--text align-center text-decoration-none link-hover"
+            >
+              <div class="icon-wrapper d-inline-flex">
+                <!-- <img class :src="require('~/assets/pin.svg')" style> -->
+                <v-icon class="ma-auto" size="2rem" dark>phone</v-icon>
+              </div>
+              {{contacts.tel}}
+            </a>
           </v-flex>
-          <v-flex xs12 sm4 class="contact-wrapper px-3 display-flex align-center">
-            <div class="icon-wrapper">
-              <!-- <img class :src="require('~/assets/pin.svg')" style> -->
-              <v-icon class="ma-auto" x-large dark>mail</v-icon>
-            </div>
-            <span class="subheading white--text">{{contacts.mail}}</span>
+          <v-flex xs12 md4 class="contact-wrapper px-3 display-flex align-center">
+            <a
+              :href="`mailto:${contacts.tel}`"
+              class="contact-link display-flex white--text align-center text-decoration-none link-hover"
+            >
+              <div class="icon-wrapper">
+                <!-- <img class :src="require('~/assets/pin.svg')" style> -->
+                <v-icon class="ma-auto" size="2rem" dark>mail</v-icon>
+              </div>
+              {{contacts.mail}}
+            </a>
           </v-flex>
-          <v-flex xs12 sm4 class="contact-wrapper px-3 display-flex align-center">
+          <v-flex xs12 md4 class="contact-wrapper px-3 display-flex align-center">
             <div class="icon-wrapper">
               <!-- <img class :src="require('~/assets/pin.svg')" style> -->
-              <v-icon class="ma-auto" x-large dark>location_on</v-icon>
+              <v-icon class="ma-auto" size="2rem" dark>location_on</v-icon>
             </div>
-            <span class="subheading white--text">{{contacts.address}}</span>
+            <span class="white--text">{{contacts.address}}</span>
           </v-flex>
         </v-layout>
-        <p class="text-xs-center white--text mb-0">© 2019. Все права защищены.</p>
+        <p class="text-xs-center white--text mb-0">©Азбука Электроснабжения. Все права защищены.</p>
       </v-container>
     </v-footer>
   </v-app>
@@ -118,6 +169,15 @@
 .contact-wrapper {
   flex-direction: row;
   margin-bottom: 24px;
+  color: white;
+
+  .contact-link {
+    &:hover {
+      .icon-wrapper {
+        background: #1f5bff;
+      }
+    }
+  }
 }
 
 .v-input__append-outer {
@@ -138,9 +198,9 @@
 .icon-wrapper {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  width: 65px;
-  min-width: 65px;
-  height: 65px;
+  width: 3.5rem;
+  min-width: 3.5rem;
+  height: 3.5rem;
   display: flex;
   align-items: center;
   margin-right: 1.5rem;
@@ -173,6 +233,7 @@
 .toolbar-bottom {
   width: 100%;
   height: 64px;
+  min-height: 64px;
   justify-content: center;
   align-items: flex-start;
   flex-direction: row;
@@ -218,6 +279,7 @@
   // }
   .toolbar-bottom {
     height: 90px;
+    min-height: 90px;
   }
 
   .v-content {
@@ -281,7 +343,30 @@ export default {
       return this.$store.state.contacts;
     },
     menuItems() {
-      return this.$store.state.menuItems;
+      return [
+        {
+          name: "Главная",
+          to: "/"
+        },
+        {
+          name: "Каталог",
+          to: "/catalog",
+          items: this.$store.state.mainCategories
+        },
+        {
+          name: "Производители",
+          to: "/manufacturers",
+          items: this.$store.state.manufacturers
+        },
+        {
+          name: "О компании",
+          to: "/about"
+        },
+        {
+          name: "Контакты",
+          to: "/contacts"
+        }
+      ];
     },
     isSearchValid() {
       return this.search && this.search.length > 3;
@@ -300,13 +385,6 @@ export default {
           ? this.$store.state.autocompleteSearchItems
           : [];
       return items;
-      // .map(item => {
-      //     item.description =
-      //       item.description.length > this.descriptionLimit
-      //         ? item.description.slice(0, this.descriptionLimit) + "..."
-      //         : item.description;
-      //     return item;
-      //   })
     },
     fields() {
       if (!this.model) return [];
@@ -318,47 +396,12 @@ export default {
         };
       });
     }
-    // items() {
-    //   return this.entries.map(entry => {
-    //     const Description =
-    //       entry.Description.length > this.descriptionLimit
-    //         ? entry.Description.slice(0, this.descriptionLimit) + "..."
-    //         : entry.Description;
-
-    //     return Object.assign({}, entry, { Description });
-    //   });
-    // }
   },
   data() {
     return {
-      descriptionLimit: 50,
-      entries: [],
-      // isLoading: false,
-
       drawer: false,
-      active: null
-      // menuItems: [
-      //   {
-      //     name: "Главная",
-      //     to: "/"
-      //   },
-      //   {
-      //     name: "Каталог",
-      //     to: "/catalog"
-      //   },
-      //   {
-      //     name: "Производители",
-      //     to: "/manufacturers"
-      //   },
-      //   {
-      //     name: "О компании",
-      //     to: "/about"
-      //   },
-      //   {
-      //     name: "Контакты",
-      //     to: "/contacts"
-      //   }
-      // ]
+
+      searchActive: false
     };
   }
 };

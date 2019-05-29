@@ -2,7 +2,13 @@
   <div>
     <section class="main-wrapper" :style="`background-image:url(${require('~/assets/bg1.jpg')})`">
       <!--:style="item.img && item.img.url ? `background-image:url(${imageBaseUrl+item.img.url})` : ''" -->
-      <v-carousel hide-delimiters height="35rem" light :cycle="false">
+      <v-carousel
+        hide-delimiters
+        height="35rem"
+        light
+        :cycle="false"
+        v-if="sliders && sliders.length > 0"
+      >
         <v-carousel-item
           v-for="(item,i) in sliders"
           :key="i"
@@ -36,6 +42,14 @@
           </v-container>
         </v-carousel-item>
       </v-carousel>
+      <div v-else>
+        <v-container fill-height>
+          <v-layout row wrap align-center class="text-xs-center">
+            <h1 class="display-3 font-weight-bold w-100">{{title}}</h1>
+            <p class="display-1">{{description}}</p>
+          </v-layout>
+        </v-container>
+      </div>
     </section>
     <section>
       <v-container class="py-5" grid-list-lg>
@@ -53,12 +67,8 @@
               ripple
             >
               <nuxt-link :to="`/catalog/${item.slug}`" class="catalog-link" style>
-                <div class="img-wrapper pa-2">
-                  <img
-                    v-if="item.img"
-                    class="catalog-link-img d-block ma-auto"
-                    :src="imageBaseUrl+item.img.url"
-                  >
+                <div class="img-wrapper pa-2" v-if="item.img">
+                  <img class="catalog-link-img d-block ma-auto" :src="imageBaseUrl+item.img.url">
                 </div>
 
                 <div class="pl-3 catalog-link-text font-weight-medium" style>{{item.name}}</div>
@@ -96,16 +106,12 @@
         </v-layout>
       </v-container>
     </section>
-    <section>
+    <section v-if="sliders.length>0">
       <v-container class="py-5">
         <v-layout row wrap>
           <v-flex xs12>
-            <h1
-              class="display-3 font-weight-bold"
-            >Электротехника и электрооборудование со склада и на заказ!</h1>
-            <p
-              class="display-1"
-            >Компания Азбука Электроснабжения — авторизованный дистрибьютор . Мы занимаемся продажей оборудования EATON, ETI, ..... и поддержкой своих клиентов через квалифицированные консультации по возможностям оборудования и его применению. Мы занимаемся продажей блоков питания,</p>
+            <h1 class="display-3 font-weight-bold">{{title}}</h1>
+            <p class="display-1">{{description}}</p>
             <v-btn color="#1F5BFF" outline class="ml-0">О компании</v-btn>
           </v-flex>
           <!-- <v-flex xs2 class="px-2 pt-2">
@@ -195,7 +201,7 @@
 }
 
 .main-wrapper {
-  // height: 40rem;
+  min-height: 35rem;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -233,12 +239,15 @@ export default {
       imageBaseUrl: process.env.imageBaseUrl,
       loading: false,
       search: null,
-      select: null
+      select: null,
+      title: "Электротехника и электрооборудование со склада и на заказ!",
+      description:
+        "омпания Азбука Электроснабжения — авторизованный дистрибьютор . Мы занимаемся продажей оборудования EATON, ETI, ..... и поддержкой своих клиентов через квалифицированные консультации по возможностям оборудования и его применению. Мы занимаемся продажей блоков питания,"
     };
   },
   async asyncData(ctx) {
     let client = ctx.app.apolloProvider.defaultClient;
-    const { data: categoriesData } = await client.query({
+    const { data: pageData } = await client.query({
       query: gql`
         {
           sliders {
@@ -250,18 +259,18 @@ export default {
               url
             }
           }
-          manufacturers {
-            id
-            name
-            slug
-            description
-            img {
-              url
-            }
-          }
         }
       `
     });
+    //  manufacturers {
+    //       id
+    //       name
+    //       slug
+    //       description
+    //       img {
+    //         url
+    //       }
+    //     }
     // console.log("TCL: categories", categoriesData);
     // const categories = [
     //   {
@@ -269,16 +278,20 @@ export default {
     //   }
     // ];
     await ctx.store.dispatch("fetchMainCategories");
+    await ctx.store.dispatch("fetchManufacturers");
     // console.log("TCL: data", data);
     return {
       // categories: categoriesData.categories, //categoriesData.categories
-      manufacturers: categoriesData.manufacturers,
-      sliders: categoriesData.sliders
+      // manufacturers: categoriesData.manufacturers,
+      sliders: pageData.sliders
     };
   },
   computed: {
     categories() {
       return this.$store.state.mainCategories;
+    },
+    manufacturers() {
+      return this.$store.state.manufacturers;
     }
   },
   watch: {

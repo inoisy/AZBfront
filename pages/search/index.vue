@@ -50,10 +50,19 @@
             </v-flex>
             <v-divider vertical class="mx-3"></v-divider>
             <v-flex class="display-1">
-              <!-- {{item._source}} -->
-              <h2 class="display-2 mb-3 mt-1">{{item._source.name}}</h2>
-              <p class="grey--text">Артикул: {{item._source.SKU}}</p>
-              <p>{{item._source.description}}</p>
+              <h2
+                class="display-2 mb-3 mt-1"
+                v-html="item.highlight.name && item.highlight.name.length > 0 ? item.highlight.name[0] : item._source.name"
+              ></h2>
+              <p class="grey--text">
+                Артикул:
+                <span
+                  v-html="item.highlight.SKU && item.highlight.SKU.length > 0 ? item.highlight.SKU[0] : item._source.SKU"
+                ></span>
+              </p>
+              <p
+                v-html="item.highlight.description && item.highlight.description.length > 0 ? item.highlight.description[0] : item._source.description"
+              ></p>
             </v-flex>
           </v-card>
         </v-flex>

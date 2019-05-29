@@ -3,7 +3,8 @@ const baseUrl = process.env.baseUrl
 export const state = () => ({
   autocompleteSearchItems: [],
   search: {
-    query: null
+    query: null,
+    active: false,
   },
   searchItems: [],
   products: [],
@@ -19,27 +20,28 @@ export const state = () => ({
     mail: "mail@azb-es.ru",
     address: "г. Москва Загородное шоссе дом 1 корпус 2 офис 212"
   },
-  menuItems: [{
-      name: "Главная",
-      to: "/"
-    },
-    {
-      name: "Каталог",
-      to: "/catalog"
-    },
-    {
-      name: "Производители",
-      to: "/manufacturers"
-    },
-    {
-      name: "О компании",
-      to: "/about"
-    },
-    {
-      name: "Контакты",
-      to: "/contacts"
-    }
-  ]
+  // menuItems: [{
+  //     name: "Главная",
+  //     to: "/"
+  //   },
+  //   {
+  //     name: "Каталог",
+  //     to: "/catalog"
+  //   },
+  //   {
+  //     name: "Производители",
+  //     to: "/manufacturers"
+  //   },
+  //   {
+  //     name: "О компании",
+  //     to: "/about"
+  //   },
+  //   {
+  //     name: "Контакты",
+  //     to: "/contacts"
+  //   }
+  // ]
+
   // catalog: {
   //   manufacturerSelected: null
   // }
@@ -49,6 +51,9 @@ export const mutations = {
   // catalog(state, prop, item) {
   //   state[prop] = item
   // },
+  search(state, search) {
+    state.search = search
+  },
   search(state, search) {
     state.search = search
   },
@@ -84,9 +89,9 @@ export const mutations = {
 export const strict = false
 export const actions = {
   async fetchManufacturers(ctx) {
-    let client = ctx.app.apolloProvider.defaultClient;
+    let client = this.app.apolloProvider.defaultClient;
     const {
-      data: ManufacturerData
+      data: manufacturerData
     } = await client.query({
       query: gql `
         {
@@ -98,22 +103,24 @@ export const actions = {
         }
         `
     });
+    const manufacturers = manufacturerData.manufacturers
     // console.log("TCL: fetchManufacturers -> ManufacturerData", ManufacturerData)
-    return ManufacturerData
+    await ctx.commit('manufacturers', manufacturers)
+    return manufacturers
     //    const {
     //      data
-    //    } = await this.$axios.get(baseUrl + 'categories/main')
-    //    console.log("TCL: fetchMainCategories -> baseUrl + 'categories/main'", baseUrl + 'categories/main')
+    //    } = await this.$axios.get( 'categories/main')
+    //    console.log("TCL: fetchMainCategories ->  'categories/main'",  'categories/main')
     //    // console.log('fetchMainCategories', data)
-    //    await ctx.commit('mainCategories', data)
+    //  
 
     //    return data
   },
   async fetchMainCategories(ctx) {
     const {
       data
-    } = await this.$axios.get(baseUrl + 'categories/main')
-    // console.log("TCL: fetchMainCategories -> baseUrl + 'categories/main'", baseUrl + 'categories/main')
+    } = await this.$axios.get('categories/main')
+    // console.log("TCL: fetchMainCategories ->  'categories/main'",  'categories/main')
     // console.log('fetchMainCategories', data)
     await ctx.commit('mainCategories', data)
 
@@ -192,7 +199,7 @@ export const actions = {
     const {
       data: returnData
     } = await this.$axios.post(
-      baseUrl + "products/search",
+      "products/search",
       query
     );
 
@@ -209,7 +216,8 @@ export const actions = {
   },
   async autocompleteSearch(ctx, input) {
     // console.log("TCL: autocompleteSearch -> input", input)
-    ctx.commit('loading', true)
+    await ctx.commit('loading', true)
+    await ctx.commit("autocompleteSearchItems", []);
     const query = {
       size: 10,
       from: 0,
@@ -217,17 +225,39 @@ export const actions = {
         multi_match: {
           query: input,
           fields: ["SKU", "description", "name"],
-          "fuzziness": "4"
+          "fuzziness": "AUTO"
         }
+      },
+      highlight: {
+        pre_tags: ["<span class='highlight'>"],
+        post_tags: ["</span>"],
+        fields: [{
+            "SKU": {}
+          },
+          {
+            "name": {}
+          },
+          {
+            "description": {}
+          }
+        ]
       }
     };
     const {
       data
     } = await this.$axios.post(
-      baseUrl + "products/search",
+      "products/search",
       query
     );
-    const items = data.hits.map(item => item._source)
+    console.log("TCL: autocompleteSearch -> data", data)
+
+    const items = data.hits.map(item => {
+      const highlight = item.highlight
+      return {
+        ...item._source,
+        highlight
+      }
+    })
     await ctx.commit("autocompleteSearchItems", items);
     await ctx.commit('loading', false)
     return items
@@ -238,13 +268,28 @@ export const actions = {
     // console.log("hello from actions", ctx)
 
     const nameQuery = {
+      highlight: {
+        pre_tags: ["<span class='highlight'>"],
+        post_tags: ["</span>"],
+        fields: [{
+            "SKU": {}
+          },
+          {
+            "name": {}
+          },
+          {
+            "description": {}
+          }
+        ]
+      },
       size: 20,
       from: 0,
       query: {
         multi_match: {
           query: input,
           fields: ["SKU", "description", "name"],
-          "fuzziness": "AUTO"
+          "fuzziness": "AUTO",
+
         }
       }
     };
@@ -263,7 +308,7 @@ export const actions = {
     const {
       data: nameData
     } = await this.$axios.post(
-      baseUrl + "products/search",
+      "products/search",
       nameQuery
     );
     if (nameData.hits.length === 0) {
@@ -324,7 +369,7 @@ export const actions = {
 // const {
 //   data
 // } = await this.$axios.post(
-//   baseUrl + "products/search",
+//    "products/search",
 //   query
 // );
 // returnData = data

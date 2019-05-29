@@ -1,6 +1,6 @@
 const pkg = require('./package')
-const backendUrl = process.env.BACKEND_URL || "http://localhost:1337/"
-
+const backendUrl = process.env.BACKEND_URL || "http://yakutov.com"
+const imageBaseUrl = process.env.IMAGE_BASE_URL || "http://yakutov.com"
 module.exports = {
   mode: 'universal',
   // router: {
@@ -34,7 +34,7 @@ module.exports = {
   // }],
   env: {
     baseUrl: backendUrl,
-    imageBaseUrl: process.env.IMAGE_BASE_URL || "http://localhost:1337"
+    imageBaseUrl: imageBaseUrl
     //  imageBaseUrl: imageBaseUrl,
     //  formFrom: process.env.FORM_FROM || 'hydroservice24ru@gmail.com',
   },
@@ -114,6 +114,7 @@ module.exports = {
    */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+    baseURL: backendUrl
   },
   apollo: {
 
@@ -122,7 +123,7 @@ module.exports = {
     },
     clientConfigs: {
       default: {
-        httpEndpoint: backendUrl + 'graphql',
+        httpEndpoint: backendUrl + '/graphql',
 
       },
 
