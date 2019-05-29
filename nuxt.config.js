@@ -1,6 +1,6 @@
 const pkg = require('./package')
-const backendUrl = process.env.BACKEND_URL || "http://yakutov.com"
-const imageBaseUrl = process.env.IMAGE_BASE_URL || "http://yakutov.com"
+const backendUrl = process.env.BACKEND_URL || "http://api.yakutov.com"
+const imageBaseUrl = process.env.IMAGE_BASE_URL || "http://api.yakutov.com"
 module.exports = {
   mode: 'universal',
   // router: {
