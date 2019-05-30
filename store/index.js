@@ -99,6 +99,9 @@ export const actions = {
             id
             name
             slug
+            img{
+              url
+            }
           }
         }
         `
