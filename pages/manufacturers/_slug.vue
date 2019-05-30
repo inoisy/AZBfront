@@ -34,7 +34,7 @@
               <div v-for="child in item.items" :key="child.id">
                 <nuxt-link
                   class="display-2 text-decoration-none link-hover mb-1 d-inline-block"
-                  :to="{path:`/catalog/${item.element.slug}/${child.slug}`,query:{manufacturer:manufacturer.slug}}"
+                  :to="`/catalog/${item.element.slug}/${child.slug}/${manufacturer.slug}`"
                 >{{child.name}}</nuxt-link>
               </div>
             </div>
