@@ -166,7 +166,6 @@
   </div>
 </template>
 <style lang="stylus" scoped>
-$menuWidth = 20rem;
 
 .all-wrapper {
   flex-direction: column;
@@ -194,8 +193,8 @@ $menuWidth = 20rem;
     flex-direction: row;
 
     .menu-wrapper {
-      width: $menuWidth;
-      min-width: $menuWidth;
+      width: 20rem;
+      min-width: 20rem;
       margin-bottom: 0;
 
       // padding-right: 16px;
@@ -205,7 +204,7 @@ $menuWidth = 20rem;
     }
 
     .content-wrapper {
-      width: calc(100% - $menuWidth);
+      width: calc(100% - 20rem);
     }
   }
 }

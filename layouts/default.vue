@@ -128,10 +128,10 @@
           >{{item.name}}</v-btn>
         </v-layout>
         <v-layout row wrap class="mb-4">
-          <v-flex xs12 md4 class="contact-wrapper px-3 display-flex align-center">
+          <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
             <a
               :href="`tel:${contacts.tel}`"
-              class="contact-link display-flex white--text align-center text-decoration-none link-hover"
+              class="contact-link display-flex white--text align-center text-decoration-none link-hover text-xs-left text-md-center"
             >
               <div class="icon-wrapper d-inline-flex">
                 <!-- <img class :src="require('~/assets/pin.svg')" style> -->
@@ -140,10 +140,10 @@
               {{contacts.tel}}
             </a>
           </v-flex>
-          <v-flex xs12 md4 class="contact-wrapper px-3 display-flex align-center">
+          <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
             <a
               :href="`mailto:${contacts.tel}`"
-              class="contact-link display-flex white--text align-center text-decoration-none link-hover"
+              class="contact-link display-flex white--text align-center text-decoration-none link-hover text-xs-left text-md-center"
             >
               <div class="icon-wrapper">
                 <!-- <img class :src="require('~/assets/pin.svg')" style> -->
@@ -152,12 +152,21 @@
               {{contacts.mail}}
             </a>
           </v-flex>
-          <v-flex xs12 md4 class="contact-wrapper px-3 display-flex align-center">
-            <div class="icon-wrapper">
-              <!-- <img class :src="require('~/assets/pin.svg')" style> -->
+          <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
+            <a
+              @click="handleMap"
+              class="contact-link display-flex white--text align-center text-decoration-none link-hover text-xs-left text-md-center"
+            >
+              <div class="icon-wrapper">
+                <!-- <img class :src="require('~/assets/pin.svg')" style> -->
+                <v-icon class="ma-auto" size="2rem" dark>location_on</v-icon>
+              </div>
+              {{contacts.address}}
+            </a>
+            <!-- <div class="icon-wrapper">
               <v-icon class="ma-auto" size="2rem" dark>location_on</v-icon>
             </div>
-            <span class="white--text">{{contacts.address}}</span>
+            <span class="white--text">{{contacts.address}}</span>-->
           </v-flex>
         </v-layout>
         <p class="text-xs-center white--text mb-0">©Азбука Электроснабжения. Все права защищены.</p>
@@ -167,11 +176,11 @@
 </template>
 <style lang="stylus" >
 .contact-wrapper {
-  flex-direction: row;
-  margin-bottom: 24px;
-  color: white;
-
   .contact-link {
+    flex-direction: row;
+    margin-bottom: 24px;
+    color: white;
+
     &:hover {
       .icon-wrapper {
         background: #1f5bff;
@@ -266,12 +275,17 @@
 
 @media (min-width: 960px) {
   .contact-wrapper {
-    flex-direction: column;
-  }
+    align-items: flex-start;
+    justify-content: center;
 
-  .icon-wrapper {
-    margin-bottom: 1.5rem;
-    margin-right: 0;
+    .contact-link {
+      flex-direction: column;
+
+      .icon-wrapper {
+        margin-bottom: 1.5rem;
+        margin-right: 0;
+      }
+    }
   }
 
   // .toolbar-bottom, .toolbar-top-inner {
@@ -395,6 +409,12 @@ export default {
           value: this.model[key] || "n/a"
         };
       });
+    }
+  },
+  methods: {
+    async handleMap() {
+      await this.$router.push("/contacts");
+      await this.$vuetify.goTo("#yandex-map");
     }
   },
   data() {

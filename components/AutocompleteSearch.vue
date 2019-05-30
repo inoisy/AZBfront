@@ -12,18 +12,19 @@
     item-value="SKU"
     placeholder="Поиск по каталогу"
     return-object
-    v-debounce:700ms="throttledMethod"
     no-data-text="Ничего не найдено"
     solo
     flat
     hide-no-data
     hide-selected
     append-icon="none"
-    v-on:keyup.enter="handleSearch"
-    v-on:keyup.esc="$emit('searchChange', false)"
   >
+    <!-- v-on:keyup.esc="$emit('searchChange', false)" -->
+    <!-- v-debounce:700ms="throttledMethod" -->
+    <!-- v-on:keyup.enter="handleSearch" -->
     <template v-slot:item="data">
-      <div @click="$router.push(`/product/${data.item.slug}`); clear()">
+      <div>
+        <!-- @click="$router.push(`/product/${data.item.slug}`); clear()" -->
         <p class="mb-0" style="font-size:14px">
           <span
             v-html="data.item.highlight.name && data.item.highlight.name.length > 0 ? data.item.highlight.name[0] : data.item.name"
@@ -55,7 +56,7 @@
 export default {
   data() {
     return {
-      model: null,
+      model: {},
       search: null,
       showMobileSearch: false
     };
@@ -78,17 +79,17 @@ export default {
           ? this.$store.state.autocompleteSearchItems
           : [];
       return items;
-    },
-    fields() {
-      if (!this.model) return [];
-
-      return Object.keys(this.model).map(key => {
-        return {
-          key,
-          value: this.model[key] || "n/a"
-        };
-      });
     }
+    // fields() {
+    //   if (!this.model) return [];
+
+    //   return Object.keys(this.model).map(key => {
+    //     return {
+    //       key,
+    //       value: this.model[key] || "n/a"
+    //     };
+    //   });
+    // }
     // items() {
     //   return this.entries.map(entry => {
     //     const Description =
@@ -104,7 +105,16 @@ export default {
     async search(val) {
       if (val && val.length <= 3) {
         await this.$store.commit("autocompleteSearchItems", []);
+      } else if (val && val.length > 3) {
+        await this.$store.dispatch("autocompleteSearch", val);
       }
+    },
+    async model(val) {
+      if (Object.keys(val).length > 0 && val.slug) {
+        this.$router.push(`/product/${val.slug}`);
+        this.clear();
+      }
+      console.log("TCL: model -> val", val);
     }
   },
   methods: {
@@ -121,21 +131,21 @@ export default {
     async clear(val) {
       // console.log(val);
       this.search = null;
-      this.model = null;
+      this.model = {};
       // this.$parent.searchActive = false;
       this.$emit("searchChange", false);
       // console.log("TCL: clear -> this.$parent", this.$parent.searchActive);
       await this.$store.commit("autocompleteSearchItems", []);
-    },
-    async throttledMethod(val) {
-      if (val && val.length > 3) {
-        await this.$store.dispatch("autocompleteSearch", val);
-      }
-      // else {
-      // this.search = "";
-      // this.model = "";
-      // }
     }
+    // async autocompleteSearch(val) {
+    //   if (val && val.length > 3) {
+    //     await this.$store.dispatch("autocompleteSearch", val);
+    //   }
+    //   // else {
+    //   // this.search = "";
+    //   // this.model = "";
+    //   // }
+    // }
   }
 };
 </script>

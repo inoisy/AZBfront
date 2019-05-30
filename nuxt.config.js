@@ -107,7 +107,11 @@ module.exports = {
   modules: [
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
-    '@nuxtjs/apollo'
+    '@nuxtjs/apollo', ['vue-yandex-maps/nuxt', { // you may define your apiKey, lang and version or skip this.
+      apiKey: '1f0f5e98-1b55-407d-b09a-60f373e6dcce',
+      lang: 'ru_RU',
+      version: '2.1'
+    }]
   ],
   /*
    ** Axios module configuration
