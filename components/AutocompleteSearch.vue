@@ -18,6 +18,7 @@
     hide-no-data
     hide-selected
     append-icon="none"
+    v-on:keyup.esc="$emit('searchChange', false)"
   >
     <!-- v-on:keyup.esc="$emit('searchChange', false)" -->
     <!-- v-debounce:700ms="throttledMethod" -->

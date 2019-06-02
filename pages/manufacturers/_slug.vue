@@ -29,7 +29,6 @@
           <v-flex xs12>
             <h2>Каталог {{manufacturer.name}}</h2>
             <div v-for="item in categories" :key="item.id">
-              <!-- {{item}} -->
               <v-subheader class="pl-0 text-uppercase mb-2">{{item.element.name}}</v-subheader>
               <div v-for="child in item.items" :key="child.id">
                 <nuxt-link
@@ -56,12 +55,10 @@
           </v-flex>
           <v-flex xs12 md8 class="mb-5 certificate-text-wrap">
             <h2>{{manufacturer.certificate.name}} {{manufacturer.name}}</h2>
-            <!-- <div> -->
             <p>{{manufacturer.certificate.description}}</p>
             <p
               class="mb-0"
             >Срок действия: {{new Date(manufacturer.certificate.expirationDate).toLocaleDateString("ru-RU", { year: 'numeric', month: 'numeric', day: 'numeric' })}}</p>
-            <!-- </div> -->
           </v-flex>
         </v-layout>
       </v-container>
@@ -75,13 +72,24 @@ import Breadcrumbs from "~/components/Breadcrumbs";
 import NavMenu from "~/components/NavMenu";
 
 export default {
+  head() {
+    return {
+      title: this.manufacturer.name,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.manufacturer.description
+        }
+      ]
+    };
+  },
   components: {
     Breadcrumbs,
     NavMenu
   },
   computed: {
     breadcrumbs() {
-      // console.log(this.$route);
       return [
         {
           text: "Главная",
@@ -200,7 +208,6 @@ export default {
     // const newMap = new Map();
     let newObj = {};
     for (let item of manufacturer.categories) {
-      console.log("TCL: item", item);
       if (item.parent && item.parent.length > 0) {
         // newMap.set(item.parent[0].id, { item: item.parent[0] });
 
@@ -214,15 +221,7 @@ export default {
         // newObj[item.parent[0].id].element.push(item);
       }
     }
-    // console.log("TCL: newObj", newObj);
-
-    // console.log("TCL: newMap", newMap);
-    // const objFromMap = { ...newMap };
-
-    // console.log("TCL: objFromMap", objFromMap);
-    // console.log("TCL: newCategories", newCategories);
-    // const manufacturers = ;
-    // console.log("TCL: asyncData -> manufacturersData", manufacturersData);
+    await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
       manufacturer: manufacturer,

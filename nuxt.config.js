@@ -1,48 +1,56 @@
 const pkg = require('./package')
 const backendUrl = process.env.BACKEND_URL || "http://api.yakutov.com"
 const imageBaseUrl = process.env.IMAGE_BASE_URL || "http://api.yakutov.com"
+
+
 module.exports = {
   mode: 'universal',
-  // router: {
-  // routes: [{
-  //   name: "catalog-category-subCategory-filter",
-  //   path: "/catalog/:category/:subCategory/:filter",
-  //   component: "pages/catalog/_category/_subCategory/index.vue"
-  // }],
-  // extendRoutes(nuxtRoutes, resolve) {
-  //   nuxtRoutes.splice(0, nuxtRoutes.length, ...routes.map((route) => {
-  //     return {
-  //       ...route,
-  //       component: resolve(__dirname, route.component)
-  //     }
-  //   }))
-  // },
-  // },
-  // routes: [{
-  //   path: '/about-us',
-  //   name: 'about_us',
-  //   component: 'pages/aboutus',
-  //   alias: [
-  //     '/qui-sommes-nous',
-  //     '/quienes-somos'
-  //   ]
-  // }, {
-  //   path: '/about-us/:id',
-  //   name: 'about_us-id',
-  //   component: 'pages/aboutus-id',
-
-  // }],
   env: {
     baseUrl: backendUrl,
     imageBaseUrl: imageBaseUrl
-    //  imageBaseUrl: imageBaseUrl,
-    //  formFrom: process.env.FORM_FROM || 'hydroservice24ru@gmail.com',
+  },
+  router: {
+    scrollBehavior: async (to, from, savedPosition) => {
+      if (savedPosition) {
+        return savedPosition
+      }
+
+      const findEl = async (hash, x) => {
+        return document.querySelector(hash) ||
+          new Promise((resolve, reject) => {
+            if (x > 50) {
+              return resolve()
+            }
+            setTimeout(() => {
+              resolve(findEl(hash, ++x || 1))
+            }, 100)
+          })
+      }
+
+      if (to.hash) {
+        let el = await findEl(to.hash)
+        if ('scrollBehavior' in document.documentElement.style) {
+          return window.scrollTo({
+            top: el.offsetTop,
+            behavior: 'smooth'
+          })
+        } else {
+          return window.scrollTo(0, el.offsetTop)
+        }
+      }
+
+      return {
+        x: 0,
+        y: 0
+      }
+    }
   },
   /*
    ** Headers of the page
    */
   head: {
-    title: pkg.name,
+    titleTemplate: '%s - Азбука электроснабжения',
+    // title: "Азбука электроснабжения",
     meta: [{
         charset: 'utf-8'
       },
@@ -53,7 +61,7 @@ module.exports = {
       {
         hid: 'description',
         name: 'description',
-        content: pkg.description
+        content: "Электротехника и электрооборудование со склада и на заказ - Азбука электронабжения"
       }
     ],
     link: [{
@@ -92,13 +100,6 @@ module.exports = {
     '@/plugins/vuetify',
     '@/plugins/debounce',
     '@/plugins/instant',
-    // [, {
-    //   ssr: false
-    // }],
-    // {
-    //   src: '@/plugins/affix',
-    //   ssr: false
-    // },
   ],
 
   /*
@@ -116,6 +117,9 @@ module.exports = {
       max: 10000,
       maxAge: 1000 * 60 * 60
     }],
+    // ['vue-scrollto/nuxt', {
+    //   duration: 300
+    // }],
   ],
   /*
    ** Axios module configuration

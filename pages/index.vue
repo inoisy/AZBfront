@@ -234,6 +234,20 @@
 import gql from "graphql-tag";
 
 export default {
+  head() {
+    return {
+      titleTemplate: "",
+      title: "Азбука электронабжения",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content:
+            "Электротехника и электрооборудование со склада и на заказ - Азбука электронабжения"
+        }
+      ]
+    };
+  },
   data() {
     return {
       imageBaseUrl: process.env.imageBaseUrl,
@@ -242,7 +256,7 @@ export default {
       select: null,
       title: "Электротехника и электрооборудование со склада и на заказ!",
       description:
-        "омпания Азбука Электроснабжения — авторизованный дистрибьютор . Мы занимаемся продажей оборудования EATON, ETI, ..... и поддержкой своих клиентов через квалифицированные консультации по возможностям оборудования и его применению. Мы занимаемся продажей блоков питания,"
+        "Компания Азбука Электроснабжения — авторизованный дистрибьютор . Мы занимаемся продажей оборудования EATON, ETI, ..... и поддержкой своих клиентов через квалифицированные консультации по возможностям оборудования и его применению. Мы занимаемся продажей блоков питания,"
     };
   },
   async asyncData(ctx) {
@@ -250,6 +264,21 @@ export default {
     const { data: pageData } = await client.query({
       query: gql`
         {
+          pages(where: { slug: "index" }) {
+            title
+            description
+            slug
+            description
+            content
+          }
+          manufacturers {
+            id
+            name
+            slug
+            img {
+              url
+            }
+          }
           sliders {
             id
             header
@@ -277,22 +306,23 @@ export default {
     //     name: "Автоматические выключатели"
     //   }
     // ];
+    await ctx.store.dispatch("fetchGeneralInfo");
     await ctx.store.dispatch("fetchMainCategories");
-    await ctx.store.dispatch("fetchManufacturers");
+
     // console.log("TCL: data", data);
     return {
       // categories: categoriesData.categories, //categoriesData.categories
-      // manufacturers: categoriesData.manufacturers,
+      manufacturers: pageData.manufacturers,
       sliders: pageData.sliders
     };
   },
   computed: {
     categories() {
       return this.$store.state.mainCategories;
-    },
-    manufacturers() {
-      return this.$store.state.manufacturers;
     }
+    // manufacturers() {
+    //   return this.$store.state.manufacturers;
+    // }
   },
   watch: {
     search(val) {

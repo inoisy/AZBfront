@@ -6,22 +6,8 @@
         <v-flex xs12 md4 class="menu-wrapper mb-4">
           <nav-menu :menuItems="aboutPages"></nav-menu>
         </v-flex>
-        <v-flex xs12 md8 v-for="item in certificates" :key="item.id">
-          <card :item="item" :href="null">
-            <template v-slot:subheader>
-              <p class="mb-2 d-inline-block display-1">
-                Производитель:
-                <nuxt-link
-                  class="link-hover"
-                  :to="`/manufacturers/${item.manufacturer.slug}`"
-                >{{item.manufacturer.name}}</nuxt-link>
-              </p>
-              <p
-                class="mb-2 display-1"
-              >Срок действия: {{new Date(item.expirationDate).toLocaleDateString("ru-RU", { year: 'numeric', month: 'numeric', day: 'numeric' })}}</p>
-            </template>
-            <template v-slot:addToHeader>{{item.manufacturer.name}}</template>
-          </card>
+        <v-flex xs12 md8>
+          <div class="display-1" v-html="page.content"></div>
         </v-flex>
       </v-layout>
     </v-container>
@@ -32,18 +18,17 @@
 import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
 import NavMenu from "~/components/NavMenu";
-import Card from "~/components/Card";
 import DefaultHeader from "~/components/DefaultHeader";
 
 export default {
   head() {
     return {
-      title: "Сертификаты",
+      title: this.page.title,
       meta: [
         {
           hid: "description",
           name: "description",
-          content: "Сертификаты - Азбука электроснабжения"
+          content: this.page.title + " - Азбука электроснабжения"
         }
       ]
     };
@@ -51,12 +36,11 @@ export default {
   components: {
     Breadcrumbs,
     NavMenu,
-    Card,
     DefaultHeader
   },
   data() {
     return {
-      baseUrl: process.env.imageBaseUrl
+      title: "Доставка"
     };
   },
   computed: {
@@ -74,7 +58,7 @@ export default {
           to: "/about"
         },
         {
-          text: this.page.title,
+          text: this.title,
           to: this.$route.path
         }
       ];
@@ -85,42 +69,24 @@ export default {
     let client = ctx.app.apolloProvider.defaultClient;
 
     const baseUrl = process.env.baseUrl;
-    const { data: certificatesData } = await client.query({
+    const { data: pagesData } = await client.query({
+      variables: {
+        slug: params.slug
+      },
       query: gql`
-        {
-          pages(where: { slug: "certificate" }) {
+        query PagesQuery($slug: String!) {
+          pages(where: { slug: $slug }) {
             title
             slug
             description
             content
-            parent {
-              title
-              children {
-                title
-                slug
-              }
-            }
-          }
-          certificates {
-            id
-            name
-            description
-            expirationDate
-            img {
-              url
-            }
-            manufacturer {
-              name
-              slug
-            }
           }
         }
       `
     });
     await ctx.store.dispatch("fetchGeneralInfo");
     return {
-      certificates: certificatesData.certificates,
-      page: certificatesData.pages[0]
+      page: pagesData.pages[0]
     };
   }
 };

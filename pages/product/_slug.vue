@@ -152,6 +152,18 @@ import Breadcrumbs from "~/components/Breadcrumbs";
 import CatalogDialog from "~/components/CatalogDialog";
 
 export default {
+  head() {
+    return {
+      title: this.product.name,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.product.description || this.product.name
+        }
+      ]
+    };
+  },
   data() {
     return {
       imageBaseUrl: process.env.imageBaseUrl,
@@ -269,11 +281,10 @@ export default {
         slug: ctx.route.params.slug
       }
     });
-    console.log(productData);
-    // let category = categoryData.categories[0];
-    const product = productData.products[0];
+    await ctx.store.dispatch("fetchGeneralInfo");
+
     return {
-      product: product
+      product: productData.products[0]
       //   filters: category.filters || {},
       //   categories: categories
       //   category: category

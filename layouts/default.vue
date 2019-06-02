@@ -4,30 +4,31 @@
       <div class="toolbar-top hidden-sm-and-down fill-height" style>
         <div class="toolbar-top-inner fill-height">
           <v-btn
-            :href="`tel:${contacts.tel}`"
+            :href="`tel:${contacts.phone}`"
             class="toolbar-top-btn white--text ma-0 fill-height"
             style="text-decoration:none"
             flat
           >
             <v-icon class="mr-1" style="color:currentcolor">phone</v-icon>
-            <span class="hidden-sm-and-down">{{contacts.tel}}</span>
+            <span class="hidden-sm-and-down">{{contacts.phone}}</span>
           </v-btn>
           <v-btn
-            :href="`mailto:${contacts.mail}`"
+            :href="`mailto:${contacts.email}`"
             class="toolbar-top-btn white--text ma-0 fill-height"
             style="text-decoration:none"
             flat
           >
             <v-icon class="mr-1" style="color:currentcolor">mail</v-icon>
-            <span class="hidden-sm-and-down">{{contacts.mail}}</span>
+            <span class="hidden-sm-and-down">{{contacts.email}}</span>
           </v-btn>
           <v-btn
+            to="/contacts#map"
             class="toolbar-top-btn white--text ma-0 fill-height"
             style="text-decoration:none"
             flat
           >
             <v-icon class="mr-1" style="color:currentcolor">location_on</v-icon>
-            <span class="hidden-md-and-down">{{contacts.address}}</span>
+            <span class="hidden-md-and-down">{{contacts.content.address.title}}</span>
           </v-btn>
         </div>
       </div>
@@ -68,6 +69,7 @@
 
               <v-list>
                 <v-list-tile
+                  active-class="text--accent"
                   v-for="(child, index) in item.items"
                   :key="index"
                   nuxt
@@ -90,10 +92,23 @@
             >{{item.name}}</v-btn>
           </template>
         </div>
-        <v-btn v-if="!searchActive" class="toolbar-top-btn ml-2 hidden-md-and-up" icon>
+        <v-btn
+          v-if="!searchActive"
+          class="toolbar-top-btn ml-1 hidden-md-and-up"
+          icon
+          :href="`tel:${contacts.tel}`"
+        >
           <v-icon class style="color:currentcolor">phone</v-icon>
         </v-btn>
-        <v-btn v-if="!searchActive" icon class="ml-2 hidden-lg-and-up mr-3" @click="drawer=!drawer">
+        <v-btn
+          v-if="!searchActive"
+          class="toolbar-top-btn ml-1 hidden-md-and-up"
+          icon
+          to="/contacts#map"
+        >
+          <v-icon class style="color:currentcolor">location_on</v-icon>
+        </v-btn>
+        <v-btn v-if="!searchActive" icon class="ml-1 hidden-lg-and-up mr-3" @click="drawer=!drawer">
           <v-icon>menu</v-icon>
         </v-btn>
       </div>
@@ -104,7 +119,14 @@
 
     <v-navigation-drawer v-model="drawer" temporary fixed right>
       <v-list>
-        <v-list-tile v-for="item in menuItems" :key="item.name" :to="item.to" nuxt ripple>
+        <v-list-tile
+          active-class="text--accent"
+          v-for="item in menuItems"
+          :key="item.name"
+          :to="item.to"
+          nuxt
+          ripple
+        >
           <v-list-tile-title>{{item.name}}</v-list-tile-title>
         </v-list-tile>
       </v-list>
@@ -130,43 +152,36 @@
         <v-layout row wrap class="mb-4">
           <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
             <a
-              :href="`tel:${contacts.tel}`"
+              :href="`tel:${contacts.phone}`"
               class="contact-link display-flex white--text align-center text-decoration-none link-hover text-xs-left text-md-center"
             >
               <div class="icon-wrapper d-inline-flex">
-                <!-- <img class :src="require('~/assets/pin.svg')" style> -->
                 <v-icon class="ma-auto" size="2rem" dark>phone</v-icon>
               </div>
-              {{contacts.tel}}
+              {{contacts.phone}}
             </a>
           </v-flex>
           <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
             <a
-              :href="`mailto:${contacts.tel}`"
+              :href="`mailto:${contacts.email}`"
               class="contact-link display-flex white--text align-center text-decoration-none link-hover text-xs-left text-md-center"
             >
               <div class="icon-wrapper">
-                <!-- <img class :src="require('~/assets/pin.svg')" style> -->
                 <v-icon class="ma-auto" size="2rem" dark>mail</v-icon>
               </div>
-              {{contacts.mail}}
+              {{contacts.email}}
             </a>
           </v-flex>
           <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
-            <a
-              @click="handleMap"
+            <nuxt-link
+              to="/contacts#map"
               class="contact-link display-flex white--text align-center text-decoration-none link-hover text-xs-left text-md-center"
             >
               <div class="icon-wrapper">
-                <!-- <img class :src="require('~/assets/pin.svg')" style> -->
                 <v-icon class="ma-auto" size="2rem" dark>location_on</v-icon>
               </div>
-              {{contacts.address}}
-            </a>
-            <!-- <div class="icon-wrapper">
-              <v-icon class="ma-auto" size="2rem" dark>location_on</v-icon>
-            </div>
-            <span class="white--text">{{contacts.address}}</span>-->
+              {{contacts.content.address.title}}
+            </nuxt-link>
           </v-flex>
         </v-layout>
         <p class="text-xs-center white--text mb-0">©Азбука Электроснабжения. Все права защищены.</p>
@@ -354,7 +369,15 @@ export default {
 
   computed: {
     contacts() {
-      return this.$store.state.contacts;
+      // console.log(
+      //   "TCL: contacts -> this.$store.state.generalInfo.contacts[0]",
+      //   this.$store.state.generalInfo.contacts
+      // );
+
+      return this.$store.state.generalInfo.contacts &&
+        this.$store.state.generalInfo.contacts.length > 0
+        ? this.$store.state.generalInfo.contacts[0]
+        : {};
     },
     menuItems() {
       return [
@@ -365,16 +388,19 @@ export default {
         {
           name: "Каталог",
           to: "/catalog",
-          items: this.$store.state.mainCategories
+          items: this.$store.state.generalInfo.categories
         },
         {
           name: "Производители",
           to: "/manufacturers",
-          items: this.$store.state.manufacturers
+          items: this.$store.state.generalInfo.manufacturers
         },
         {
           name: "О компании",
-          to: "/about"
+          to: "/about",
+          items: this.$store.state.generalInfo.aboutPages.map(item => {
+            return { name: item.title, ...item };
+          })
         },
         {
           name: "Контакты",
@@ -399,22 +425,22 @@ export default {
           ? this.$store.state.autocompleteSearchItems
           : [];
       return items;
-    },
-    fields() {
-      if (!this.model) return [];
-
-      return Object.keys(this.model).map(key => {
-        return {
-          key,
-          value: this.model[key] || "n/a"
-        };
-      });
     }
+    // fields() {
+    //   if (!this.model) return [];
+
+    //   return Object.keys(this.model).map(key => {
+    //     return {
+    //       key,
+    //       value: this.model[key] || "n/a"
+    //     };
+    //   });
+    // }
   },
   methods: {
     async handleMap() {
       await this.$router.push("/contacts");
-      await this.$vuetify.goTo("#yandex-map");
+      // await this.$vuetify.goTo("#yandex-map");
     }
   },
   data() {

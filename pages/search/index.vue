@@ -88,6 +88,18 @@
 import Breadcrumbs from "~/components/Breadcrumbs";
 
 export default {
+  head() {
+    return {
+      title: "Поиск",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: "Поиск - Азбука электронабжения"
+        }
+      ]
+    };
+  },
   components: {
     Breadcrumbs
   },
@@ -128,6 +140,7 @@ export default {
     if (ctx.route.query.q) {
       await ctx.store.dispatch("search", ctx.route.query.q);
     }
+    await ctx.store.dispatch("fetchGeneralInfo");
   },
 
   computed: {

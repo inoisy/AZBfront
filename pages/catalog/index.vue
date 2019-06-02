@@ -8,7 +8,6 @@
     </section>
     <section>
       <v-container v-bind="{ [`grid-list-${$vuetify.breakpoint.name}`]: true }" class="py-5">
-        <!-- {{$vuetify.breakpoint.name}} -->
         <v-layout row wrap>
           <v-flex xs12>
             <v-card
@@ -19,14 +18,12 @@
               :to="`/catalog/${item.slug}`"
               class="category-card-wrapper link mb-4 text-decoration-none align-start pa-3 xs12"
             >
-              <!-- <div class="flex"> -->
               <h2 class="display-3 font-weight-bold" style="padding-right:56px;">{{item.name}}</h2>
               <p>{{item.description}}</p>
 
               <div class="img-wrapper pa-2" v-if="item.img && item.img.url">
                 <img :src="imageBaseUrl+item.img.url" class="d-block ma-auto">
               </div>
-              <!-- </div> -->
             </v-card>
           </v-flex>
         </v-layout>
@@ -41,6 +38,18 @@ import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
 
 export default {
+  head() {
+    return {
+      title: "Каталог",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: "Каталог - Азбука электроснабжения"
+        }
+      ]
+    };
+  },
   components: {
     Breadcrumbs
   },
@@ -50,35 +59,14 @@ export default {
     };
   },
   async asyncData(ctx) {
-    console.log(ctx.route.params);
-    // let client = ctx.app.apolloProvider.defaultClient;
-    // const { data: categoriesData } = await client.query({
-    //   query: gql`
-    //     {
-    //       categories {
-    //         name
-    //         slug
-    //         img {
-    //           url
-    //         }
-    //       }
-    //     }
-    //   `
-    // });
-    // const categories = categoriesData.categories;
-    // console.log("TCL: categories", categories);
     const data = await ctx.store.dispatch("fetchMainCategories");
+    await ctx.store.dispatch("fetchGeneralInfo");
+
     return {
       categories: data
     };
-    // return {
-    //   route: ctx.route.params.product
-    // };
   },
   computed: {
-    // categories() {
-    //   return this.$store.state.categories;
-    // },
     breadcrumbsItems() {
       return [
         {
@@ -101,8 +89,6 @@ export default {
 
   .img-wrapper {
     background-color: #1F5BFF;
-    // border-radius: 9px !important;
-    // float: right;
     position: absolute;
     top: 0;
     right: 0;

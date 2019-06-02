@@ -1,18 +1,15 @@
 <template>
   <div>
-    <section class="grey lighten-2">
-      <v-container>
-        <breadcrumbs class="pl-1" :items="breadcrumbs"/>
-        <h1 class="mb-4">{{title}}</h1>
-      </v-container>
-    </section>
+    <default-header :breadcrumbs="breadcrumbs" :title="page.title"></default-header>
     <section>
       <v-container class="py-5">
         <v-layout row wrap>
-          <v-flex xs4 class="pr-5">
-            <nav-menu :menuItems="menuItems"></nav-menu>
+          <v-flex xs12 md4 class="menu-wrapper mb-4">
+            <nav-menu :menuItems="aboutPages"></nav-menu>
           </v-flex>
-          <v-flex xs8 v-html="content"></v-flex>
+          <v-flex xs12 md8>
+            <div v-html="page.content"></div>
+          </v-flex>
         </v-layout>
       </v-container>
     </section>
@@ -20,43 +17,59 @@
 </template>
 
 <script>
-import Breadcrumbs from "~/components/Breadcrumbs";
+import gql from "graphql-tag";
+
 import NavMenu from "~/components/NavMenu";
+import DefaultHeader from "~/components/DefaultHeader";
 
 export default {
+  head() {
+    return {
+      title: this.title,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.title + " - Азбука электроснабжения"
+        }
+      ]
+    };
+  },
   components: {
-    Breadcrumbs,
-    NavMenu
+    NavMenu,
+    DefaultHeader
+  },
+  async asyncData(ctx) {
+    const params = ctx.route.params;
+    let client = ctx.app.apolloProvider.defaultClient;
+    const { data: pagesData } = await client.query({
+      query: gql`
+        {
+          pages(where: { slug: "about" }) {
+            title
+            slug
+            description
+            content
+          }
+        }
+      `
+    });
+    await ctx.store.dispatch("fetchGeneralInfo");
+
+    return {
+      page: pagesData.pages[0]
+    };
   },
   data() {
     return {
-      title: "О компании",
-      menuItems: [
-        // {
-        //   text: "О компании",
-        //   to: "/about"
-        // },
-        {
-          text: "Сертификаты",
-          to: "/about/certificate"
-        },
-        {
-          text: "Доставка",
-          to: "/about/delivery"
-        }
-      ],
-      content: `
-        <p>Молодая, быстро развивающаяся, амбициозная компания! Мы занимаемся поставками электрооборудования для вас, наших клиентов. Благодаря прямым контрактам мы можем предложить выгодные условия и быстрые сроки поставки. Так же, мы предлагаем прямые поставки оборудования из Европы. Специалисты нашей компании помогут вам создать и смонтировать проект любой сложности, будь то по электрике или кабельному обогреву. Все для вашей экономии и удобства. </p>
-        <h3>AZB field of activity</h3>
-        <p>Personal information provided on the website and online credit card transactions are transmitted through a secure server. We are committed to handling your personal information with high standards of information security. We take appropriate physical, electronic, and administrative steps to maintain the security and accuracy of personally identifiable information we collect, including limiting the number of people who have physical access to our database servers, as well as employing electronic security systems and password protections that guard against unauthorized access. </p>
-        <h3>AZB Guaranties</h3>
-        <p>Personal information provided on the website and online credit card transactions are transmitted through a secure server. We are committed to handling your personal information with high standards of information security. We take appropriate physical, electronic, and administrative steps to maintain the security and accuracy of personally identifiable information we collect, including limiting the number of people who have physical access to our database servers, as well as employing electronic security systems and password protections that guard against unauthorized access. </p>
-
-     `
+      title: "О компании"
     };
   },
 
   computed: {
+    aboutPages() {
+      return this.$store.state.generalInfo.aboutPages;
+    },
     breadcrumbs() {
       return [
         {
@@ -73,5 +86,10 @@ export default {
 };
 </script>
 
-<style>
+<style lang="stylus" scoped>
+@media (min-width: 960px) {
+  .menu-wrapper {
+    padding-right: 30px;
+  }
+}
 </style>

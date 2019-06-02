@@ -4,7 +4,6 @@
       <v-container>
         <breadcrumbs class="pl-1 mb-4" :items="breadcrumbs"/>
         <h1 class="display-4 mb-5 font-weight-bold">{{category.name}}</h1>
-        <!-- {{category.manufacturers}} -->
       </v-container>
     </section>
     <v-container class="py-5">
@@ -43,6 +42,18 @@ import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
 
 export default {
+  head() {
+    return {
+      title: this.category.name,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.category.description + " - Азбука электроснабжения"
+        }
+      ]
+    };
+  },
   data() {
     return {
       imageBaseUrl: process.env.imageBaseUrl
@@ -105,6 +116,7 @@ export default {
     });
     const category = categoryData.categories[0];
     console.log("TCL: categoryData", categoryData);
+    await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
       filters: category.filters || {},

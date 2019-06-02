@@ -3,7 +3,6 @@
     <section class="grey lighten-2">
       <v-container id="main-wrapper">
         <breadcrumbs class="pl-1 mb-4" :items="breadcrumbs"/>
-        <!-- {{manufacturerCurr}} -->
         <h1 class="display-5 mb-5 font-weight-bold">{{category.name }}</h1>
       </v-container>
     </section>
@@ -166,7 +165,6 @@
   </div>
 </template>
 <style lang="stylus" scoped>
-
 .all-wrapper {
   flex-direction: column;
   min-height: 50vh;
@@ -217,6 +215,18 @@ import StickyMenu from "~/components/StickyMenu";
 import CatalogDialog from "~/components/CatalogDialog";
 
 export default {
+  head() {
+    return {
+      title: this.category.name,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.category.description + " - Азбука электроснабжения"
+        }
+      ]
+    };
+  },
   components: {
     Breadcrumbs,
     StickyMenu,
@@ -421,6 +431,8 @@ export default {
           item => item.slug === params.filter
         )
       : null;
+    await ctx.store.dispatch("fetchGeneralInfo");
+
     return {
       category: categoryData.categories[0],
       manufacturers: categoryData.categories[0].manufacturers,

@@ -49,6 +49,18 @@ import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
 
 export default {
+  head() {
+    return {
+      title: "Производители",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: "Производители - Азбука электронабжения"
+        }
+      ]
+    };
+  },
   components: {
     Breadcrumbs
   },
@@ -89,8 +101,7 @@ export default {
         }
       `
     });
-    // const manufacturers = ;
-    console.log("TCL: asyncData -> manufacturersData", manufacturersData);
+    await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
       manufacturers: manufacturersData.manufacturers

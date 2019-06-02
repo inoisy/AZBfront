@@ -16,10 +16,11 @@ export const state = () => ({
   categories: [],
   mainCategories: [],
   contacts: {
-    tel: "+7 (495) 532-50-66",
-    mail: "mail@azb-es.ru",
-    address: "г. Москва Загородное шоссе дом 1 корпус 2 офис 212"
+    // tel: "+7 (495) 532-50-66",
+    // mail: "mail@azb-es.ru",
+    // address: "г. Москва Загородное шоссе дом 1 корпус 2 офис 212"
   },
+  generalInfo: {}
   // menuItems: [{
   //     name: "Главная",
   //     to: "/"
@@ -51,11 +52,14 @@ export const mutations = {
   // catalog(state, prop, item) {
   //   state[prop] = item
   // },
-  search(state, search) {
-    state.search = search
+  generalInfo(state, item) {
+    state.generalInfo = item
   },
-  search(state, search) {
-    state.search = search
+  search(state, item) {
+    state.search = item
+  },
+  search(state, item) {
+    state.search = item
   },
   mainCategories(state, item) {
     state.mainCategories = item
@@ -88,6 +92,60 @@ export const mutations = {
 }
 export const strict = false
 export const actions = {
+  async fetchGeneralInfo(ctx) {
+    let client = this.app.apolloProvider.defaultClient;
+    const {
+      data: generalData
+    } = await client.query({
+      query: gql `
+        {
+           pages(where: {
+             slug: "about"
+           }) {
+             title
+             slug
+             
+             children {
+               title
+               slug
+             }
+           }
+           contacts {
+             name
+             content
+             email
+             phone
+           }
+          manufacturers {
+            id
+            name
+            slug
+            img{
+              url
+            }
+          }
+        }
+        `
+    });
+    // const manufacturers = 
+    // const aboutPage = 
+    // console.log("TCL: fetchGeneralInfo -> aboutPage", generalData.pages[0])
+    // console.log("TCL: fetchManufacturers -> ManufacturerData", ManufacturerData)
+    // await ctx.commit('manufacturers', manufacturers)
+    const {
+      data: categories
+    } = await this.$axios.get('categories/main')
+    const returnData = {
+      manufacturers: generalData.manufacturers,
+      aboutPages: generalData.pages[0].children,
+      categories: categories,
+      contacts: generalData.contacts
+    }
+    // console.log("TCL: fetchGeneralInfo -> returnData", returnData)
+    // console.log("TCL: fetchMainCategories ->  'categories/main'",  'categories/main')
+    // console.log('fetchMainCategories', data)
+    await ctx.commit('generalInfo', returnData)
+  },
   async fetchManufacturers(ctx) {
     let client = this.app.apolloProvider.defaultClient;
     const {
