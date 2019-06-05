@@ -117,10 +117,21 @@ module.exports = {
       max: 10000,
       maxAge: 1000 * 60 * 60
     }],
+    '@nuxtjs/markdownit'
     // ['vue-scrollto/nuxt', {
     //   duration: 300
     // }],
   ],
+  markdownit: {
+    preset: 'default',
+    linkify: true,
+    breaks: true,
+    injected: true
+    // use: [
+    //   ['markdown-it-container', containerName],
+    //   'markdown-it-attrs'
+    // ]
+  },
   /*
    ** Axios module configuration
    */

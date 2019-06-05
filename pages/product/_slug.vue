@@ -96,11 +96,11 @@
           <v-tabs-items v-model="tab">
             <v-tab-item>
               <v-card flat>
-                <v-card-text>
-                  <p v-for="(item,index) in Object.keys(product.technicaldescription)" :key="index">
+                <v-card-text v-html="product.content">
+                  <!-- <p v-for="(item,index) in Object.keys(product.technicaldescription)" :key="index">
                     <span class="font-weight-bold">{{item}}:</span>
                     {{product.technicaldescription[item]}}
-                  </p>
+                  </p>-->
                 </v-card-text>
               </v-card>
             </v-tab-item>
@@ -223,6 +223,7 @@ export default {
   },
   async asyncData(ctx) {
     const params = ctx.route.params;
+    console.log("TCL: Data -> params", params);
     let client = ctx.app.apolloProvider.defaultClient;
     // const { data: categoriesData } = await client.query({
     //   query: gql`
@@ -236,7 +237,6 @@ export default {
     // });
 
     // const categories = categoriesData.categories;
-
     const { data: productData } = await client.query({
       query: gql`
         query ProductsQuery($slug: String!) {
@@ -247,7 +247,7 @@ export default {
             id
             name
             description
-            technicaldescription
+            content
             productimage {
               filename
               img {
@@ -281,6 +281,7 @@ export default {
         slug: ctx.route.params.slug
       }
     });
+    console.log("TCL: productData", productData);
     await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
