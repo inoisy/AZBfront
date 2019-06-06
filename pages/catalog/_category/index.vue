@@ -7,23 +7,32 @@
       </v-container>
     </section>
     <v-container class="py-5">
-      <v-layout row wrap v-if="category.child && category.child.length > 0">
-        <v-card
-          hover
-          ripple
-          :to="`/catalog/${category.slug}/${item.slug}`"
-          class="mb-4 flex xs12 pa-3 text-decoration-none display-flex row wrap layout"
-          v-for="item in category.child"
-          :key="item.id"
-        >
-          <v-flex xs12 md4>
-            <v-img contain max-height="300px" v-if="item.img" :src="imageBaseUrl+ item.img.url"></v-img>
-          </v-flex>
-          <v-flex xs12 md8 class="pt-4">
-            <h2 class="display-3 font-weight-bold">{{item.name}}</h2>
-            <div class="display-1">{{item.description}}</div>
-          </v-flex>
-        </v-card>
+      <!-- {{categories}} -->
+      <v-layout row wrap>
+        <v-flex xs12 md4 class="menu-wrapper mb-4">
+          <nav-menu :menuItems="categories" type="catalog"></nav-menu>
+        </v-flex>
+        <v-flex xs12 md8>
+          <!-- <div class="display-1" v-html="page.content"></div> -->
+          <v-layout row wrap v-if="category.child && category.child.length > 0">
+            <v-card
+              hover
+              ripple
+              :to="`/catalog/${category.slug}/${item.slug}`"
+              class="mb-4 flex xs12 pa-3 text-decoration-none display-flex row wrap layout"
+              v-for="item in category.child"
+              :key="item.id"
+            >
+              <v-flex xs12 md4>
+                <v-img contain max-height="300px" v-if="item.img" :src="imageBaseUrl+ item.img.url"></v-img>
+              </v-flex>
+              <v-flex xs12 md8 class="pt-4">
+                <h2 class="display-3 font-weight-bold">{{item.name}}</h2>
+                <div class="display-1">{{item.description}}</div>
+              </v-flex>
+            </v-card>
+          </v-layout>
+        </v-flex>
       </v-layout>
     </v-container>
     <section class="grey lighten-2" v-if="category.content && category.content.length>0">
@@ -40,6 +49,7 @@
 <script>
 import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
+import NavMenu from "~/components/NavMenu";
 
 export default {
   head() {
@@ -60,7 +70,8 @@ export default {
     };
   },
   components: {
-    Breadcrumbs
+    Breadcrumbs,
+    NavMenu
   },
   computed: {
     breadcrumbs() {
@@ -87,6 +98,14 @@ export default {
     const { data: categoryData } = await client.query({
       query: gql`
         query CateforiesQuery($slug: String!) {
+          categoriesMain: categories(where: { ismain: true }) {
+            id
+            name
+            slug
+            img {
+              url
+            }
+          }
           categories(where: { slug: $slug }) {
             id
             name
@@ -98,6 +117,7 @@ export default {
               name
               slug
             }
+
             child(sort: "name:ASC") {
               id
               name
@@ -120,9 +140,17 @@ export default {
 
     return {
       filters: category.filters || {},
-      categories: await ctx.store.dispatch("fetchMainCategories"),
+      categories: categoryData.categoriesMain, //await ctx.store.dispatch("fetchMainCategories"),
+
       category: category
     };
   }
 };
 </script>
+<style lang="stylus" scoped>
+@media (min-width: 960px) {
+  .menu-wrapper {
+    padding-right: 30px;
+  }
+}
+</style>

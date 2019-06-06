@@ -4,7 +4,7 @@
     <v-container class="py-5">
       <v-layout row wrap>
         <v-flex xs12 md4 class="menu-wrapper mb-4">
-          <nav-menu :menuItems="aboutPages"></nav-menu>
+          <nav-menu :menuItems="aboutPages" type="about"></nav-menu>
         </v-flex>
         <v-flex xs12 md8>
           <div class="display-1" v-html="page.content"></div>

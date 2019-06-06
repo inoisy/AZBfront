@@ -110,8 +110,7 @@
                   <div class="tabsText" style="display: block;">
                     <p>
                       <b>Самовывоз с нашего склада:</b>
-                      <br>
-                      По адресу: {{$store.state.contacts.address}}
+                      <br>По адресу: г. Москва Загородное шоссе дом 1 корпус 2 офис 212
                     </p>
 
                     <p>
@@ -131,8 +130,8 @@
                 <v-card-text>
                   Банковский перевод: счет на оплату формируется после оформления заказа или отправки заявки в произвольной форме на электронную почту
                   <a
-                    :href="`mailto:${contacts.mail}`"
-                  >{{contacts.mail}}</a>
+                    :href="`mailto:mail@azb-es.ru`"
+                  >mail@azb-es.ru</a>
                   <br>Специалист свяжется с вами для уточнения деталей.
                 </v-card-text>
               </v-card>

@@ -15,11 +15,7 @@ export const state = () => ({
   filters: [],
   categories: [],
   mainCategories: [],
-  contacts: {
-    // tel: "+7 (495) 532-50-66",
-    // mail: "mail@azb-es.ru",
-    // address: "г. Москва Загородное шоссе дом 1 корпус 2 офис 212"
-  },
+
   generalInfo: {}
   // menuItems: [{
   //     name: "Главная",
@@ -110,6 +106,13 @@ export const actions = {
                slug
              }
            }
+           categories(where:{
+             ismain: true
+           }){
+             id
+             name
+             slug
+           }
            contacts {
              name
              content
@@ -127,23 +130,17 @@ export const actions = {
         }
         `
     });
-    // const manufacturers = 
-    // const aboutPage = 
-    // console.log("TCL: fetchGeneralInfo -> aboutPage", generalData.pages[0])
-    // console.log("TCL: fetchManufacturers -> ManufacturerData", ManufacturerData)
-    // await ctx.commit('manufacturers', manufacturers)
-    const {
-      data: categories
-    } = await this.$axios.get('categories/main')
+
+    // const {
+    //   data: categories
+    // } = await this.$axios.get('categories/main')
     const returnData = {
       manufacturers: generalData.manufacturers,
       aboutPages: generalData.pages[0].children,
-      categories: categories,
+      categories: generalData.categories,
       contacts: generalData.contacts
     }
-    // console.log("TCL: fetchGeneralInfo -> returnData", returnData)
-    // console.log("TCL: fetchMainCategories ->  'categories/main'",  'categories/main')
-    // console.log('fetchMainCategories', data)
+
     await ctx.commit('generalInfo', returnData)
   },
   async fetchManufacturers(ctx) {
@@ -177,16 +174,16 @@ export const actions = {
 
     //    return data
   },
-  async fetchMainCategories(ctx) {
-    const {
-      data
-    } = await this.$axios.get('categories/main')
-    // console.log("TCL: fetchMainCategories ->  'categories/main'",  'categories/main')
-    // console.log('fetchMainCategories', data)
-    await ctx.commit('mainCategories', data)
+  // async fetchMainCategories(ctx) {
+  //   const {
+  //     data
+  //   } = await this.$axios.get('categories/main')
+  //   // console.log("TCL: fetchMainCategories ->  'categories/main'",  'categories/main')
+  //   // console.log('fetchMainCategories', data)
+  //   await ctx.commit('mainCategories', data)
 
-    return data
-  },
+  //   return data
+  // },
   async fetchProducts(ctx, input) {
     // console.log("TCL: fetchProducts -> input", input)
     await ctx.commit('loading', true)
@@ -240,7 +237,7 @@ export const actions = {
       if (condition.length > 0) {
         query.query.bool.must.push(
           // {
-          condition
+          ...condition
 
         )
       }
@@ -255,7 +252,7 @@ export const actions = {
         }
       })
     }
-    // console.log("TCL: fetchProducts -> query", query.query.bool.must)
+    console.log("TCL: fetchProducts -> query", query.query.bool.must)
 
     const {
       data: returnData

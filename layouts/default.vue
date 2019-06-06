@@ -10,7 +10,7 @@
             flat
           >
             <v-icon class="mr-1" style="color:currentcolor">phone</v-icon>
-            <span class="hidden-sm-and-down">{{contacts.phone}}</span>
+            <span>{{contacts.phone}}</span>
           </v-btn>
           <v-btn
             :href="`mailto:${contacts.email}`"
@@ -19,7 +19,7 @@
             flat
           >
             <v-icon class="mr-1" style="color:currentcolor">mail</v-icon>
-            <span class="hidden-sm-and-down">{{contacts.email}}</span>
+            <span>{{contacts.email}}</span>
           </v-btn>
           <v-btn
             to="/contacts#map"
@@ -34,7 +34,7 @@
       </div>
       <div class="toolbar-bottom">
         <v-btn
-          :class="searchActive ? 'hidden-sm-and-down' : ''"
+          v-show="!searchActive"
           to="/"
           class="fill-height logo-link ma-0 py-2 ml-2"
           color="transparent"
@@ -42,15 +42,19 @@
         >
           <img class="logo-img d-block" :src="require('~/assets/azblogo.png')">
         </v-btn>
-        <v-spacer v-if="!searchActive"></v-spacer>
-        <v-btn v-if="!searchActive" @click="searchActive=true" class icon>
+        <v-spacer v-show="!searchActive"></v-spacer>
+        <v-btn v-show="!searchActive" @click="searchActive=true" class icon>
           <v-icon>search</v-icon>
         </v-btn>
         <autocomplete-search v-if="searchActive" @searchChange="searchActive=$event"/>
-        <v-btn v-if="searchActive" icon @click="searchActive = false">
+        <v-btn v-show="searchActive" icon @click="searchActive = false">
           <v-icon>close</v-icon>
         </v-btn>
-        <div v-if="!searchActive" class="hidden-md-and-down fill-height ml-3" style="display:flex">
+        <div
+          v-show="!searchActive"
+          class="hidden-sm-and-down fill-height ml-3"
+          style="display:flex"
+        >
           <template v-for="(item,index) in menuItems">
             <v-menu
               :key="index"
@@ -93,7 +97,7 @@
           </template>
         </div>
         <v-btn
-          v-if="!searchActive"
+          v-show="!searchActive"
           class="toolbar-top-btn ml-1 hidden-md-and-up"
           icon
           :href="`tel:${contacts.tel}`"
@@ -101,14 +105,19 @@
           <v-icon class style="color:currentcolor">phone</v-icon>
         </v-btn>
         <v-btn
-          v-if="!searchActive"
+          v-show="!searchActive"
           class="toolbar-top-btn ml-1 hidden-md-and-up"
           icon
           to="/contacts#map"
         >
           <v-icon class style="color:currentcolor">location_on</v-icon>
         </v-btn>
-        <v-btn v-if="!searchActive" icon class="ml-1 hidden-lg-and-up mr-3" @click="drawer=!drawer">
+        <v-btn
+          v-show="!searchActive"
+          icon
+          class="ml-1 hidden-md-and-up mr-3"
+          @click="drawer=!drawer"
+        >
           <v-icon>menu</v-icon>
         </v-btn>
       </div>

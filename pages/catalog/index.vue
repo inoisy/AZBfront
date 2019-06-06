@@ -59,11 +59,26 @@ export default {
     };
   },
   async asyncData(ctx) {
-    const data = await ctx.store.dispatch("fetchMainCategories");
+    let client = ctx.app.apolloProvider.defaultClient;
+    const { data: categoryData } = await client.query({
+      query: gql`
+        {
+          categories(where: { ismain: true }) {
+            id
+            name
+            slug
+            img {
+              url
+            }
+          }
+        }
+      `
+    });
+    // # const data = await ctx.store.dispatch("fetchMainCategories");
     await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
-      categories: data
+      categories: categoryData.categories
     };
   },
   computed: {

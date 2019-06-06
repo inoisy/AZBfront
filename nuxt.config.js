@@ -117,11 +117,47 @@ module.exports = {
       max: 10000,
       maxAge: 1000 * 60 * 60
     }],
-    '@nuxtjs/markdownit'
+    '@nuxtjs/markdownit',
+    "nuxt-ssr-cache",
+'@nuxtjs/sitemap',
+'@nuxtjs/robots'
     // ['vue-scrollto/nuxt', {
     //   duration: 300
     // }],
   ],
+  robots: {
+    UserAgent: '*',
+    Disallow: '/'
+  },
+  cache: {
+    store: {
+      type: "redis",
+      host: "localhost",
+      ttl: 10 * 60,
+      pages: ['/'],
+      configure: [
+        ['maxmemory', "400mb"],
+        ['maxmemory-policy', 'allkeys-lru']
+      ]
+    }
+  },
+  sitemap: {
+    // hostname: 'https://example.com',
+    gzip: true,
+    // exclude: [
+    //   '/secret',
+    //   '/admin/**'
+    // ],
+    // routes: [
+    //   '/page/1',
+    //   {
+    //     url: '/page/2',
+    //     changefreq: 'daily',
+    //     priority: 1,
+    //     lastmodISO: '2017-06-30T13:30:00.000Z'
+    //   }
+    // ]
+  },
   markdownit: {
     preset: 'default',
     linkify: true,

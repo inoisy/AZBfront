@@ -155,6 +155,14 @@ export default {
             description
             content
           }
+          categories(where: { ismain: true }) {
+            id
+            name
+            slug
+            img {
+              url
+            }
+          }
           manufacturers {
             id
             name
@@ -192,14 +200,15 @@ export default {
     //   }
     // ];
     await ctx.store.dispatch("fetchGeneralInfo");
-    await ctx.store.dispatch("fetchMainCategories");
+    // await ctx.store.dispatch("fetchMainCategories");
 
     // console.log("TCL: data", data);
     return {
       // categories: categoriesData.categories, //categoriesData.categories
       manufacturers: pageData.manufacturers,
       sliders: pageData.sliders,
-      page: pageData.pages[0]
+      page: pageData.pages[0],
+      categories: pageData.categories
     };
   },
   computed: {
