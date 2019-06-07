@@ -23,9 +23,14 @@
               v-for="item in category.child"
               :key="item.id"
             >
-              <v-flex xs12 md4>
-                <v-img contain max-height="300px" v-if="item.img" :src="imageBaseUrl+ item.img.url"></v-img>
+              <v-flex xs12 md4 class="py-4 px-3">
+                <v-img
+                  contain
+                  max-height="250px"
+                  :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
+                ></v-img>
               </v-flex>
+              <v-divider class="flex xs12 hidden-md-and-up mt-3 mb-2"></v-divider>
               <v-flex xs12 md8>
                 <h2 class="display-3 font-weight-bold">{{item.name}}</h2>
                 <div class="display-1">{{item.description}}</div>

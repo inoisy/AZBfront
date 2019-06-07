@@ -76,8 +76,8 @@
                 <img
                   style="max-width: 100%; max-height: 350px; margin: 0 auto; display: block;"
                   v-if="item.productimage && item.productimage.thumbnail"
-                  :src="imageBaseUrl+item.productimage.thumbnail.url"
-                  alt
+                  :src="item.productimage.thumbnail.url ? imageBaseUrl+item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
+                  :alt="item.name"
                 >
               </div>
               <div class="flex xs12 md8">

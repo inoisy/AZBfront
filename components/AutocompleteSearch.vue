@@ -18,14 +18,28 @@
     hide-no-data
     hide-selected
     append-icon="none"
+    @change="handleChange"
+    @input="handleInput"
+    v-on:keyup.enter="handleEnter"
     v-on:keyup.esc="$emit('searchChange', false)"
   >
     <!-- v-on:keyup.esc="$emit('searchChange', false)" -->
     <!-- v-debounce:700ms="throttledMethod" -->
     <!-- v-on:keyup.enter="handleSearch" -->
     <template v-slot:item="data">
+      <!-- <div> -->
+      <div
+        v-if="data.item.productimage.thumbnail"
+        class="align-center justify-center"
+        style="max-width:60px; min-width: 60px;    display: inline-flex;"
+      >
+        <img
+          style="max-width:50px; max-height: 50px"
+          :src="data.item.productimage.thumbnail ? imageBaseUrl+data.item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
+        >
+      </div>
+      <!-- <v-divider vertical class="px-3"></v-divider> -->
       <div>
-        <!-- @click="$router.push(`/product/${data.item.slug}`); clear()" -->
         <p class="mb-0" style="font-size:14px">
           <span
             v-html="data.item.highlight.name && data.item.highlight.name.length > 0 ? data.item.highlight.name[0] : data.item.name"
@@ -44,6 +58,11 @@
           v-html="data.item.highlight.description && data.item.highlight.description.length > 0 ? data.item.highlight.description[0] : data.item.description"
         ></p>
       </div>
+      <!-- {{data.item.productimage.thumbnail.url}} -->
+      <!-- </div> -->
+      <!-- @click="$router.push(`/product/${data.item.slug}`); clear()" -->
+
+      <!-- </div> -->
     </template>
     <template v-slot:prepend>
       <v-btn class="my-0 mx-2" @click="handleSearch" icon :disabled="!isSearchValid">
@@ -57,6 +76,7 @@
 export default {
   data() {
     return {
+      imageBaseUrl: process.env.imageBaseUrl,
       model: {},
       search: null,
       showMobileSearch: false
@@ -111,14 +131,36 @@ export default {
       }
     },
     async model(val) {
-      if (Object.keys(val).length > 0 && val.slug) {
-        this.$router.push(`/product/${val.slug}`);
-        this.clear();
-      }
+      // if (Object.keys(val).length > 0 && val.slug) {
+      //   this.$router.push(`/product/${val.slug}`);
+      //   this.clear();
+      // }
       console.log("TCL: model -> val", val);
     }
   },
   methods: {
+    async handleEnter(val) {
+      console.log("handleEnter", val);
+      this.handleSearch();
+      // if (Object.keys(val).length > 0 && val.slug) {
+      //   this.$router.push(`/product/${val.slug}`);
+      //   this.clear();
+      // }
+    },
+    async handleInput(val) {
+      console.log("handleInput", val);
+      // if (Object.keys(val).length > 0 && val.slug) {
+      //   this.$router.push(`/product/${val.slug}`);
+      //   this.clear();
+      // }
+    },
+    async handleChange(val) {
+      console.log("change", val);
+      if (Object.keys(val).length > 0 && val.slug) {
+        this.$router.push(`/product/${val.slug}`);
+        this.clear();
+      }
+    },
     async handleSearch() {
       console.log(this.search);
       if (this.search && this.search.length > 3) {
@@ -138,15 +180,6 @@ export default {
       // console.log("TCL: clear -> this.$parent", this.$parent.searchActive);
       await this.$store.commit("autocompleteSearchItems", []);
     }
-    // async autocompleteSearch(val) {
-    //   if (val && val.length > 3) {
-    //     await this.$store.dispatch("autocompleteSearch", val);
-    //   }
-    //   // else {
-    //   // this.search = "";
-    //   // this.model = "";
-    //   // }
-    // }
   }
 };
 </script>

@@ -6,7 +6,7 @@
       :to="href"
       class="mb-4 flex xs12 pa-3 text-decoration-none display-flex row wrap layout"
     >
-      <v-flex xs12 md4>
+      <v-flex xs12 md4 class="py-4 px-3">
         <v-img contain max-height="300px" v-if="item.img" :src="imageBaseUrl+ item.img.url"></v-img>
       </v-flex>
       <v-flex xs12 md8>

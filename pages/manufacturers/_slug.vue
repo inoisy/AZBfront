@@ -29,7 +29,7 @@
           <v-flex xs12>
             <h2>Каталог {{manufacturer.name}}</h2>
             <div v-for="item in categories" :key="item.id">
-              <v-subheader class="pl-0 text-uppercase mb-2">{{item.element.name}}</v-subheader>
+              <v-subheader class="pl-0 text-uppercase mt-4">{{item.element.name}}</v-subheader>
               <div v-for="child in item.items" :key="child.id">
                 <nuxt-link
                   class="display-2 text-decoration-none link-hover mb-1 d-inline-block"
@@ -48,8 +48,7 @@
             <v-img
               contain
               max-height="100%"
-              v-if="manufacturer.certificate.img"
-              :src="imageBaseUrl+manufacturer.certificate.img.url"
+              :src="manufacturer.certificate.img ? imageBaseUrl+manufacturer.certificate.img.url : require('~/assets/no-image1.png')"
               :alt="manufacturer.certificate.name"
             />
           </v-flex>
@@ -130,7 +129,7 @@ export default {
     // console.log("TCL: asyncData -> ctx", ctx.params.slug);
 
     let client = ctx.app.apolloProvider.defaultClient;
-    console.log("TCL: ctx.params.slug", ctx.params.slug);
+    // console.log("TCL: ctx.params.slug", ctx.params.slug);
 
     const { data: manufacturersData } = await client.query({
       query: gql`
@@ -178,7 +177,7 @@ export default {
     // console.log("TCL: Data -> manufacturersData", manufacturersData);
 
     const manufacturer = manufacturersData.manufacturers[0];
-    console.log("TCL: manufacturer", manufacturer);
+    // console.log("TCL: manufacturer", manufacturer);
     // console.log(manufacturer.categories);
     // const { data: categoriesData } = await client.query({
     //   query: gql`

@@ -66,8 +66,11 @@
               ripple
             >
               <nuxt-link :to="`/catalog/${item.slug}`" class="catalog-link" style>
-                <div class="img-wrapper px-3 py-4 grey lighten-3" v-if="item.img">
-                  <img class="catalog-link-img d-block ma-auto" :src="imageBaseUrl+item.img.url">
+                <div class="img-wrapper px-3 py-4 grey lighten-3">
+                  <img
+                    class="catalog-link-img d-block ma-auto"
+                    :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
+                  >
                 </div>
 
                 <div class="pa-3 catalog-link-text font-weight-medium" style>{{item.name}}</div>
@@ -212,9 +215,9 @@ export default {
     };
   },
   computed: {
-    categories() {
-      return this.$store.state.mainCategories;
-    }
+    // categories() {
+    //   return this.$store.state.mainCategories;
+    // }
     // manufacturers() {
     //   return this.$store.state.manufacturers;
     // }

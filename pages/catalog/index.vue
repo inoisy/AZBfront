@@ -16,14 +16,30 @@
               hover
               ripple
               :to="`/catalog/${item.slug}`"
-              class="category-card-wrapper link mb-4 text-decoration-none align-start pa-3 xs12"
+              class="category-card-wrapper link mb-4 text-decoration-none align-start pa-3 xs12 layout wrap row"
             >
-              <h2 class="display-3 font-weight-bold" style="padding-right:56px;">{{item.name}}</h2>
+              <v-flex xs12 md4 class="py-4 px-3">
+                <v-img
+                  contain
+                  max-height="300px"
+                  :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
+                ></v-img>
+              </v-flex>
+              <v-divider class="flex xs12 hidden-md-and-up mt-3 mb-2"></v-divider>
+              <v-flex xs12 md8>
+                <h2 class="display-3 font-weight-bold">{{item.name}}</h2>
+                <div class="display-1">{{item.description}}</div>
+              </v-flex>
+              <!-- </v-card> -->
+              <!-- <h2 class="display-3 font-weight-bold" style="padding-right:56px;">{{item.name}}</h2>
               <p>{{item.description}}</p>
 
-              <div class="img-wrapper pa-2" v-if="item.img && item.img.url">
-                <img :src="imageBaseUrl+item.img.url" class="d-block ma-auto">
-              </div>
+              <div class="img-wrapper pa-2">
+                <img
+                  :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
+                  class="d-block ma-auto"
+                >
+              </div>-->
             </v-card>
           </v-flex>
         </v-layout>
@@ -67,6 +83,7 @@ export default {
             id
             name
             slug
+            description
             img {
               url
             }
@@ -101,17 +118,5 @@ export default {
 .category-card-wrapper {
   display: flex;
   flex-direction: column;
-
-  .img-wrapper {
-    background-color: #1F5BFF;
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    img {
-      width: 40px;
-      min-width: 40px;
-    }
-  }
 }
 </style>

@@ -41,11 +41,11 @@
             ripple
           >
             <!-- {{item._source.productimage.thumbnail}} -->
-            <v-flex v-if="item._source.productimage && item._source.productimage.thumbnail">
+            <v-flex>
               <v-img
                 max-width="300px"
                 max-height="300px"
-                :src="imageBaseUrl+item._source.productimage.thumbnail.url"
+                :src="item._source.productimage ? imageBaseUrl+item._source.productimage.thumbnail.url : require('~/assets/no-image1.png')"
               ></v-img>
             </v-flex>
             <v-divider vertical class="mx-3"></v-divider>
