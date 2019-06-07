@@ -32,7 +32,7 @@
         <v-flex v-if="searchItems && searchItems.length > 0">
           <h2>Результаты поиска</h2>
           <v-card
-            class="mb-3 layout row wrap display-flex pa-3"
+            class="mb-3 layout row display-flex pa-3"
             v-for="item in searchItems"
             :key="item.id"
             :to="`/product/${item._source.slug}`"
@@ -43,12 +43,13 @@
             <!-- {{item._source.productimage.thumbnail}} -->
             <v-flex>
               <v-img
+                min-width="60px"
                 max-width="300px"
                 max-height="300px"
                 :src="item._source.productimage ? imageBaseUrl+item._source.productimage.thumbnail.url : require('~/assets/no-image1.png')"
               ></v-img>
             </v-flex>
-            <v-divider vertical class="mx-3"></v-divider>
+            <v-divider vertical class="mx-2"></v-divider>
             <v-flex class="display-1">
               <h2
                 class="display-2 mb-3 mt-1"

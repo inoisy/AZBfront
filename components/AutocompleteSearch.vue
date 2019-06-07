@@ -31,16 +31,16 @@
       <div
         v-if="data.item.productimage.thumbnail"
         class="align-center justify-center"
-        style="max-width:60px; min-width: 60px;    display: inline-flex;"
+        style="max-width:60px; min-width: 60px; width:60px;    display: inline-flex;"
       >
         <img
-          style="max-width:50px; max-height: 50px"
+          style="max-width:50px; max-height: 50px; width:50px"
           :src="data.item.productimage.thumbnail ? imageBaseUrl+data.item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
         >
       </div>
-      <!-- <v-divider vertical class="px-3"></v-divider> -->
-      <div>
-        <p class="mb-0" style="font-size:14px">
+      <!-- <v-divider vertical class="ma-1 py-1"></v-divider> -->
+      <div style="max-width: calc(100% - 60px);">
+        <p class="mb-1 text-truncate" style="font-size: 1rem">
           <span
             v-html="data.item.highlight.name && data.item.highlight.name.length > 0 ? data.item.highlight.name[0] : data.item.name"
           ></span>
@@ -54,7 +54,7 @@
         </p>
         <p
           class="mb-0 text-truncate"
-          style="font-size:12px"
+          style="font-size:1rem"
           v-html="data.item.highlight.description && data.item.highlight.description.length > 0 ? data.item.highlight.description[0] : data.item.description"
         ></p>
       </div>
