@@ -9,7 +9,7 @@
     <v-container class="py-5">
       <!-- {{categories}} -->
       <v-layout row wrap>
-        <v-flex xs12 md4 class="menu-wrapper mb-4">
+        <v-flex xs12 md4 class="menu-wrapper mb-4 hidden-sm-and-down">
           <nav-menu :menuItems="categories" type="catalog"></nav-menu>
         </v-flex>
         <v-flex xs12 md8>
@@ -26,7 +26,7 @@
               <v-flex xs12 md4>
                 <v-img contain max-height="300px" v-if="item.img" :src="imageBaseUrl+ item.img.url"></v-img>
               </v-flex>
-              <v-flex xs12 md8 class="pt-4">
+              <v-flex xs12 md8>
                 <h2 class="display-3 font-weight-bold">{{item.name}}</h2>
                 <div class="display-1">{{item.description}}</div>
               </v-flex>

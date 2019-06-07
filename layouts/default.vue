@@ -140,6 +140,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+
     <v-footer
       height="auto"
       style="position: relative; background-size: cover; background-position: center;"
