@@ -4,6 +4,7 @@ const imageBaseUrl = process.env.IMAGE_BASE_URL || "http://api.yakutov.com"
 
 
 module.exports = {
+  version: pkg.version,
   mode: 'universal',
   env: {
     baseUrl: backendUrl,
@@ -106,6 +107,7 @@ module.exports = {
    ** Nuxt.js modules
    */
   modules: [
+    "nuxt-ssr-cache",
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
     '@nuxtjs/apollo', ['vue-yandex-maps/nuxt', { // you may define your apiKey, lang and version or skip this.
@@ -113,14 +115,28 @@ module.exports = {
       lang: 'ru_RU',
       version: '2.1'
     }],
-    ['@nuxtjs/component-cache', {
-      max: 10000,
-      maxAge: 1000 * 60 * 60
-    }],
+    // ['@nuxtjs/component-cache', {
+    //   max: 10000,
+    //   maxAge: 1000 * 60 * 60
+    // }],
     '@nuxtjs/markdownit',
-    // "nuxt-ssr-cache",
+    // ["nuxt-ssr-cache", {
+    //   useHostPrefix: false,
+    //   store: {
+    //     type: 'memory',
+
+    //     // maximum number of pages to store in memory
+    //     // if limit is reached, least recently used page
+    //     // is removed.
+    //     max: 100,
+
+    //     // number of seconds to store this page in cache
+    //     ttl: 60,
+    //   }
+    // }],
     '@nuxtjs/sitemap',
-    '@nuxtjs/robots'
+    '@nuxtjs/robots',
+
     // ['vue-scrollto/nuxt', {
     //   duration: 300
     // }],
@@ -129,18 +145,41 @@ module.exports = {
     UserAgent: '*',
     Disallow: '/'
   },
-  // cache: {
-  //   store: {
-  //     type: "redis",
-  //     host: "localhost",
-  //     ttl: 10 * 60,
-  //     pages: ['/'],
-  //     configure: [
-  //       ['maxmemory', "400mb"],
-  //       ['maxmemory-policy', 'allkeys-lru']
-  //     ]
-  //   }
-  // },
+  cache: {
+    // if you're serving multiple host names (with differing
+    // results) from the same server, set this option to true.
+    // (cache keys will be prefixed by your host name)
+    // if your server is behind a reverse-proxy, please use
+    // express or whatever else that uses 'X-Forwarded-Host'
+    // header field to provide req.hostname (actual host name)
+    useHostPrefix: true,
+
+    store: {
+      type: 'redis',
+      host: 'localhost',
+      ttl: 10 * 60,
+      configure: [
+        // these values are configured
+        // on redis upon initialization
+        ['maxmemory', '200mb'],
+        ['maxmemory-policy', 'allkeys-lru'],
+      ],
+      // type: 'memory',
+
+      // // maximum number of pages to store in memory
+      // // if limit is reached, least recently used page
+      // // is removed.
+      // max: 100,
+
+      // // number of seconds to store this page in cache
+      // ttl: 60,
+    },
+    pages: [
+      // these are prefixes of pages that need to be cached
+      // if you want to cache all pages, just include '/'
+      "/"
+    ],
+  },
   sitemap: {
     // hostname: 'https://example.com',
     gzip: true,

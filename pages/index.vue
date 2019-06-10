@@ -189,62 +189,16 @@ export default {
         }
       `
     });
-    //  manufacturers {
-    //       id
-    //       name
-    //       slug
-    //       description
-    //       img {
-    //         url
-    //       }
-    //     }
-    // console.log("TCL: categories", categoriesData);
-    // const categories = [
-    //   {
-    //     name: "Автоматические выключатели"
-    //   }
-    // ];
-    await ctx.store.dispatch("fetchGeneralInfo");
-    // await ctx.store.dispatch("fetchMainCategories");
 
-    // console.log("TCL: data", data);
+    await ctx.store.dispatch("fetchGeneralInfo");
     return {
-      // categories: categoriesData.categories, //categoriesData.categories
       manufacturers: pageData.manufacturers,
       sliders: pageData.sliders,
       page: pageData.pages[0],
       categories: pageData.categories
     };
   },
-  computed: {
-    // categories() {
-    //   return this.$store.state.mainCategories;
-    // }
-    // manufacturers() {
-    //   return this.$store.state.manufacturers;
-    // }
-  }
-  // watch: {
-  //   search(val) {
-  //     val && val !== this.select && val.length > 3 && this.querySelections(val);
-  //   }
-  // },
-  // methods: {
-  //   async querySelections(v) {
-  //     this.loading = true;
-  //     const query = {
-  //       size: 10,
-  //       from: 0,
-  //       query: {
-  //         multi_match: {
-  //           query: v,
-  //           fields: ["name", "description", "SKU"]
-  //         }
-  //       }
-  //     };
-  //     this.loading = false;
-  //   }
-  // }
+  computed: {}
 };
 </script>
 <style lang="stylus" >
