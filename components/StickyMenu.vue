@@ -23,9 +23,13 @@ export default {
         : null;
     },
     sidebarStyles() {
-      const bottom =
-        this.sidebar.windowScrollTop + this.sidebar.innerHeight >
-        this.sidebar.offsetHeight + this.sidebar.elemHeight;
+      const currScroll =
+        this.sidebar.windowScrollTop + this.sidebar.innerHeight;
+      // console.log("TCL: sidebarStyles -> pos1", pos1);
+      const bottomSide = this.sidebar.offsetHeight + this.sidebar.elemHeight;
+      // console.log("TCL: sidebarStyles -> pos2", pos2);
+      const bottom = currScroll > bottomSide;
+
       const top = this.sidebar.windowScrollTop > this.sidebar.offsetHeight;
       return {
         "fixed-top": !this.breakpoint && !bottom && top,

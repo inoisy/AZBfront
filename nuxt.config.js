@@ -118,9 +118,9 @@ module.exports = {
       maxAge: 1000 * 60 * 60
     }],
     '@nuxtjs/markdownit',
-    "nuxt-ssr-cache",
-'@nuxtjs/sitemap',
-'@nuxtjs/robots'
+    // "nuxt-ssr-cache",
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots'
     // ['vue-scrollto/nuxt', {
     //   duration: 300
     // }],
@@ -129,18 +129,18 @@ module.exports = {
     UserAgent: '*',
     Disallow: '/'
   },
-  cache: {
-    store: {
-      type: "redis",
-      host: "localhost",
-      ttl: 10 * 60,
-      pages: ['/'],
-      configure: [
-        ['maxmemory', "400mb"],
-        ['maxmemory-policy', 'allkeys-lru']
-      ]
-    }
-  },
+  // cache: {
+  //   store: {
+  //     type: "redis",
+  //     host: "localhost",
+  //     ttl: 10 * 60,
+  //     pages: ['/'],
+  //     configure: [
+  //       ['maxmemory', "400mb"],
+  //       ['maxmemory-policy', 'allkeys-lru']
+  //     ]
+  //   }
+  // },
   sitemap: {
     // hostname: 'https://example.com',
     gzip: true,

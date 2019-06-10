@@ -32,12 +32,10 @@
               >
             </v-flex>
             <v-flex class="xs12 sm8">
-              <h2 class="mb-4 font-weight-bold">{{item.name}}</h2>
+              <h2 class="mb-3 font-weight-bold">{{item.name}}</h2>
               <div class="display-1" v-html="item.description"></div>
             </v-flex>
           </v-layout>
-
-          <!-- <p></p> -->
         </v-card>
       </v-layout>
     </v-container>

@@ -1,11 +1,13 @@
 <template>
   <div>
-    <section class="grey lighten-2">
+    <default-header :breadcrumbs="breadcrumbs" :title="title"></default-header>
+
+    <!-- <section class="grey lighten-2">
       <v-container grid-list-xs>
         <breadcrumbs class="pl-1" :items="breadcrumbs"/>
         <h1>{{title}}</h1>
       </v-container>
-    </section>
+    </section>-->
     <section>
       <v-container class="py-5">
         <v-layout row wrap>
@@ -56,6 +58,8 @@
 
 <script>
 import Breadcrumbs from "~/components/Breadcrumbs";
+import DefaultHeader from "~/components/DefaultHeader";
+
 // import { yandexMap, ymapMarker } from "vue-yandex-maps";
 
 export default {
@@ -72,7 +76,8 @@ export default {
     };
   },
   components: {
-    Breadcrumbs
+    Breadcrumbs,
+    DefaultHeader
     // yandexMap,
     // ymapMarker
   },

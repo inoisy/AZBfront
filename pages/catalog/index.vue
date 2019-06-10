@@ -18,16 +18,16 @@
               :to="`/catalog/${item.slug}`"
               class="category-card-wrapper link mb-4 text-decoration-none align-start pa-3 xs12 layout wrap row"
             >
-              <v-flex xs12 md4 class="py-4 px-3">
+              <v-flex xs12 md3 lg2 class="px-3">
                 <v-img
                   contain
-                  max-height="300px"
+                  max-height="170px"
                   :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
                 ></v-img>
               </v-flex>
               <v-divider class="flex xs12 hidden-md-and-up mt-3 mb-2"></v-divider>
-              <v-flex xs12 md8>
-                <h2 class="display-3 font-weight-bold">{{item.name}}</h2>
+              <v-flex xs12 md9 lg10>
+                <h2 class="display-2 font-weight-bold">{{item.name}}</h2>
                 <div class="display-1">{{item.description}}</div>
               </v-flex>
               <!-- </v-card> -->
@@ -79,7 +79,7 @@ export default {
     const { data: categoryData } = await client.query({
       query: gql`
         {
-          categories(where: { ismain: true }) {
+          categories(where: { ismain: true }, sort: "name:asc") {
             id
             name
             slug

@@ -1,11 +1,12 @@
 <template>
   <div>
-    <section class="grey lighten-2">
+    <default-header :breadcrumbs="breadcrumbs" :title="product.name"></default-header>
+    <!-- <section class="grey lighten-2">
       <v-container class="text-xs-center text-md-left">
         <breadcrumbs class="pl-1" :items="breadcrumbs"/>
         <h1>{{product.name}}</h1>
       </v-container>
-    </section>
+    </section>-->
     <v-container class="py-5">
       <v-layout row wrap>
         <v-flex xs12 md8 order-xs2 order-md1 class="pr-3 display-1">
@@ -37,7 +38,7 @@
         </v-flex>
         <v-flex xs12 md4 order-xs1 order-md2 class="mb-4">
           <v-card
-            class="pa-4 mb-4"
+            class="pa-3 mb-4"
             style="border-radius: 10px"
             hover
             ripple
@@ -149,6 +150,7 @@
 import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
 import CatalogDialog from "~/components/CatalogDialog";
+import DefaultHeader from "~/components/DefaultHeader";
 
 export default {
   head() {
@@ -179,7 +181,8 @@ export default {
   },
   components: {
     Breadcrumbs,
-    CatalogDialog
+    CatalogDialog,
+    DefaultHeader
   },
   computed: {
     contacts() {
@@ -306,6 +309,6 @@ export default {
 
 .img-thumbnail {
   max-width: 100%;
-  max-height: 300px;
+  max-height: 200px;
 }
 </style>

@@ -25,20 +25,23 @@
     </v-container>
     <section class="grey lighten-3">
       <v-container class="py-5">
-        <v-layout row wrap>
-          <v-flex xs12>
-            <h2>Каталог {{manufacturer.name}}</h2>
-            <div v-for="item in categories" :key="item.id">
-              <v-subheader class="pl-0 text-uppercase mt-4">{{item.element.name}}</v-subheader>
-              <div v-for="child in item.items" :key="child.id">
-                <nuxt-link
-                  class="display-2 text-decoration-none link-hover mb-1 d-inline-block"
-                  :to="`/catalog/${item.element.slug}/${child.slug}/${manufacturer.slug}`"
-                >{{child.name}}</nuxt-link>
-              </div>
+        <!-- <v-layout row wrap> -->
+        <!-- <v-flex xs12> -->
+        <h2>Каталог {{manufacturer.name}}</h2>
+        <div class="catalog-wrap">
+          <div v-for="item in categories" :key="item.id">
+            <v-subheader class="pl-0 text-uppercase mt-4">{{item.element.name}}</v-subheader>
+            <div v-for="child in item.items" :key="child.id">
+              <nuxt-link
+                class="display-1 text-decoration-none link-hover mb-1 d-inline-block"
+                :to="`/catalog/${item.element.slug}/${child.slug}/${manufacturer.slug}`"
+              >{{child.name}}</nuxt-link>
             </div>
-          </v-flex>
-        </v-layout>
+          </div>
+        </div>
+
+        <!-- </v-flex> -->
+        <!-- </v-layout> -->
       </v-container>
     </section>
     <section class="certificate-wrap" v-if="manufacturer.certificate">
@@ -230,12 +233,20 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
+.catalog-wrap {
+  columns: 1;
+}
+
 .certificate-text-wrap {
   padding-left: 0;
 }
 
 // }
 @media (min-width: 960px) {
+  .catalog-wrap {
+    columns: 2;
+  }
+
   .certificate-text-wrap {
     padding-left: 40px;
   }

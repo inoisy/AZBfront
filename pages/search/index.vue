@@ -6,23 +6,22 @@
           <v-flex>
             <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs"/>
             <h1 class="mb-5">Поиск по каталогу</h1>
+            <v-text-field
+              solo
+              autofocus
+              ref="search"
+              label="Поиск по каталогу"
+              v-model="search"
+              :rules="[rules.required, rules.counterMax,rules.counterMin]"
+              v-debounce:1s="throttledMethod"
+            ></v-text-field>
           </v-flex>
         </v-layout>
       </v-container>
     </section>
     <v-container class="py-5">
       <v-layout wrap>
-        <v-flex xs12 class="mb-4">
-          <v-text-field
-            solo
-            autofocus
-            ref="search"
-            label="Поиск по каталогу"
-            v-model="search"
-            :rules="[rules.required, rules.counterMax,rules.counterMin]"
-            v-debounce:1s="throttledMethod"
-          ></v-text-field>
-        </v-flex>
+        <!-- <v-flex xs12 class="mb-3"></v-flex> -->
         <!-- <v-divider></v-divider> -->
         <!-- {{searchItems}} -->
         <!-- <div v-for="(item, $index) in items" :key="$index" class="infinite-wrapper">
@@ -30,7 +29,7 @@
     </div>
         <infinite-loading @infinite="infiniteHandler" force-use-infinite-wrapper=".infinite-wrapper"></infinite-loading>-->
         <v-flex v-if="searchItems && searchItems.length > 0">
-          <h2>Результаты поиска</h2>
+          <h2 class="mb-4">Результаты поиска</h2>
           <v-card
             class="mb-3 layout row display-flex pa-3"
             v-for="item in searchItems"
@@ -41,11 +40,12 @@
             ripple
           >
             <!-- {{item._source.productimage.thumbnail}} -->
-            <v-flex>
+            <v-flex xs2 style="min-width:60px" class="flex-center justify-center">
               <v-img
+                contain
                 min-width="60px"
-                max-width="300px"
-                max-height="300px"
+                max-width="170px"
+                max-height="170px"
                 :src="item._source.productimage ? imageBaseUrl+item._source.productimage.thumbnail.url : require('~/assets/no-image1.png')"
               ></v-img>
             </v-flex>

@@ -66,14 +66,16 @@
               ripple
             >
               <nuxt-link :to="`/catalog/${item.slug}`" class="catalog-link" style>
-                <div class="img-wrapper px-3 py-4 grey lighten-3">
-                  <img
+                <div class="img-wrapper px-3 py-3 grey lighten-3">
+                  <v-img
+                    max-height="170px"
+                    contain
                     class="catalog-link-img d-block ma-auto"
                     :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
-                  >
+                  ></v-img>
                 </div>
 
-                <div class="pa-3 catalog-link-text font-weight-medium" style>{{item.name}}</div>
+                <div class="py-2 px-3 display-1 font-weight-medium" style>{{item.name}}</div>
               </nuxt-link>
             </v-card>
           </v-flex>
@@ -81,7 +83,7 @@
       </v-container>
     </section>
     <section class="grey lighten-3">
-      <v-container class="py-5" grid-list-lg>
+      <v-container class="pt-5 pb-1" grid-list-lg>
         <v-layout row wrap justify-center>
           <h2 class="text-uppercase text-xs-center xs12 flex mb-4">ПРОИЗВОДИТЕЛИ</h2>
           <v-flex xs6 sm4 md4 lg3 v-for="item in manufacturers" :key="item.slug" class="mb-4">
@@ -127,7 +129,6 @@ import gql from "graphql-tag";
 export default {
   head() {
     return {
-      // titleTemplate: "",
       title: "Интернет магазин электротехники и электрооборудования",
       meta: [
         {
@@ -158,8 +159,9 @@ export default {
             description
             content
           }
-          categories(where: { ismain: true }) {
+          categories(where: { ismain: true }, sort: "name:asc") {
             id
+            updatedAt
             name
             slug
             img {
@@ -299,15 +301,10 @@ export default {
       // background-color: #1F5BFF;
       // border-radius: 9px;
       .catalog-link-img {
-        max-height: 200px;
+        // max-height: 200px;
         // width: 40px;
         // max-height: 40px;
       }
-    }
-
-    .catalog-link-text {
-      font-size: 1.3rem;
-      position: relative;
     }
   }
 

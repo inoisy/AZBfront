@@ -1,14 +1,12 @@
 <template>
   <div>
-    <section class="grey lighten-2">
-      <v-container id="main-wrapper">
-        <breadcrumbs class="pl-1 mb-4" :items="breadcrumbs"/>
-        <h1 class="display-5 mb-5 font-weight-bold">{{category.name }}</h1>
-      </v-container>
-    </section>
+    <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
     <v-container class="pt-5 d-flex">
       <v-layout class="d-flex all-wrapper" id="contentWrapper">
-        <div class="menu-wrapper" v-if="showFilters || manufacturers && manufacturers.length>1">
+        <div
+          class="menu-wrapper"
+          v-if="products && products.length > 0 && (showFilters || manufacturers && manufacturers.length > 1)"
+        >
           <sticky-menu class="menu-child">
             <slot>
               <v-expansion-panel v-if="manufacturers && manufacturers.length>1">
@@ -29,7 +27,7 @@
                   </v-card>
                 </v-expansion-panel-content>
               </v-expansion-panel>
-              <v-expansion-panel expand v-if="showFilters">
+              <v-expansion-panel expand v-if="showFilters ">
                 <v-expansion-panel-content
                   v-for="(item, i) in Object.keys(category.filters)"
                   :key="i"
@@ -72,40 +70,44 @@
               style="border-radius: 4px"
               tag="article"
             >
-              <div class="flex xs12 md4 px-4 align-items justify-center py-4">
-                <img
-                  style="max-width: 100%; max-height: 350px; margin: 0 auto; display: block;"
+              <div class="display-flex xs12 md4 px-3 align-center justify-center">
+                <v-img
+                  contain
+                  min-width="70px"
+                  max-width="170px"
+                  max-height="170px"
                   v-if="item.productimage && item.productimage.thumbnail"
                   :src="item.productimage.thumbnail.url ? imageBaseUrl+item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
                   :alt="item.name"
-                >
+                />
               </div>
+
               <div class="flex xs12 md8">
                 <v-subheader class="pa-0">
                   <span>Артикул:&nbsp;</span>
                   <span class="font-weight-bold">{{item.SKU}}</span>
                 </v-subheader>
                 <h2>{{item.name}}</h2>
-                <p>{{item.description}}</p>
-                <p v-if="item.manufacturer">
-                  <span>Производитель:</span>
+                <div class="mb-1">{{item.description}}</div>
+                <div class="mb-1" v-if="item.manufacturer">
+                  Производитель:
                   <nuxt-link
                     class="font-weight-bold link-hover"
                     :to="`/manufacturers/${item.manufacturer.slug}`"
                   >{{item.manufacturer.name}}</nuxt-link>
-                </p>
-                <p v-for="(it,index) in Object.keys(item.filters)" :key="index">
-                  <span>{{it}}:</span>
+                </div>
+                <div class="mb-1" v-for="(it,index) in Object.keys(item.filters)" :key="index">
+                  {{it}}:
                   <span class="font-weight-bold">{{item.filters[it]}}</span>
-                </p>
+                </div>
                 <v-btn
-                  class="ml-0"
+                  class="ml-0 mt-3"
                   dark
                   @click="selectedName=item.name;dialog=!dialog;"
                   color="#1F5BFF"
                 >Заказать</v-btn>
                 <v-btn
-                  class="ml-0"
+                  class="ml-0 mt-3"
                   dark
                   outline
                   color="#1F5BFF"
@@ -127,6 +129,7 @@
           <div v-else>
             <v-alert type="error" :value="true">Ничего не найдено</v-alert>
             <v-btn
+              v-if="showClearFilters"
               class="ml-0 mt-4"
               large
               style="width: 100%"
@@ -151,16 +154,17 @@
         </v-card-text>
       </v-card>
     </v-flex>
-    <!-- <v-flex v-if="category.content">
-      <section class="grey lighten-2">
-        <v-container class="py-5">
-          <v-layout row wrap>
-            <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
-            <div v-html="category.content"></div>
-          </v-layout>
-        </v-container>
-      </section>
-    </v-flex>-->
+    <section
+      class="grey lighten-2 position-relative"
+      v-if="category.content && category.content.length>0"
+    >
+      <v-container class="py-5">
+        <v-layout row wrap>
+          <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
+          <div v-html="$md.render(category.content)"></div>
+        </v-layout>
+      </v-container>
+    </section>
     <catalog-dialog :name="selectedName"/>
   </div>
 </template>
@@ -213,6 +217,7 @@ import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
 import StickyMenu from "~/components/StickyMenu";
 import CatalogDialog from "~/components/CatalogDialog";
+import DefaultHeader from "~/components/DefaultHeader";
 
 export default {
   head() {
@@ -230,7 +235,8 @@ export default {
   components: {
     Breadcrumbs,
     StickyMenu,
-    CatalogDialog
+    CatalogDialog,
+    DefaultHeader
   },
   data() {
     return {
@@ -248,19 +254,29 @@ export default {
       return this.$vuetify.breakpoint.mdAndUp ? 140 : 80;
     },
     showFilters() {
-      return Object.keys(this.category.filters).length > 0;
+      return (
+        this.category.filters && Object.keys(this.category.filters).length > 0
+      );
     },
     showClearFilters() {
       let newArr = [];
-      for (let item of Object.keys(this.dataFilters)) {
-        newArr.push(!!this.dataFilters[item]);
-      }
-      const returnVal =
-        !!this.manufacturerSelected || newArr.some(item => item === true)
-          ? true
-          : false;
+      console.log(
+        "TCL: showClearFilters -> this.dataFilters",
+        this.dataFilters
+      );
 
-      return returnVal;
+      if (this.dataFilters && Object.keys(this.dataFilters).length > 0) {
+        for (let item of Object.keys(this.dataFilters)) {
+          newArr.push(!!this.dataFilters[item]);
+        }
+        const returnVal =
+          !!this.manufacturerSelected || newArr.some(item => item === true)
+            ? true
+            : false;
+        console.log("TCL: showClearFilters -> returnVal", returnVal);
+
+        return returnVal;
+      } else return false;
     },
     products() {
       return this.$store.state.products;

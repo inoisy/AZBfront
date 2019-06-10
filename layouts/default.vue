@@ -71,8 +71,9 @@
                 <v-icon>arrow_drop_down</v-icon>
               </v-btn>
 
-              <v-list>
+              <v-list :class="item.items.length > 8 ? 'two-columns' : ''">
                 <v-list-tile
+                  class="list-item"
                   active-class="text--accent"
                   v-for="(child, index) in item.items"
                   :key="index"
@@ -80,8 +81,7 @@
                   :to="`${item.to}/${child.slug}`"
                 >
                   <!-- :to="item.forms && item.forms.length > 0 ? localePath({ name: 'catalog-slug', params: { slug: item.forms[0].slug } }) :  localePath({ name: 'about-slug', params: { slug: item.slug } })" -->
-
-                  <v-list-tile-title>{{ child.name }}</v-list-tile-title>
+                  {{ child.name }}
                 </v-list-tile>
               </v-list>
             </v-menu>
@@ -200,6 +200,19 @@
   </v-app>
 </template>
 <style lang="stylus" >
+.two-columns {
+  column-count: 2;
+  max-width: 600px;
+
+  .list-item {
+    float: left;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    width: 100%;
+    // max-width: 300px;
+  }
+}
+
 .contact-wrapper {
   .contact-link {
     flex-direction: row;

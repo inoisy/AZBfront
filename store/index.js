@@ -108,7 +108,7 @@ export const actions = {
            }
            categories(where:{
              ismain: true
-           }){
+           }, sort: "name:asc"){
              id
              name
              slug

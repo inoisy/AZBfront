@@ -1,11 +1,13 @@
 <template>
   <div>
-    <section class="grey lighten-2">
+    <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
+
+    <!-- <section class="grey lighten-2">
       <v-container>
         <breadcrumbs class="pl-1 mb-4" :items="breadcrumbs"/>
         <h1 class="display-4 mb-5 font-weight-bold">{{category.name}}</h1>
       </v-container>
-    </section>
+    </section>-->
     <v-container class="py-5">
       <!-- {{categories}} -->
       <v-layout row wrap>
@@ -23,17 +25,17 @@
               v-for="item in category.child"
               :key="item.id"
             >
-              <v-flex xs12 md4 class="py-4 px-3">
+              <v-flex xs12 md3 lg2 class="pa-3">
                 <v-img
                   contain
-                  max-height="250px"
+                  max-height="170px"
                   :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
                 ></v-img>
               </v-flex>
               <v-divider class="flex xs12 hidden-md-and-up mt-3 mb-2"></v-divider>
-              <v-flex xs12 md8>
-                <h2 class="display-3 font-weight-bold">{{item.name}}</h2>
-                <div class="display-1">{{item.description}}</div>
+              <v-flex xs12 md9 lg10>
+                <h2 class="display-2 font-weight-bold">{{item.name}}</h2>
+                <div class>{{item.description}}</div>
               </v-flex>
             </v-card>
           </v-layout>
@@ -44,7 +46,7 @@
       <v-container class="py-5">
         <v-layout row wrap>
           <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
-          <div v-html="category.content"></div>
+          <div v-html="$md.render(category.content)"></div>
         </v-layout>
       </v-container>
     </section>
@@ -55,6 +57,7 @@
 import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
 import NavMenu from "~/components/NavMenu";
+import DefaultHeader from "~/components/DefaultHeader";
 
 export default {
   head() {
@@ -76,7 +79,8 @@ export default {
   },
   components: {
     Breadcrumbs,
-    NavMenu
+    NavMenu,
+    DefaultHeader
   },
   computed: {
     breadcrumbs() {
@@ -103,15 +107,18 @@ export default {
     const { data: categoryData } = await client.query({
       query: gql`
         query CateforiesQuery($slug: String!) {
-          categoriesMain: categories(where: { ismain: true }) {
-            id
-            name
-            slug
-            img {
-              url
-            }
-          }
-          categories(where: { slug: $slug }) {
+          # categoriesMain: categories(
+          #   where: { ismain: true }
+          #   sort: "name:asc"
+          # ) {
+          #   id
+          #   name
+          #   slug
+          #   img {
+          #     url
+          #   }
+          # }
+          categories(where: { slug: $slug }, sort: "name:asc") {
             id
             name
             description
@@ -145,7 +152,7 @@ export default {
 
     return {
       filters: category.filters || {},
-      categories: categoryData.categoriesMain, //await ctx.store.dispatch("fetchMainCategories"),
+      categories: ctx.store.state.generalInfo.categories, //categoryData.categoriesMain, //await ctx.store.dispatch("fetchMainCategories"),
 
       category: category
     };
