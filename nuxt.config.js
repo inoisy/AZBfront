@@ -99,8 +99,13 @@ module.exports = {
    */
   plugins: [
     '@/plugins/vuetify',
-    '@/plugins/debounce',
-    '@/plugins/instant',
+    // '@/plugins/debounce',
+    // '@/plugins/instant',
+    "@/plugins/lazyload.js",
+    {
+      src: '@/plugins/aos.js',
+      ssr: false
+    },
   ],
 
   /*
@@ -164,16 +169,17 @@ module.exports = {
         ['maxmemory', '200mb'],
         ['maxmemory-policy', 'allkeys-lru'],
       ],
-      // type: 'memory',
 
-      // // maximum number of pages to store in memory
-      // // if limit is reached, least recently used page
-      // // is removed.
-      // max: 100,
-
-      // // number of seconds to store this page in cache
-      // ttl: 60,
     },
+    // type: 'memory',
+
+    // // maximum number of pages to store in memory
+    // // if limit is reached, least recently used page
+    // // is removed.
+    // max: 100,
+
+    // // number of seconds to store this page in cache
+    // ttl: 60,
     pages: [
       // these are prefixes of pages that need to be cached
       // if you want to cache all pages, just include '/'

@@ -35,7 +35,7 @@
                 <img
                   class="d-block"
                   style="width:100%"
-                  :src="imageBaseUrl+item.img.url"
+                  v-lazy="imageBaseUrl+item.img.url"
                   :alt="item.header"
                 >
               </v-flex>
@@ -67,12 +67,11 @@
             >
               <nuxt-link :to="`/catalog/${item.slug}`" class="catalog-link" style>
                 <div class="img-wrapper px-3 py-3 grey lighten-3">
-                  <v-img
-                    max-height="170px"
-                    contain
+                  <img
                     class="catalog-link-img d-block ma-auto"
-                    :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
-                  ></v-img>
+                    style="max-height: 170px;"
+                    v-lazy="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
+                  >
                 </div>
 
                 <div class="py-2 px-3 display-1 font-weight-medium" style>{{item.name}}</div>
@@ -100,7 +99,7 @@
               <img
                 v-if="item.img && item.img.url"
                 class="mx-auto d-block"
-                :src="imageBaseUrl + item.img.url"
+                v-lazy="imageBaseUrl + item.img.url"
                 :alt="item.name"
                 style="max-width:100%; "
               >
@@ -114,7 +113,7 @@
       <v-container class="py-5">
         <v-layout row wrap>
           <v-flex xs12>
-            <div class="display-1 mb-4" v-html="$md.render(page.content)"></div>
+            <div class="display-1 mb-4" data-aos="fade-up" v-html="$md.render(page.content)"></div>
             <v-btn color="#1F5BFF" large dark class="ml-0">О компании</v-btn>
           </v-flex>
         </v-layout>
