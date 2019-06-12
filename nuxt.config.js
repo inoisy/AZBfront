@@ -1,7 +1,8 @@
 const pkg = require('./package')
-const backendUrl = process.env.BACKEND_URL || "http://api.yakutov.com"
-const imageBaseUrl = process.env.IMAGE_BASE_URL || "http://api.yakutov.com"
+const axios = require("axios")
 
+const backendUrl = process.env.BACKEND_URL || "http://api.yakutov.com"
+const imageBaseUrl = process.env.IMAGE_BASE_URL || "http://cdn.yakutov.com"
 
 module.exports = {
   version: pkg.version,
@@ -120,31 +121,12 @@ module.exports = {
       lang: 'ru_RU',
       version: '2.1'
     }],
-    // ['@nuxtjs/component-cache', {
-    //   max: 10000,
-    //   maxAge: 1000 * 60 * 60
-    // }],
+
     '@nuxtjs/markdownit',
-    // ["nuxt-ssr-cache", {
-    //   useHostPrefix: false,
-    //   store: {
-    //     type: 'memory',
 
-    //     // maximum number of pages to store in memory
-    //     // if limit is reached, least recently used page
-    //     // is removed.
-    //     max: 100,
-
-    //     // number of seconds to store this page in cache
-    //     ttl: 60,
-    //   }
-    // }],
     '@nuxtjs/sitemap',
     '@nuxtjs/robots',
 
-    // ['vue-scrollto/nuxt', {
-    //   duration: 300
-    // }],
   ],
   robots: {
     UserAgent: '*',
@@ -162,7 +144,7 @@ module.exports = {
     store: {
       type: 'redis',
       host: 'localhost',
-      ttl: 10 * 60,
+      ttl: 4 * 60 * 60,
       configure: [
         // these values are configured
         // on redis upon initialization
@@ -187,21 +169,58 @@ module.exports = {
     ],
   },
   sitemap: {
-    // hostname: 'https://example.com',
+    // hostname: os.hostname(),
     gzip: true,
     // exclude: [
     //   '/secret',
     //   '/admin/**'
     // ],
-    // routes: [
-    //   '/page/1',
-    //   {
-    //     url: '/page/2',
-    //     changefreq: 'daily',
-    //     priority: 1,
-    //     lastmodISO: '2017-06-30T13:30:00.000Z'
-    //   }
-    // ]
+    async routes() {
+      // console.log("sitemap-generation")
+
+      // console.log("TCL: routes -> data", data)
+      // console.log("TCL: routes -> categories", categories)
+      let routes = []
+
+      const {
+        data: manufacturers
+      } = await axios.get(backendUrl + '/manufacturers?_limit=99999')
+      console.log("TCL: routes -> manufacturers", manufacturers)
+      for (let item of manufacturers) {
+        routes.push(`/manufacturers/${item.slug}`)
+      }
+
+
+      const {
+        data: pages
+      } = await axios.get(backendUrl + '/pages?parent.slug=about')
+      console.log("TCL: routes -> pages", pages)
+      for (let item of pages) {
+        routes.push(`/about/${item.slug}`)
+      }
+
+      const {
+        data: categories
+      } = await axios.get(backendUrl + '/categories?ismain=true&_limit=99999')
+      for (let category of categories) {
+        routes.push(`/catalog/${category.slug}`)
+
+      }
+      for (let category of categories) {
+        for (let subcategory of category.child) {
+          routes.push(`/catalog/${category.slug}/${subcategory.slug}`)
+        }
+      }
+      const {
+        data: products
+      } = await axios.get(backendUrl + '/products?_limit=99999')
+      // console.log("TCL: routes ->  products.length", products.length)
+      for (let product of products) {
+        routes.push(`/product/${product.slug}`)
+      }
+
+      return routes
+    }
   },
   markdownit: {
     preset: 'default',

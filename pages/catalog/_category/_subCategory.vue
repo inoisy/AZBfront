@@ -63,59 +63,7 @@
         </div>
         <v-flex class="content-wrapper">
           <div v-if="products && products.length > 0">
-            <v-card
-              v-for="item in products"
-              :key="item.id"
-              class="mb-4 pa-3 layout row wrap d-flex"
-              style="border-radius: 4px"
-              tag="article"
-            >
-              <div class="display-flex xs12 md4 px-3 align-center justify-center">
-                <v-img
-                  contain
-                  min-width="70px"
-                  max-width="170px"
-                  max-height="170px"
-                  v-if="item.productimage && item.productimage.thumbnail"
-                  :src="item.productimage.thumbnail.url ? imageBaseUrl+item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
-                  :alt="item.name"
-                />
-              </div>
-
-              <div class="flex xs12 md8">
-                <v-subheader class="pa-0">
-                  <span>Артикул:&nbsp;</span>
-                  <span class="font-weight-bold">{{item.SKU}}</span>
-                </v-subheader>
-                <h2>{{item.name}}</h2>
-                <div class="mb-1">{{item.description}}</div>
-                <div class="mb-1" v-if="item.manufacturer">
-                  Производитель:
-                  <nuxt-link
-                    class="font-weight-bold link-hover"
-                    :to="`/manufacturers/${item.manufacturer.slug}`"
-                  >{{item.manufacturer.name}}</nuxt-link>
-                </div>
-                <div class="mb-1" v-for="(it,index) in Object.keys(item.filters)" :key="index">
-                  {{it}}:
-                  <span class="font-weight-bold">{{item.filters[it]}}</span>
-                </div>
-                <v-btn
-                  class="ml-0 mt-3"
-                  dark
-                  @click="selectedName=item.name;dialog=!dialog;"
-                  color="#1F5BFF"
-                >Заказать</v-btn>
-                <v-btn
-                  class="ml-0 mt-3"
-                  dark
-                  outline
-                  color="#1F5BFF"
-                  nuxt
-                  :to="`/product/${item.slug}`"
-                >Подробнее</v-btn>
-              </div>
-            </v-card>
+            <product-card v-for="item in products" :key="item.id" :item="item"/>
           </div>
           <div v-else-if="$store.state.loading">
             <v-progress-circular
@@ -190,6 +138,23 @@
   }
 }
 
+.product-card-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  .img-wrapper {
+    min-height: 150px;
+    margin: auto;
+    min-width: 150px;
+
+    img {
+      display: block;
+      max-height: 100%;
+      margin: auto;
+    }
+  }
+}
+
 @media (min-width: 960px) {
   .all-wrapper {
     flex-direction: row;
@@ -209,6 +174,10 @@
       width: calc(100% - 20rem);
     }
   }
+
+  .product-card-wrapper {
+    flex-direction: row;
+  }
 }
 </style>
 
@@ -218,6 +187,7 @@ import Breadcrumbs from "~/components/Breadcrumbs";
 import StickyMenu from "~/components/StickyMenu";
 import CatalogDialog from "~/components/CatalogDialog";
 import DefaultHeader from "~/components/DefaultHeader";
+import ProductCard from "~/components/ProductCard";
 
 export default {
   head() {
@@ -236,7 +206,8 @@ export default {
     Breadcrumbs,
     StickyMenu,
     CatalogDialog,
-    DefaultHeader
+    DefaultHeader,
+    ProductCard
   },
   data() {
     return {

@@ -39,9 +39,6 @@
             </div>
           </div>
         </div>
-
-        <!-- </v-flex> -->
-        <!-- </v-layout> -->
       </v-container>
     </section>
     <section class="certificate-wrap" v-if="manufacturer.certificate">
@@ -111,12 +108,7 @@ export default {
   data() {
     return {
       imageBaseUrl: process.env.imageBaseUrl,
-      //   title: "Доставка",
       menuItems: [
-        // {
-        //   text: "О компании",
-        //   to: "/about"
-        // },
         {
           text: "Сертификаты",
           to: "/about/certificate"
@@ -129,11 +121,7 @@ export default {
     };
   },
   async asyncData(ctx) {
-    // console.log("TCL: asyncData -> ctx", ctx.params.slug);
-
     let client = ctx.app.apolloProvider.defaultClient;
-    // console.log("TCL: ctx.params.slug", ctx.params.slug);
-
     const { data: manufacturersData } = await client.query({
       query: gql`
         query ManufacturersQuery($slug: String!) {
@@ -142,7 +130,7 @@ export default {
             name
             slug
             description
-            categories {
+            categories(sort: "name:asc") {
               id
               name
               slug
@@ -151,7 +139,7 @@ export default {
                 name
                 slug
               }
-              child {
+              child(sort: "name:asc") {
                 id
                 name
                 slug

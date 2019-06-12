@@ -11,13 +11,20 @@
     <v-container class="py-5">
       <!-- {{categories}} -->
       <v-layout row wrap>
-        <v-flex xs12 md4 class="menu-wrapper mb-4 hidden-sm-and-down">
+        <v-flex xs12 md4 lg3 class="menu-wrapper mb-4 hidden-sm-and-down">
           <nav-menu :menuItems="categories" type="catalog"></nav-menu>
         </v-flex>
-        <v-flex xs12 md8>
+        <v-flex xs12 md8 lg9>
           <!-- <div class="display-1" v-html="page.content"></div> -->
           <v-layout row wrap v-if="category.child && category.child.length > 0">
-            <v-card
+            <category-card
+              v-for="item in category.child"
+              :key="item.name"
+              :item="item"
+              :to="`/catalog/${category.slug}/${item.slug}`"
+            />
+
+            <!-- <v-card
               hover
               ripple
               :to="`/catalog/${category.slug}/${item.slug}`"
@@ -37,7 +44,7 @@
                 <h2 class="display-2 font-weight-bold">{{item.name}}</h2>
                 <div class>{{item.description}}</div>
               </v-flex>
-            </v-card>
+            </v-card>-->
           </v-layout>
         </v-flex>
       </v-layout>
@@ -58,6 +65,7 @@ import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
 import NavMenu from "~/components/NavMenu";
 import DefaultHeader from "~/components/DefaultHeader";
+import CategoryCard from "~/components/CategoryCard";
 
 export default {
   head() {
@@ -80,7 +88,8 @@ export default {
   components: {
     Breadcrumbs,
     NavMenu,
-    DefaultHeader
+    DefaultHeader,
+    CategoryCard
   },
   computed: {
     breadcrumbs() {
@@ -160,9 +169,14 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
+.menu-wrapper {
+}
+
 @media (min-width: 960px) {
   .menu-wrapper {
     padding-right: 30px;
+    // flex-basis: 22rem;
+    // max-width: 22rem;
   }
 }
 </style>

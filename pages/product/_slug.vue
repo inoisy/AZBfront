@@ -9,7 +9,7 @@
     </section>-->
     <v-container class="py-5">
       <v-layout row wrap>
-        <v-flex xs12 md8 order-xs2 order-md1 class="pr-3 display-1">
+        <v-flex xs12 md8 lg9 order-xs2 order-md1 class="pr-3 display-1">
           <p v-if="product.manufacturer">
             <span class="font-weight-bold">Производитель:</span>
             <nuxt-link
@@ -36,9 +36,9 @@
 
           <!-- {{}} -->
         </v-flex>
-        <v-flex xs12 md4 order-xs1 order-md2 class="mb-4">
+        <v-flex xs12 md4 lg3 order-xs1 order-md2 class="mb-4">
           <v-card
-            class="pa-3 mb-4"
+            class="pa-5 mb-4"
             style="border-radius: 10px"
             hover
             ripple
@@ -48,12 +48,15 @@
               class="img-thumbnail d-block mx-auto"
               v-if="product.productimage && product.productimage.thumbnail"
               :src="imageBaseUrl+product.productimage.thumbnail.url"
-              alt
+              :alt="product.name"
+              :title="product.name"
             >
           </v-card>
           <v-dialog v-model="dialogImg">
-            <div class="pa-3" style="background-color: white;
-    position: relative;">
+            <div
+              class="pa-3 fullscreen-img"
+              v-lazy:background-image="imageBaseUrl+product.productimage.img.url"
+            >
               <v-btn
                 class="close-btn"
                 flat
@@ -66,12 +69,10 @@
               >
                 <v-icon>close</v-icon>
               </v-btn>
-              <v-img
-                v-if="product.productimage.img"
-                contain
-                :src="imageBaseUrl+product.productimage.img.url"
-                max-height="80vh"
-              />
+
+              <!-- <div
+                
+              />-->
             </div>
           </v-dialog>
           <v-btn
@@ -310,5 +311,18 @@ export default {
 .img-thumbnail {
   max-width: 100%;
   max-height: 200px;
+}
+
+.fullscreen-img {
+  background-color: white;
+  position: relative;
+  height: 90vh;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-position: center;
+  background-size: contain;
+  padding: 20px 0;
+  background-origin: content-box;
+  /* margin: 15px; */
 }
 </style>

@@ -6,7 +6,7 @@ const {
 } = require('nuxt')
 const app = express()
 const host = process.env.HOST || 'localhost'
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 8082
 
 app.set('port', port)
 

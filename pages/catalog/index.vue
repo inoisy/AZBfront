@@ -10,7 +10,13 @@
       <v-container v-bind="{ [`grid-list-${$vuetify.breakpoint.name}`]: true }" class="py-5">
         <v-layout row wrap>
           <v-flex xs12>
-            <v-card
+            <category-card
+              v-for="item in categories"
+              :key="item.name"
+              :item="item"
+              :to="`/catalog/${item.slug}`"
+            />
+            <!-- <v-card
               v-for="item in categories"
               :key="item.name"
               hover
@@ -30,17 +36,7 @@
                 <h2 class="display-2 font-weight-bold">{{item.name}}</h2>
                 <div class="display-1">{{item.description}}</div>
               </v-flex>
-              <!-- </v-card> -->
-              <!-- <h2 class="display-3 font-weight-bold" style="padding-right:56px;">{{item.name}}</h2>
-              <p>{{item.description}}</p>
-
-              <div class="img-wrapper pa-2">
-                <img
-                  :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
-                  class="d-block ma-auto"
-                >
-              </div>-->
-            </v-card>
+            </v-card>-->
           </v-flex>
         </v-layout>
       </v-container>
@@ -52,6 +48,7 @@
 import gql from "graphql-tag";
 
 import Breadcrumbs from "~/components/Breadcrumbs";
+import CategoryCard from "~/components/CategoryCard";
 
 export default {
   head() {
@@ -67,7 +64,8 @@ export default {
     };
   },
   components: {
-    Breadcrumbs
+    Breadcrumbs,
+    CategoryCard
   },
   data() {
     return {
@@ -115,8 +113,43 @@ export default {
 };
 </script>
 <style lang="stylus">
-.category-card-wrapper {
-  display: flex;
-  flex-direction: column;
-}
+
+
+
+
+
+
+
+// .category-card-wrapper {
+
+
+
+
+
+
+
+//   display: flex;
+
+
+
+
+
+
+
+//   flex-direction: column;
+
+
+
+
+
+
+
+// }
+
+
+
+
+
+
+
 </style>

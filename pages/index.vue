@@ -65,12 +65,14 @@
               hover
               ripple
             >
-              <nuxt-link :to="`/catalog/${item.slug}`" class="catalog-link" style>
+              <nuxt-link :to="`/catalog/${item.slug}`" class="catalog-link">
                 <div class="img-wrapper px-3 py-3 grey lighten-3">
                   <img
                     class="catalog-link-img d-block ma-auto"
                     style="max-height: 170px;"
                     v-lazy="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
+                    :alt="item.name"
+                    :title="item.name"
                   >
                 </div>
 
@@ -101,7 +103,7 @@
                 class="mx-auto d-block"
                 v-lazy="imageBaseUrl + item.img.url"
                 :alt="item.name"
-                style="max-width:100%; "
+                style="max-width:100%;"
               >
               <p v-else>{{item.name}}</p>
             </v-card>
@@ -248,16 +250,8 @@ export default {
   .catalog-link {
     text-decoration: none;
 
-    // display: flex;
-    // align-items: center;
     .img-wrapper {
-      // background-color: #1F5BFF;
-      // border-radius: 9px;
-      .catalog-link-img {
-        // max-height: 200px;
-        // width: 40px;
-        // max-height: 40px;
-      }
+      min-height: 200px;
     }
   }
 

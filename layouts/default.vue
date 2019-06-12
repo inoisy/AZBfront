@@ -286,7 +286,7 @@
   flex-direction: row;
   display: flex;
   align-items: center;
-  max-width: 1785px;
+  // max-width: 1785px;
 }
 
 .toolbar-top-inner {
