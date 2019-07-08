@@ -3,31 +3,36 @@
     <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
     <v-container class="pt-5 d-flex">
       <v-layout class="d-flex all-wrapper" id="contentWrapper">
-        <div
-          class="menu-wrapper"
-          v-if="products && products.length > 0 && (showFilters || manufacturers && manufacturers.length > 1)"
-        >
+        <div class="menu-wrapper" v-show="showFilters || manufacturers && manufacturers.length>1">
           <sticky-menu class="menu-child">
             <slot>
-              <v-expansion-panel v-if="manufacturers && manufacturers.length>1">
-                <v-expansion-panel-content>
-                  <template v-slot:header>
-                    <div>Производитель</div>
-                  </template>
-                  <v-card>
-                    <v-card-text class="grey lighten-3">
-                      <v-checkbox
-                        v-model="manufacturerSelected"
-                        :label="checkbox.name"
-                        v-for="(checkbox,index) in manufacturers"
-                        :key="index"
-                        :value="checkbox.id"
-                      ></v-checkbox>
-                    </v-card-text>
-                  </v-card>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
-              <v-expansion-panel expand v-if="showFilters ">
+              <!-- <v-expansion-panel >
+              <v-expansion-panel-content>-->
+              <!-- <template v-slot:header> -->
+              <div v-if="manufacturers && manufacturers.length>1" class="mb-3">
+                <v-card class="pt-2">
+                  <!-- <v-card-title primary-title> -->
+                  <v-subheader>ПРОИЗВОДИТЕЛИ</v-subheader>
+                  <!-- </v-card-title> -->
+
+                  <v-card-text class="pt-0">
+                    <v-checkbox
+                      v-model="manufacturerSelected"
+                      :label="checkbox.name"
+                      v-for="(checkbox) in manufacturers"
+                      :key="checkbox.id"
+                      :value="checkbox.id"
+                    ></v-checkbox>
+                  </v-card-text>
+                </v-card>
+              </div>
+
+              <!-- <div></div> -->
+              <!-- </template> -->
+
+              <!-- </v-expansion-panel-content>
+              </v-expansion-panel>-->
+              <v-expansion-panel v-if="showFilters ">
                 <v-expansion-panel-content
                   v-for="(item, i) in Object.keys(category.filters)"
                   :key="i"
@@ -63,7 +68,7 @@
         </div>
         <v-flex class="content-wrapper">
           <div v-if="products && products.length > 0">
-            <product-card v-for="item in products" :key="item.id" :item="item"/>
+            <product-card v-for="item in products" :key="item.id" :item="item" />
           </div>
           <div v-else-if="$store.state.loading">
             <v-progress-circular
@@ -113,13 +118,13 @@
         </v-layout>
       </v-container>
     </section>
-    <catalog-dialog :name="selectedName"/>
+    <catalog-dialog :name="selectedName" />
   </div>
 </template>
 <style lang="stylus" scoped>
 .all-wrapper {
   flex-direction: column;
-  min-height: 50vh;
+  min-height: 100vh;
 
   .menu-wrapper {
     position: relative;
@@ -322,6 +327,7 @@ export default {
       // );
       await this.$store.dispatch("fetchProducts", {
         categoryId: this.category.id,
+        manufacturers: this.manufacturerSelected,
         filters: this.dataFilters,
         size: this.itemsPerPage,
         from: (this.pageCurr - 1) * this.itemsPerPage
@@ -365,6 +371,7 @@ export default {
       this.pageCurr = 1;
       await this.$store.dispatch("fetchProducts", {
         categoryId: this.category.id,
+        manufacturers: this.manufacturerSelected,
         filters: this.dataFilters,
         size: this.itemsPerPage,
         from: 0
@@ -407,17 +414,18 @@ export default {
       }
     });
 
-    const products = await ctx.store.dispatch("fetchProducts", {
-      categoryId: categoryData.categories[0].id,
-      filters: null,
-      size: 10,
-      from: 0
-    });
     let manufacturer = params.filter
       ? categoryData.categories[0].manufacturers.find(
           item => item.slug === params.filter
         )
       : null;
+    const products = await ctx.store.dispatch("fetchProducts", {
+      categoryId: categoryData.categories[0].id,
+      filters: null,
+      size: 10,
+      from: 0,
+      manufacturers: manufacturer ? manufacturer.id : null
+    });
     await ctx.store.dispatch("fetchGeneralInfo");
 
     return {

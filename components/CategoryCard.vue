@@ -3,13 +3,14 @@
     hover
     ripple
     :to="to"
+    style="width:100%"
     class="category-card-wrapper link mb-4 text-decoration-none align-start pa-3"
   >
     <div class="img-wrapper ma-auto">
       <img
         class="ma-auto d-block"
         v-lazy="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
-      >
+      />
     </div>
     <v-divider class="hidden-md-and-up mt-3 mb-2 w-100"></v-divider>
 

@@ -33,10 +33,9 @@
             <v-icon class="mr-2 text-decoration-none" style="color:currentColor">picture_as_pdf</v-icon>
             <u>Техническая документация</u>
           </a>
-
-          <!-- {{}} -->
         </v-flex>
-        <v-flex xs12 md4 lg3 order-xs1 order-md2 class="mb-4">
+        <!-- {{product.productimage}} -->
+        <v-flex xs12 md4 lg3 order-xs1 order-md2 class="mb-4" v-if="product.productimage">
           <v-card
             class="pa-5 mb-4"
             style="border-radius: 10px"
@@ -46,13 +45,13 @@
           >
             <img
               class="img-thumbnail d-block mx-auto"
-              v-if="product.productimage && product.productimage.thumbnail"
+              v-if="product.productimage.thumbnail"
               :src="imageBaseUrl+product.productimage.thumbnail.url"
               :alt="product.name"
               :title="product.name"
-            >
+            />
           </v-card>
-          <v-dialog v-model="dialogImg">
+          <v-dialog v-model="dialogImg" v-if="product.productimage.img">
             <div
               class="pa-3 fullscreen-img"
               v-lazy:background-image="imageBaseUrl+product.productimage.img.url"
@@ -69,10 +68,6 @@
               >
                 <v-icon>close</v-icon>
               </v-btn>
-
-              <!-- <div
-                
-              />-->
             </div>
           </v-dialog>
           <v-btn
@@ -112,16 +107,16 @@
                   <div class="tabsText" style="display: block;">
                     <p>
                       <b>Самовывоз с нашего склада:</b>
-                      <br>По адресу: г. Москва Загородное шоссе дом 1 корпус 2 офис 212
+                      <br />По адресу: г. Москва Загородное шоссе дом 1 корпус 2 офис 212
                     </p>
 
                     <p>
                       <b>Доставка до двери</b>
-                      <br>Осуществляется курьерской службой или транспортной компанией (на Ваш выбор). Мы работаем с ведущими транспортными компаниями и доставляем заказы во все регионы России и Казахстана.
+                      <br />Осуществляется курьерской службой или транспортной компанией (на Ваш выбор). Мы работаем с ведущими транспортными компаниями и доставляем заказы во все регионы России и Казахстана.
                     </p>
                     <p>
                       <b>Доставка до терминала</b>
-                      <br>Транспортной компании в Москва – БЕСПЛАТНО.
+                      <br />Транспортной компании в Москва – БЕСПЛАТНО.
                     </p>
                   </div>
                 </v-card-text>
@@ -134,7 +129,7 @@
                   <a
                     :href="`mailto:mail@azb-es.ru`"
                   >mail@azb-es.ru</a>
-                  <br>Специалист свяжется с вами для уточнения деталей.
+                  <br />Специалист свяжется с вами для уточнения деталей.
                 </v-card-text>
               </v-card>
             </v-tab-item>
@@ -143,7 +138,7 @@
       </v-layout>
     </v-container>
 
-    <catalog-dialog :name="product.name"/>
+    <catalog-dialog :name="product.name" />
   </div>
 </template>
 
@@ -205,9 +200,7 @@ export default {
         },
         {
           text: this.product.category.name,
-          to: `/catalog/${this.product.category.parent[0].slug}/${
-            this.product.category.slug
-          }`
+          to: `/catalog/${this.product.category.parent[0].slug}/${this.product.category.slug}`
         },
         {
           text: this.product.name,

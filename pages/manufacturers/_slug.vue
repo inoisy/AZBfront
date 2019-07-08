@@ -130,6 +130,9 @@ export default {
             name
             slug
             description
+            catalog{
+              url
+            }
             categories(sort: "name:asc") {
               id
               name
