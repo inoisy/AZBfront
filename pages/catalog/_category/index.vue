@@ -17,14 +17,14 @@
         <v-flex xs12 md8 lg9>
           <!-- <div class="display-1" v-html="page.content"></div> -->
           <v-layout row wrap v-if="category.child && category.child.length > 0">
-            <category-card
+            <!-- <category-card
               v-for="item in category.child"
               :key="item.name"
               :item="item"
               :to="`/catalog/${category.slug}/${item.slug}`"
-            />
+            />-->
 
-            <!-- <v-card
+            <v-card
               hover
               ripple
               :to="`/catalog/${category.slug}/${item.slug}`"
@@ -32,19 +32,19 @@
               v-for="item in category.child"
               :key="item.id"
             >
-              <v-flex xs12 md3 lg2 class="pa-3">
+              <!-- <v-flex xs12 md3 lg2 class="pa-3">
                 <v-img
                   contain
                   max-height="170px"
                   :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
                 ></v-img>
-              </v-flex>
-              <v-divider class="flex xs12 hidden-md-and-up mt-3 mb-2"></v-divider>
+              </v-flex>-->
+              <!-- <v-divider class="flex xs12 hidden-md-and-up mt-3 mb-2"></v-divider> -->
               <v-flex xs12 md9 lg10>
-                <h2 class="display-2 font-weight-bold">{{item.name}}</h2>
-                <div class>{{item.description}}</div>
+                <h2 class="display-2 font-weight-bold mb-0">{{item.name}}</h2>
+                <!-- <div class>{{item.description}}</div> -->
               </v-flex>
-            </v-card>-->
+            </v-card>
           </v-layout>
         </v-flex>
       </v-layout>

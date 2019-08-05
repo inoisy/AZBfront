@@ -68,6 +68,7 @@
         </div>
         <v-flex class="content-wrapper">
           <div v-if="products && products.length > 0">
+            <!-- {{item.id}} -->
             <product-card v-for="item in products" :key="item.id" :item="item" />
           </div>
           <div v-else-if="$store.state.loading">
