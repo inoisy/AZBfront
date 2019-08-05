@@ -58,7 +58,7 @@
           <v-flex xs12>
             <h2 class="text-uppercase text-xs-center mb-4">КАТЕГОРИИ ТОВАРОВ</h2>
           </v-flex>
-          <v-flex xs12 sm6 md4 lg3 v-for="item in categories" :key="item.id">
+          <v-flex xs12 sm6 md4 lg3 xl2 v-for="item in categories" :key="item.id">
             <v-card
               class="catalog-link-wrapper fill-height flex pa-0"
               color="transparent"
