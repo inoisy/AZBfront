@@ -20,7 +20,7 @@
     </section>
     <v-container class="py-5" v-show="manufacturer.content">
       <v-layout row wrap>
-        <v-flex xs12 class="display-1" v-html="manufacturer.content"></v-flex>
+        <v-flex xs12 class="display-1" v-html="$md.render(manufacturer.content)"></v-flex>
       </v-layout>
     </v-container>
     <section class="grey lighten-3" v-show="categories.length>0">

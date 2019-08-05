@@ -4,7 +4,7 @@
       <v-container class="pb-4">
         <v-layout row wrap>
           <!-- <v-flex> -->
-          <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs"/>
+          <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs" />
           <h1 class="mb-5">Производители</h1>
           <!-- </v-flex> -->
         </v-layout>
@@ -25,11 +25,11 @@
             <v-flex class="xs12 sm4 justify-center align-center layout">
               <img
                 class="display-block"
-                style="max-width:100%"
+                style="max-width:80%"
                 v-if="item.img"
                 :src="imageBaseUrl+item.img.url"
                 :alt="item.name"
-              >
+              />
             </v-flex>
             <v-flex class="xs12 sm8">
               <h2 class="mb-3 font-weight-bold">{{item.name}}</h2>
