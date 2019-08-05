@@ -4,7 +4,7 @@
       <v-container class="pb-4">
         <v-layout row wrap>
           <v-flex>
-            <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs"/>
+            <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs" />
             <h1 class="mb-5">{{manufacturer.name}}</h1>
           </v-flex>
           <v-flex class="align-center layout hidden-sm-and-down">
@@ -13,17 +13,17 @@
               v-if="manufacturer.img"
               :src="imageBaseUrl+manufacturer.img.url"
               :alt="manufacturer.name"
-            >
+            />
           </v-flex>
         </v-layout>
       </v-container>
     </section>
-    <v-container class="py-5">
+    <v-container class="py-5" v-show="manufacturer.content">
       <v-layout row wrap>
         <v-flex xs12 class="display-1" v-html="manufacturer.content"></v-flex>
       </v-layout>
     </v-container>
-    <section class="grey lighten-3">
+    <section class="grey lighten-3" v-show="categories.length>0">
       <v-container class="py-5">
         <!-- <v-layout row wrap> -->
         <!-- <v-flex xs12> -->
@@ -53,7 +53,7 @@
             />
           </v-flex>
           <v-flex xs12 md8 class="mb-5 certificate-text-wrap">
-            <h2>{{manufacturer.certificate.name}} {{manufacturer.name}}</h2>
+            <h2>{{manufacturer.certificate.name}}</h2>
             <p>{{manufacturer.certificate.description}}</p>
             <p
               class="mb-0"
@@ -130,7 +130,7 @@ export default {
             name
             slug
             description
-            catalog{
+            catalog {
               url
             }
             categories(sort: "name:asc") {

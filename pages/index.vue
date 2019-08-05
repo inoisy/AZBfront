@@ -19,8 +19,8 @@
           <v-container fill-height class="main-content">
             <v-layout justify-center align-center>
               <v-flex md7 lg8 class="text-xs-left justify-center column">
-                <h2 class="display-4 mb-4 font-weight-bold" v-text="item.header"/>
-                <p class="headline mb-4 font-weight-light" v-html="item.content"/>
+                <h2 class="display-4 mb-4 font-weight-bold" v-text="item.header" />
+                <p class="headline mb-4 font-weight-light" v-html="item.content" />
                 <v-btn
                   v-if="item.buttontext"
                   color="#1F5BFF"
@@ -37,7 +37,7 @@
                   style="width:100%"
                   v-lazy="imageBaseUrl+item.img.url"
                   :alt="item.header"
-                >
+                />
               </v-flex>
             </v-layout>
           </v-container>
@@ -73,7 +73,7 @@
                     v-lazy="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
                     :alt="item.name"
                     :title="item.name"
-                  >
+                  />
                 </div>
 
                 <div class="py-2 px-3 display-1 font-weight-medium" style>{{item.name}}</div>
@@ -103,8 +103,8 @@
                 class="mx-auto d-block"
                 v-lazy="imageBaseUrl + item.img.url"
                 :alt="item.name"
-                style="max-width:100%;"
-              >
+                style="max-width:80%; max-height: 80%; object-fit: contain;"
+              />
               <p v-else>{{item.name}}</p>
             </v-card>
           </v-flex>

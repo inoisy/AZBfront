@@ -6,8 +6,8 @@
         <v-flex xs12 md4 class="menu-wrapper mb-4">
           <nav-menu :menuItems="aboutPages" type="about"></nav-menu>
         </v-flex>
-        <v-flex xs12 md8 v-for="item in certificates" :key="item.id">
-          <card :item="item" :href="null">
+        <v-flex xs12 md8 >
+          <card v-for="item in certificates" :key="item.id" :item="item" :href="null">
             <template v-slot:subheader>
               <p class="mb-2 d-inline-block display-1" v-if="item.manufacturer">
                 Производитель:
