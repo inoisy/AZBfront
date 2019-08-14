@@ -3,7 +3,7 @@
     <section class="main-wrapper" :style="`background-image:url(${require('~/assets/bg1.jpg')})`">
       <v-carousel
         hide-delimiters
-        :hide-controls="sliders.length < 2"
+        :show-arrows="sliders.length < 2"
         height="35rem"
         light
         :cycle="false"
@@ -52,32 +52,34 @@
         </v-container>
       </div>
     </section>
+    <!-- {{categories}} -->
     <section>
       <v-container class="py-5" grid-list-lg>
         <v-layout row wrap>
           <v-flex xs12>
             <h2 class="text-uppercase text-xs-center mb-4">КАТЕГОРИИ ТОВАРОВ</h2>
           </v-flex>
-          <v-flex xs12 sm6 md4 lg3 xl2 v-for="item in categories" :key="item.id">
+          <v-flex xs12 sm6 md4 lg3 xl2 v-for="category in categories" :key="category.id">
             <v-card
               class="catalog-link-wrapper fill-height flex pa-0"
               color="transparent"
               hover
-              ripple
+              nuxt
+              :to="`/catalog/${category.slug}`"
             >
-              <nuxt-link :to="`/catalog/${item.slug}`" class="catalog-link">
-                <div class="img-wrapper px-3 py-3 grey lighten-3">
-                  <img
-                    class="catalog-link-img d-block ma-auto"
-                    style="max-height: 170px;"
-                    v-lazy="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
-                    :alt="item.name"
-                    :title="item.name"
-                  />
-                </div>
+              <!-- <nuxt-link :to="`/catalog/${category.slug}`" class="catalog-link"> -->
+              <div class="img-wrapper px-3 py-3 grey lighten-3">
+                <img
+                  class="catalog-link-img d-block ma-auto"
+                  style="max-height: 170px;"
+                  v-lazy="category.img ? imageBaseUrl+category.img.url : require('~/assets/no-image1.png')"
+                  :alt="category.name"
+                  :title="category.name"
+                />
+              </div>
 
-                <div class="py-2 px-3 display-1 font-weight-medium" style>{{item.name}}</div>
-              </nuxt-link>
+              <div class="py-2 px-3 display-1 font-weight-medium" style>{{category.name}}</div>
+              <!-- </nuxt-link> -->
             </v-card>
           </v-flex>
         </v-layout>
@@ -96,7 +98,6 @@
               flat
               color="transparent"
               hover
-              ripple
             >
               <img
                 v-if="item.img && item.img.url"
@@ -116,7 +117,7 @@
         <v-layout row wrap>
           <v-flex xs12>
             <div class="display-1 mb-4" data-aos="fade-up" v-html="$md.render(page.content)"></div>
-            <v-btn color="#1F5BFF" large dark class="ml-0">О компании</v-btn>
+            <v-btn color="#1F5BFF" large dark class="ml-0" to="/about">О компании</v-btn>
           </v-flex>
         </v-layout>
       </v-container>
@@ -162,7 +163,6 @@ export default {
           }
           categories(where: { ismain: true }, sort: "name:asc") {
             id
-            updatedAt
             name
             slug
             img {

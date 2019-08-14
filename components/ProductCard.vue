@@ -27,29 +27,27 @@
           :to="`/manufacturers/${item.manufacturer.slug}`"
         >{{item.manufacturer.name}}</nuxt-link>
       </div>
-      <!-- <v-btn
-        color="#1F5BFF"
-        class="ml-0 mb-2 px-1"
-        v-show="!showDesc"
-        dark
-        flat
-        @click="showDesc=!showDesc"
-      >Технические характеристики</v-btn> v-show="showDesc"-->
-      <div>
-        <div class="mb-1" v-for="(filter,index) in Object.keys(item.filters)" :key="index">
-          {{filter}}:
-          <span class="font-weight-bold">{{item.filters[filter]}}</span>
+      <div v-if="Object.keys(item.filters).length>0">
+        <v-btn
+          color="#1F5BFF"
+          class="ml-0 mb-2 px-1"
+          v-show="!showDesc"
+          dark
+          flat
+          @click="showDesc=!showDesc"
+        >Технические характеристики</v-btn>
+        <div v-show="showDesc">
+          <div class="mb-1" v-for="(filter,index) in Object.keys(item.filters)" :key="index">
+            {{filter}}:
+            <span class="font-weight-bold">{{item.filters[filter]}}</span>
+          </div>
         </div>
       </div>
+
       <div>
+        <v-btn class="ml-0" dark @click="handleOffer" color="#1F5BFF">Заказать</v-btn>
         <v-btn
-          class="ml-0 mt-3"
-          dark
-          @click="selectedName=item.name;dialog=!dialog;"
-          color="#1F5BFF"
-        >Заказать</v-btn>
-        <v-btn
-          class="ml-0 mt-3"
+          class="ml-0"
           dark
           outline
           color="#1F5BFF"
@@ -64,6 +62,14 @@
 <script>
 export default {
   props: ["item"],
+  methods: {
+    handleOffer() {
+      this.$store.commit("dialog", {
+        name: this.item.name,
+        isShow: true
+      });
+    }
+  },
   data() {
     return {
       imageBaseUrl: process.env.imageBaseUrl,

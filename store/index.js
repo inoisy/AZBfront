@@ -16,38 +16,17 @@ export const state = () => ({
   categories: [],
   mainCategories: [],
 
-  generalInfo: {}
-  // menuItems: [{
-  //     name: "Главная",
-  //     to: "/"
-  //   },
-  //   {
-  //     name: "Каталог",
-  //     to: "/catalog"
-  //   },
-  //   {
-  //     name: "Производители",
-  //     to: "/manufacturers"
-  //   },
-  //   {
-  //     name: "О компании",
-  //     to: "/about"
-  //   },
-  //   {
-  //     name: "Контакты",
-  //     to: "/contacts"
-  //   }
-  // ]
-
-  // catalog: {
-  //   manufacturerSelected: null
-  // }
+  generalInfo: {},
+  dialog: {
+    isShow: false,
+    name: ''
+  }
 })
 
 export const mutations = {
-  // catalog(state, prop, item) {
-  //   state[prop] = item
-  // },
+  dialog(state, item) {
+    state.dialog = item
+  },
   generalInfo(state, item) {
     state.generalInfo = item
   },
@@ -130,10 +109,6 @@ export const actions = {
         }
         `
     });
-
-    // const {
-    //   data: categories
-    // } = await this.$axios.get('categories/main')
     const returnData = {
       manufacturers: generalData.manufacturers,
       aboutPages: generalData.pages[0].children,
@@ -165,25 +140,7 @@ export const actions = {
     // console.log("TCL: fetchManufacturers -> ManufacturerData", ManufacturerData)
     await ctx.commit('manufacturers', manufacturers)
     return manufacturers
-    //    const {
-    //      data
-    //    } = await this.$axios.get( 'categories/main')
-    //    console.log("TCL: fetchMainCategories ->  'categories/main'",  'categories/main')
-    //    // console.log('fetchMainCategories', data)
-    //  
-
-    //    return data
   },
-  // async fetchMainCategories(ctx) {
-  //   const {
-  //     data
-  //   } = await this.$axios.get('categories/main')
-  //   // console.log("TCL: fetchMainCategories ->  'categories/main'",  'categories/main')
-  //   // console.log('fetchMainCategories', data)
-  //   await ctx.commit('mainCategories', data)
-
-  //   return data
-  // },
   async fetchProducts(ctx, input) {
     // console.log("TCL: fetchProducts -> input", input)
     await ctx.commit('loading', true)
@@ -203,14 +160,11 @@ export const actions = {
       query: {
         bool: {
           must: [{
-              match: {
-                ['category.id']: category
-              }
+            match: {
+              ['category.id']: category
             }
-
-          ]
+          }]
         }
-
       }
     }
     // if (category){
@@ -261,11 +215,6 @@ export const actions = {
       query
     );
 
-
-    // console.log("TCL: fetchProducts -> query", query)
-
-
-    // console.log("TCL: fetchProducts -> data", returnData)
     const products = returnData.hits.map(item => item._source)
     await ctx.commit('products', products)
     await ctx.commit('productsTotal', returnData.total.value)
@@ -321,10 +270,6 @@ export const actions = {
     return items
   },
   async search(ctx, input) {
-    // console.log("TCL: search -> input", input)
-
-    // console.log("hello from actions", ctx)
-
     const nameQuery = {
       highlight: {
         pre_tags: ["<span class='highlight'>"],
@@ -352,16 +297,6 @@ export const actions = {
       }
     };
 
-    // const allQuery = {
-    //   size: 20,
-    //   from: 0,
-    //   query: {
-    //     multi_match: {
-    //       query: input,
-    //       fields: ["SKU", "description"]
-    //     }
-    //   }
-    // };
     let items;
     const {
       data: nameData
@@ -371,36 +306,6 @@ export const actions = {
     );
     if (nameData.hits.length === 0) {
       console.log("nothing at name");
-      // const {
-      //   data: descriptionData
-      // } = await this.$axios.post(
-      //   "http://localhost:1337/products/search",
-      //   allQuery
-      // );
-      // if (descriptionData.hits.length === 0) {
-      //   console.log("nothing at description");
-      // const {
-      //   data: skuData
-      // } = await this.$axios.post(
-      //   "http://localhost:1337/products/search",
-      //   skuQuery
-      // );
-
-      // if (skuData.hits.length > 0) {
-      //   console.log("total", skuData.total);
-
-      //   items = skuData.hits;
-      // } else {
-      //   console.log("nothing at SKU");
-      // }
-      // } else {
-      //   console.log("total", descriptionData.total);
-      //   items = descriptionData.hits;
-      // }
-
-      // .filter(item => {
-      //   if (item._score > data.max_score * 0.75) return item;
-      // });
     } else {
       console.log("total", nameData.total);
 

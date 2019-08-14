@@ -40,13 +40,13 @@
           color="transparent"
           flat
         >
-          <img class="logo-img d-block" :src="require('~/assets/azblogo.png')">
+          <img class="logo-img d-block" :src="require('~/assets/azblogo.png')" />
         </v-btn>
         <v-spacer v-show="!searchActive"></v-spacer>
         <v-btn v-show="!searchActive" @click="searchActive=true" class icon>
           <v-icon>search</v-icon>
         </v-btn>
-        <autocomplete-search v-if="searchActive" @searchChange="searchActive=$event"/>
+        <autocomplete-search v-if="searchActive" @searchChange="searchActive=$event" />
         <v-btn v-show="searchActive" icon @click="searchActive = false">
           <v-icon>close</v-icon>
         </v-btn>
@@ -79,10 +79,7 @@
                   :key="index"
                   nuxt
                   :to="`${item.to}/${child.slug}`"
-                >
-                  <!-- :to="item.forms && item.forms.length > 0 ? localePath({ name: 'catalog-slug', params: { slug: item.forms[0].slug } }) :  localePath({ name: 'about-slug', params: { slug: item.slug } })" -->
-                  {{ child.name }}
-                </v-list-tile>
+                >{{ child.name }}</v-list-tile>
               </v-list>
             </v-menu>
             <v-btn
@@ -123,16 +120,15 @@
       </div>
     </v-toolbar>
     <v-content>
-      <nuxt/>
+      <nuxt />
     </v-content>
-
     <v-navigation-drawer v-model="drawer" temporary fixed right>
       <v-list>
         <v-list-tile
           active-class="text--accent"
           v-for="item in menuItems"
           :key="item.name"
-          :to="item.to"
+          :to="item.slug"
           nuxt
           ripple
         >
@@ -140,7 +136,6 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-
     <v-footer
       height="auto"
       style="position: relative; background-size: cover; background-position: center;"
@@ -197,6 +192,7 @@
         <p class="text-xs-center white--text mb-0">©Азбука Электроснабжения. Все права защищены.</p>
       </v-container>
     </v-footer>
+    <catalog-dialog />
   </v-app>
 </template>
 <style lang="stylus" >
@@ -339,23 +335,6 @@
   }
 }
 
-// @media only screen and (min-width: 1264px) {
-// .toolbar-bottom, .toolbar-top-inner {
-// max-width: 1185px;
-// }
-// }
-
-// @media only screen and (min-width: 1904px) {
-// .toolbar-bottom, .toolbar-top-inner {
-// max-width: 1785px;
-// }
-// }
-
-// @media (max-width: 960px) {
-// .v-toolbar__content {
-// display: flex;
-// }
-// }
 .search {
   // margin-left: 10rem !important;
   // width: 36rem;
@@ -387,16 +366,13 @@
 
 <script>
 import AutocompleteSearch from "~/components/AutocompleteSearch";
+import CatalogDialog from "~/components/CatalogDialog";
+
 export default {
-  components: { AutocompleteSearch },
+  components: { AutocompleteSearch, CatalogDialog },
 
   computed: {
     contacts() {
-      // console.log(
-      //   "TCL: contacts -> this.$store.state.generalInfo.contacts[0]",
-      //   this.$store.state.generalInfo.contacts
-      // );
-
       return this.$store.state.generalInfo.contacts &&
         this.$store.state.generalInfo.contacts.length > 0
         ? this.$store.state.generalInfo.contacts[0]
@@ -449,132 +425,17 @@ export default {
           : [];
       return items;
     }
-    // fields() {
-    //   if (!this.model) return [];
-
-    //   return Object.keys(this.model).map(key => {
-    //     return {
-    //       key,
-    //       value: this.model[key] || "n/a"
-    //     };
-    //   });
-    // }
   },
   methods: {
     async handleMap() {
       await this.$router.push("/contacts");
-      // await this.$vuetify.goTo("#yandex-map");
     }
   },
   data() {
     return {
       drawer: false,
-
       searchActive: false
     };
   }
 };
-// value: null,
-// suggestionAttribute: "name",
-// suggestions: [],
-// selectedEvent: "",
-// entries: [],
-// searchItems: [],
-// search: null,
-// model: null,
-// computed: {
-//   autocompleteItems() {
-//     return this.$store.state.autocompleteSearchItems.map(item => item.name);
-//   }
-// },
-// watch: {
-// async model() {
-//   console.log("watch model", this.model);
-//   const query = {
-//     size: 10,
-//     from: 0,
-//     query: {
-//       multi_match: {
-//         query: this.model,
-//         fields: ["SKU", "description", "name"]
-//       }
-//     }
-//   };
-//   const { data } = await this.$axios.post(
-//     "http://localhost:1337/products/search",
-//     query
-//   );
-//   this.entries = data.hits;
-//   // this.$store.commit("autocompleteSearchItems", data.hits);
-// },
-//   selectedEvent() {
-//     console.log(this.selectedEvent);
-//   },
-//   search() {
-//     console.log("watch model", this.search);
-//   }
-// },
-// methods: {
-// clickInput: function() {
-//   this.selectedEvent = "click input";
-// },
-// clickButton: function() {
-//   this.selectedEvent = "click button";
-// },
-// selected: function() {
-//   this.selectedEvent = "selection changed";
-// },
-// enter: function() {
-//   this.selectedEvent = "enter";
-// },
-// keyUp: function() {
-//   this.selectedEvent = "keyup pressed";
-// },
-// keyDown: function() {
-//   this.selectedEvent = "keyDown pressed";
-// },
-// keyRight: function() {
-//   this.selectedEvent = "keyRight pressed";
-// },
-// clear: function() {
-//   this.selectedEvent = "clear input";
-// },
-// escape: function() {
-//   this.selectedEvent = "escape";
-// },
-// changed: async function() {
-//   var that = this;
-//   this.suggestions = [];
-//   if (this.value && this.value.length > 3) {
-//     const items = await this.$store.dispatch(
-//       "autocompleteSearch",
-//       this.value
-//     );
-//     console.log(items);
-//     items.forEach(item => that.suggestions.push(item));
-//     // console.log(that.suggestions);
-//     // this.$axios
-//     //   .get(
-//     //     "https://api.themoviedb.org/3/search/movie?api_key=342d3061b70d2747a1e159ae9a7e9a36&query=" +
-//     //       this.value
-//     //   )
-//     //   .then(function(response) {
-//     //     response.data.results.forEach(function(a) {
-//     //       that.suggestions.push(a);
-//     //     });
-//     //   });
-//   }
-// }
-// async throttledMethod(val) {
-//   await this.$store.dispatch("autocompleteSearch", val);
-// console.log("throttledMethod", this.model, this.search, val);
-
-// this.$store.commit("autocompleteSearchItems", data.hits);
-// this.searchItems = data.hits;
-// console.log(this.searchItems);
-// }
-// async search() {
-//   console.log("search");
-// }
-// },
 </script>

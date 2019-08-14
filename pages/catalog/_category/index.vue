@@ -42,7 +42,7 @@
               <!-- <v-divider class="flex xs12 hidden-md-and-up mt-3 mb-2"></v-divider> -->
               <v-flex xs12 md9 lg10>
                 <h2 class="display-2 font-weight-bold mb-0">{{item.name}}</h2>
-                <!-- <div class>{{item.description}}</div> -->
+                <div v-show="item.description" class="mt-3">{{item.description}}</div>
               </v-flex>
             </v-card>
           </v-layout>

@@ -1,8 +1,8 @@
 <template>
-  <v-dialog v-model="dialog" width="500" persistent>
+  <v-dialog v-model="isShow" width="500" persistent>
     <v-card class="dialog-inner">
       <v-card-title class="headline grey lighten-2 pr-5" primary-title>Заказать {{name}}</v-card-title>
-      <v-btn class="close-btn" flat icon large color="primary" @click="$parent.dialog = false">
+      <v-btn class="close-btn" flat icon large color="primary" @click="close">
         <v-icon>close</v-icon>
       </v-btn>
       <v-card-text>
@@ -10,7 +10,7 @@
           Пожалуйста, заполните краткую контактную информацию,
           и наши сотрудники обязательно свяжутся с Вами.
         </p>
-        <contact-form/>
+        <contact-form />
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -20,13 +20,26 @@
 import ContactForm from "~/components/ContactForm";
 
 export default {
-  props: ["name"],
   components: {
     ContactForm
   },
+  methods: {
+    async close() {
+      await this.$store.commit("dialog", {
+        name: "",
+        isShow: false
+      });
+    }
+  },
   computed: {
-    dialog() {
-      return this.$parent.dialog;
+    // dialog() {
+    //   return this.$parent.dialog;
+    // },
+    name() {
+      return this.$store.state.dialog.name;
+    },
+    isShow() {
+      return this.$store.state.dialog.isShow;
     }
   }
 };

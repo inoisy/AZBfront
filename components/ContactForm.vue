@@ -29,24 +29,7 @@
       required
       @blur="$v.phone.$touch()"
     ></v-text-field>
-    <!-- <v-text-field
-      class="xs12 sm6 py-0 flex"
-      solo
-      v-model="subject"
-      :error-messages="subjectErrors"
-      :label="'Тема обращения'"
-      required
-      @blur="$v.subject.$touch()"
-    ></v-text-field>
-    <v-textarea
-      v-model="message"
-      :error-messages="messageErrors"
-      class="xs12 py-0 flex"
-      solo
-      name="input-7-4"
-      :label="'Ваше сообщение'"
-      @blur="$v.message.$touch()"
-    ></v-textarea>-->
+
     <v-flex>
       <v-btn class="ml-0" color="#1F5BFF" dark @click="submit">Отправить</v-btn>
       <!-- <v-btn flat @click="clear">Очистить</v-btn> -->
@@ -62,7 +45,6 @@
         <v-alert :value="this.formError" class="flex xs12 mt-3" type="error">Ошибка при отправке!</v-alert>
       </v-flex>
     </v-slide-y-transition>
-    <!-- {{formMessage}} -->
   </v-form>
 </template>
 
@@ -82,31 +64,20 @@ export default {
   validations: {
     name: { required, maxLength: maxLength(35), minLength: minLength(3) },
     email: { required, email },
-    subject: {
-      required,
-      maxLength: maxLength(35),
-      minLength: minLength(3)
-    },
-    phone: { required, minLength: minLength(10), maxLength: maxLength(15) },
-    message: { required, maxLength: maxLength(1500), minLength: minLength(3) }
+    phone: { required, minLength: minLength(10), maxLength: maxLength(15) }
   },
   data: () => ({
-    formMessage: "",
     formSuccess: false,
     formError: false,
     name: "",
     email: "",
-    subject: "",
     phone: "",
-    message: "",
     valid: ""
   }),
   methods: {
     clear() {
       this.$v.$reset();
-      this.subject = "";
       this.phone = "";
-      this.message = "";
       this.name = "";
       this.email = "";
     },
@@ -116,27 +87,20 @@ export default {
       const msg = {
         name: this.name,
         email: this.email,
-        subject: this.subject,
         phone: this.phone,
-        message: this.message
+        productName: this.$store.state.dialog.name
       };
+      console.log("TCL: submit -> msg", msg);
       //   console.log(this.$v);
       if (!this.$v.$anyError) {
         const req = await this.$axios
           .post(process.env.baseUrl + "/email", {
-            to: process.env.formContactTo,
-            from: process.env.formFrom,
+            to: "noreply@azb-es.ru",
+            from: "noreply@azb-es.ru",
             subject: `Обращение с сайта`,
-            text: `Обращение с сайта от ${msg.name} на тему ${
-              msg.subject
-            }. Email: ${msg.email}. Телефон: ${msg.phone}. Сообщение: ${
-              msg.message
-            }`,
-            html: `Обращение с сайта от ${msg.name} на тему ${
-              msg.subject
-            }.<br/> Email: ${msg.email}. Телефон: ${
-              msg.phone
-            }.<br/> Сообщение: ${msg.message}`
+            text: `Обращение с сайта от ${msg.name} 
+             Email: ${msg.email}. Телефон: ${msg.phone}. Товар: ${msg.productName}. `,
+            html: `Обращение с сайта от ${msg.name} .<br/> Email: ${msg.email}. Телефон: ${msg.phone}.<br/>  Товар: ${msg.productName}.`
           })
           .then(response => {
             this.formSuccess = true;
@@ -153,6 +117,9 @@ export default {
     // currLocale() {
     //   return this.$i18n.locale;
     // },
+    //  productName() {
+    //     return this.$store.state.dialog.name;
+    //   },
     nameErrors() {
       const errors = [];
       if (!this.$v.name.$dirty) return errors;
@@ -173,14 +140,6 @@ export default {
       !this.$v.email.required && errors.push("Введите email");
       return errors;
     },
-    subjectErrors() {
-      const errors = [];
-      if (!this.$v.subject.$dirty) return errors;
-      !this.$v.subject.maxLength && errors.push("Слишком длинная тема");
-      !this.$v.subject.minLength && errors.push("Слишком короткая тема");
-      !this.$v.subject.required && errors.push("Введите тему");
-      return errors;
-    },
     phoneErrors() {
       const errors = [];
       if (!this.$v.phone.$dirty) return errors;
@@ -188,14 +147,6 @@ export default {
         errors.push("Phone must be at most 15 characters long");
       !this.$v.phone.minLength && errors.push("Слишком короткий телефон");
       !this.$v.phone.required && errors.push("Введите телефон");
-      return errors;
-    },
-    messageErrors() {
-      const errors = [];
-      if (!this.$v.message.$dirty) return errors;
-      !this.$v.message.maxLength && errors.push("Слишком длинное сообщение");
-      !this.$v.message.minLength && errors.push("Введите сообщение");
-      !this.$v.message.required && errors.push("Введите сообщение");
       return errors;
     }
   }

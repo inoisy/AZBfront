@@ -76,8 +76,8 @@
             color="#1F5BFF"
             dark
             style="width: 100%"
-            @click="dialog = !dialog"
-          >купить</v-btn>
+            @click="handleOffer"
+          >заказать</v-btn>
         </v-flex>
       </v-layout>
       <v-layout row wrap class="mt-4">
@@ -137,18 +137,23 @@
         </v-flex>
       </v-layout>
     </v-container>
-
-    <catalog-dialog :name="product.name" />
   </div>
 </template>
 
 <script>
 import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
-import CatalogDialog from "~/components/CatalogDialog";
 import DefaultHeader from "~/components/DefaultHeader";
 
 export default {
+  methods: {
+    handleOffer() {
+      this.$store.commit("dialog", {
+        name: this.product.name,
+        isShow: true
+      });
+    }
+  },
   head() {
     return {
       title: this.product.name,
@@ -177,7 +182,6 @@ export default {
   },
   components: {
     Breadcrumbs,
-    CatalogDialog,
     DefaultHeader
   },
   computed: {

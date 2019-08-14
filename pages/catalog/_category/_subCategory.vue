@@ -119,7 +119,7 @@
         </v-layout>
       </v-container>
     </section>
-    <catalog-dialog :name="selectedName" />
+    <!-- <catalog-dialog :name="selectedName" /> -->
   </div>
 </template>
 <style lang="stylus" scoped>
