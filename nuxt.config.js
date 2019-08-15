@@ -1,5 +1,7 @@
 const pkg = require('./package')
 const axios = require("axios")
+
+const siteURL = "https://azb-es.ru"
 const backURL = "https://api.azb-es.ru"
 const backendUrl = process.env.BACKEND_URL || backURL
 const imageBaseUrl = process.env.IMAGE_BASE_URL || backURL
@@ -126,11 +128,31 @@ module.exports = {
 
     '@nuxtjs/sitemap',
     '@nuxtjs/robots',
+    '@nuxtjs/redirect-module',
+    // ['@nuxtjs/google-analytics', {
+    //   id: 'UA-12301-2'
+    // }],
+    [
+      '@nuxtjs/yandex-metrika',
+      {
+        id: '54922627',
+        webvisor: true,
+        // clickmap:true,
+        // useCDN:false,
+        // trackLinks:true,
+        // accurateTrackBounce:true,
+      }
+    ],
 
   ],
+  redirect: [{
+    from: '^/about_us',
+    to: '/about'
+  }],
   robots: {
     UserAgent: '*',
-    Disallow: '/'
+    Allow: '/',
+    Sitemap: siteURL + "/sitemap.xml"
   },
   // cache: {
   //   // if you're serving multiple host names (with differing
