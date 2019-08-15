@@ -1,6 +1,6 @@
 const pkg = require('./package')
 const axios = require("axios")
-const backURL = "http://api.azb-es.ru"
+const backURL = "https://api.azb-es.ru"
 const backendUrl = process.env.BACKEND_URL || backURL
 const imageBaseUrl = process.env.IMAGE_BASE_URL || backURL
 
