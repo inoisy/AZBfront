@@ -4,7 +4,7 @@
       <v-carousel
         hide-delimiters
         :show-arrows="sliders.length < 2"
-        height="35rem"
+        height="50rem"
         light
         :cycle="false"
         v-if="sliders && sliders.length > 0"
@@ -19,8 +19,8 @@
           <v-container fill-height class="main-content">
             <v-layout justify-center align-center>
               <v-flex md7 lg8 class="text-xs-left justify-center column">
-                <h2 class="display-4 mb-4 font-weight-bold" v-text="item.header" />
-                <p class="headline mb-4 font-weight-light" v-html="item.content" />
+                <h2 class="mb-4 font-weight-bold" style="font-size:2.1rem" v-text="item.header" />
+                <div class="mb-4" style="font-size:1.3rem" v-html="$md.render(item.content)" />
                 <v-btn
                   v-if="item.buttontext"
                   color="#1F5BFF"
