@@ -1,13 +1,9 @@
 <template>
   <div>
     <section class="grey lighten-2">
-      <v-container class="pb-4">
-        <v-layout row wrap>
-          <!-- <v-flex> -->
-          <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs" />
-          <h1 class="mb-5">Производители</h1>
-          <!-- </v-flex> -->
-        </v-layout>
+      <v-container class="pb-5">
+        <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs" />
+        <h1 class="mb-4">Производители</h1>
       </v-container>
     </section>
     <!-- {{manufacturers}} -->
@@ -15,7 +11,7 @@
       <v-layout row wrap>
         <v-card
           :to="`/manufacturers/${item.slug}`"
-          class="flex xs12 mb-4 pa-3 pt-4"
+          class="flex xs12 mb-4 pa-3 pt-3"
           v-for="(item,index) in manufacturers"
           :key="index"
           hover
@@ -32,7 +28,7 @@
               />
             </v-flex>
             <v-flex class="xs12 sm8">
-              <h2 class="mb-3 font-weight-bold">{{item.name}}</h2>
+              <h2 class="mb-2 font-weight-bold">{{item.name}}</h2>
               <div class="display-1" v-html="item.description"></div>
             </v-flex>
           </v-layout>

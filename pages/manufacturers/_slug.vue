@@ -1,11 +1,19 @@
 <template>
   <div>
     <section class="grey lighten-2">
-      <v-container class="pb-4">
+      <v-container class="pb-5">
         <v-layout row wrap>
           <v-flex>
             <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs" />
-            <h1 class="mb-5">{{manufacturer.name}}</h1>
+            <h1 class="mb-4">{{manufacturer.name}}</h1>
+            <v-btn
+              v-if="manufacturer.catalog"
+              class="ml-0 mb-4"
+              target="_blank"
+              :href="imageBaseUrl+manufacturer.catalog.url"
+            >
+              <v-icon left dark>save_alt</v-icon>Загрузить каталог
+            </v-btn>
           </v-flex>
           <v-flex class="align-center layout hidden-sm-and-down">
             <img
@@ -23,10 +31,8 @@
         <v-flex xs12 class="display-1" v-html="$md.render(manufacturer.content)"></v-flex>
       </v-layout>
     </v-container>
-    <section class="grey lighten-3" v-show="categories.length>0">
+    <section class="grey lighten-3" v-show="Object.keys(categories).length>0">
       <v-container class="py-5">
-        <!-- <v-layout row wrap> -->
-        <!-- <v-flex xs12> -->
         <h2>Каталог {{manufacturer.name}}</h2>
         <div class="catalog-wrap">
           <div v-for="item in categories" :key="item.id">
@@ -41,7 +47,9 @@
         </div>
       </v-container>
     </section>
-    <section class="certificate-wrap" v-if="manufacturer.certificate">
+    <!-- {{manufacturer.catalog}} -->
+
+    <section class="certificate-wrap grey lighten-3" v-if="manufacturer.certificate">
       <v-container class="pt-5 pb-0">
         <v-layout row wrap>
           <v-flex xs12 md4 class="align-center display-flex mb-5" style="max-height: 25rem">
