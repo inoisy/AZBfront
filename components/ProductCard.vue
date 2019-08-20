@@ -1,25 +1,25 @@
 <template>
   <v-card
-    class="product-card-wrapper mb-3 pa-3"
+    class="product-card-wrapper mb-3 pa-2"
     style="border-radius: 4px; width: 100%"
     tag="article"
   >
-    <v-flex xs12 md3 class="img-wrapper ma-auto">
+    <div class="img-wrapper ma-auto px-2">
       <img
         class="ma-auto d-block"
         v-lazy="item.productimage && item.productimage.thumbnail.url ? imageBaseUrl+item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
         :alt="item.name"
       />
-    </v-flex>
+    </div>
     <v-divider class="hidden-md-and-up mt-3 mb-2 w-100"></v-divider>
     <v-divider vertical class="hidden-sm-and-down mx-3"></v-divider>
-    <v-flex xs12 md9>
-      <v-subheader class="pa-0">
+    <v-flex>
+      <h2 class="mb-1" style="font-size: 1.7rem;">{{item.name}}</h2>
+      <div style="color: #757575; font-size: 14px;" class="my-2">
         <span>Артикул:&nbsp;</span>
         <span class="font-weight-bold">{{item.SKU}}</span>
-      </v-subheader>
-      <h2>{{item.name}}</h2>
-      <div class="mb-3">{{item.description}}</div>
+      </div>
+      <div class="mb-1">{{item.description}}</div>
       <div class="mb-1" v-if="item.manufacturer">
         Производитель:
         <nuxt-link
@@ -30,7 +30,8 @@
       <div v-if="Object.keys(item.filters).length>0">
         <v-btn
           color="#1F5BFF"
-          class="ml-0 mb-2 px-1"
+          class="ml-0 mb-1 px-1 my-0"
+          style="font-size: 12px !important;"
           v-show="!showDesc"
           dark
           flat
@@ -82,6 +83,7 @@ export default {
 <style lang="stylus" scoped>
 .img-wrapper {
   img {
+    width: 10rem;
     max-height: 250px;
   }
 }

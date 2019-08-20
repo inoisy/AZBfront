@@ -4,7 +4,7 @@
       <v-carousel
         hide-delimiters
         :show-arrows="sliders.length < 2"
-        height="50rem"
+        height="35rem"
         light
         :cycle="false"
         v-if="sliders && sliders.length > 0"
@@ -19,8 +19,8 @@
           <v-container fill-height class="main-content">
             <v-layout justify-center align-center>
               <v-flex md7 lg8 class="text-xs-left justify-center column">
-                <h2 class="mb-4 font-weight-bold" style="font-size:2.1rem" v-text="item.header" />
-                <div class="mb-4" style="font-size:1.3rem" v-html="$md.render(item.content)" />
+                <h2 class="mb-4 font-weight-bold" style="font-size:2rem" v-text="item.header" />
+                <div class="mb-4" style="font-size:1.2rem" v-html="$md.render(item.content)" />
                 <v-btn
                   v-if="item.buttontext"
                   color="#1F5BFF"
@@ -33,8 +33,8 @@
               </v-flex>
               <v-flex md5 lg4 v-if="item.img" class="hidden-sm-and-down py-4 pr-4 pl-5">
                 <img
-                  class="d-block"
-                  style="width:100%"
+                  class="d-block ma-auto"
+                  style="width:100%; max-width: 350px"
                   v-lazy="imageBaseUrl+item.img.url"
                   :alt="item.header"
                 />
@@ -89,7 +89,7 @@
       <v-container class="pt-5 pb-1" grid-list-lg>
         <v-layout row wrap justify-center>
           <h2 class="text-uppercase text-xs-center xs12 flex mb-4">ПРОИЗВОДИТЕЛИ</h2>
-          <v-flex xs6 sm4 md4 lg3 v-for="item in manufacturers" :key="item.slug" class="mb-4">
+          <v-flex xs6 sm4 md4 lg3 xl2 v-for="item in manufacturers" :key="item.slug" class="mb-4">
             <v-card
               :to="`/manufacturers/${item.slug}`"
               class="manufacturer-card align-center justify-center fill-height flex"
@@ -104,7 +104,7 @@
                 class="mx-auto d-block"
                 v-lazy="imageBaseUrl + item.img.url"
                 :alt="item.name"
-                style="max-width:80%; max-height: 80%; object-fit: contain;"
+                style="max-width:75%; max-height: 75%; object-fit: contain;"
               />
               <p v-else>{{item.name}}</p>
             </v-card>

@@ -6,17 +6,12 @@
         <div class="menu-wrapper" v-show="showFilters || manufacturers && manufacturers.length>1">
           <sticky-menu class="menu-child">
             <slot>
-              <!-- <v-expansion-panel >
-              <v-expansion-panel-content>-->
-              <!-- <template v-slot:header> -->
               <div v-if="manufacturers && manufacturers.length>1" class="mb-3">
                 <v-card class="pt-2">
-                  <!-- <v-card-title primary-title> -->
                   <v-subheader>ПРОИЗВОДИТЕЛИ</v-subheader>
-                  <!-- </v-card-title> -->
-
                   <v-card-text class="pt-0">
                     <v-checkbox
+                      height="1px"
                       v-model="manufacturerSelected"
                       :label="checkbox.name"
                       v-for="(checkbox) in manufacturers"
@@ -26,12 +21,6 @@
                   </v-card-text>
                 </v-card>
               </div>
-
-              <!-- <div></div> -->
-              <!-- </template> -->
-
-              <!-- </v-expansion-panel-content>
-              </v-expansion-panel>-->
               <v-expansion-panel v-if="showFilters ">
                 <v-expansion-panel-content
                   v-for="(item, i) in Object.keys(category.filters)"
@@ -43,6 +32,7 @@
                   <v-card>
                     <v-card-text class="grey lighten-3">
                       <v-checkbox
+                        height="1px"
                         v-model="dataFilters[item]"
                         :label="checkbox"
                         v-for="(checkbox,index) in category.filters[item]"
