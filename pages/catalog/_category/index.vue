@@ -2,28 +2,13 @@
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
 
-    <!-- <section class="grey lighten-2">
-      <v-container>
-        <breadcrumbs class="pl-1 mb-4" :items="breadcrumbs"/>
-        <h1 class="display-4 mb-5 font-weight-bold">{{category.name}}</h1>
-      </v-container>
-    </section>-->
     <v-container class="py-5">
-      <!-- {{categories}} -->
       <v-layout row wrap>
         <v-flex xs12 md4 lg3 class="menu-wrapper mb-4 hidden-sm-and-down">
           <nav-menu :menuItems="categories" type="catalog"></nav-menu>
         </v-flex>
         <v-flex xs12 md8 lg9>
-          <!-- <div class="display-1" v-html="page.content"></div> -->
           <v-layout row wrap v-if="category.child && category.child.length > 0">
-            <!-- <category-card
-              v-for="item in category.child"
-              :key="item.name"
-              :item="item"
-              :to="`/catalog/${category.slug}/${item.slug}`"
-            />-->
-
             <v-card
               hover
               ripple
@@ -32,14 +17,6 @@
               v-for="item in category.child"
               :key="item.id"
             >
-              <!-- <v-flex xs12 md3 lg2 class="pa-3">
-                <v-img
-                  contain
-                  max-height="170px"
-                  :src="item.img ? imageBaseUrl+item.img.url : require('~/assets/no-image1.png')"
-                ></v-img>
-              </v-flex>-->
-              <!-- <v-divider class="flex xs12 hidden-md-and-up mt-3 mb-2"></v-divider> -->
               <v-flex xs12 md9 lg10>
                 <h2 class="display-2 font-weight-bold mb-0">{{item.name}}</h2>
                 <div v-show="item.description" class="mt-3">{{item.description}}</div>
@@ -116,18 +93,7 @@ export default {
     const { data: categoryData } = await client.query({
       query: gql`
         query CateforiesQuery($slug: String!) {
-          # categoriesMain: categories(
-          #   where: { ismain: true }
-          #   sort: "name:asc"
-          # ) {
-          #   id
-          #   name
-          #   slug
-          #   img {
-          #     url
-          #   }
-          # }
-          categories(where: { slug: $slug }, sort: "name:asc") {
+          categories(where: { slug: $slug }) {
             id
             name
             description
@@ -139,7 +105,7 @@ export default {
               slug
             }
 
-            child(sort: "name:ASC") {
+            child(sort: "name:asc") {
               id
               name
               description

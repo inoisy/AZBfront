@@ -85,20 +85,15 @@
           <v-tabs v-model="tab" grow>
             <v-tabs-slider color="#1F5BFF"></v-tabs-slider>
 
-            <v-tab>Техническое описание</v-tab>
+            <v-tab v-if="product.content">Техническое описание</v-tab>
             <v-tab>Доставка</v-tab>
             <v-tab>Оплата</v-tab>
           </v-tabs>
 
           <v-tabs-items v-model="tab">
-            <v-tab-item>
+            <v-tab-item v-if="product.content">
               <v-card flat>
-                <v-card-text v-html="product.content">
-                  <!-- <p v-for="(item,index) in Object.keys(product.technicaldescription)" :key="index">
-                    <span class="font-weight-bold">{{item}}:</span>
-                    {{product.technicaldescription[item]}}
-                  </p>-->
-                </v-card-text>
+                <v-card-text v-html="product.content"></v-card-text>
               </v-card>
             </v-tab-item>
             <v-tab-item>

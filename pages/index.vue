@@ -52,7 +52,6 @@
         </v-container>
       </div>
     </section>
-    <!-- {{categories}} -->
     <section>
       <v-container class="py-5" grid-list-lg>
         <v-layout row wrap>
@@ -67,19 +66,17 @@
               nuxt
               :to="`/catalog/${category.slug}`"
             >
-              <!-- <nuxt-link :to="`/catalog/${category.slug}`" class="catalog-link"> -->
               <div class="img-wrapper px-3 py-3 grey lighten-3">
                 <img
                   class="catalog-link-img d-block ma-auto"
-                  style="max-height: 170px;"
+                  style="height: 100px;"
                   v-lazy="category.img ? imageBaseUrl+category.img.url : require('~/assets/no-image1.png')"
                   :alt="category.name"
                   :title="category.name"
                 />
               </div>
 
-              <div class="py-2 px-3 display-1 font-weight-medium" style>{{category.name}}</div>
-              <!-- </nuxt-link> -->
+              <div class="catalog-link-text py-2 px-3 font-weight-medium">{{category.name}}</div>
             </v-card>
           </v-flex>
         </v-layout>
@@ -247,12 +244,16 @@ export default {
 }
 
 .catalog-link-wrapper {
-  .catalog-link {
-    text-decoration: none;
+  // }
+  display: flex;
+  flex-direction: column;
 
-    .img-wrapper {
-      min-height: 200px;
-    }
+  .catalog-link-text {
+    flex-grow: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
 
   &:hover {

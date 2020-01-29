@@ -26,7 +26,7 @@
         </v-layout>
       </v-container>
     </section>
-    <v-container class="py-5" v-show="manufacturer.content">
+    <v-container class="py-5" v-if="manufacturer.content">
       <v-layout row wrap>
         <v-flex xs12 class="display-1" v-html="$md.render(manufacturer.content)"></v-flex>
       </v-layout>
