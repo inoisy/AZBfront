@@ -4,7 +4,7 @@
       <v-container class="pb-4">
         <v-layout row wrap>
           <v-flex>
-            <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs"/>
+            <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs" />
             <h1 class="mb-5">Поиск по каталогу</h1>
             <v-text-field
               solo
@@ -29,7 +29,7 @@
     </div>
         <infinite-loading @infinite="infiniteHandler" force-use-infinite-wrapper=".infinite-wrapper"></infinite-loading>-->
         <v-flex v-if="searchItems && searchItems.length > 0">
-          <h2 class="mb-4">Результаты поиска</h2>
+          <h2 class="mb-12">Результаты поиска</h2>
           <v-card
             class="mb-3 layout row display-flex pa-3"
             v-for="item in searchItems"
@@ -50,9 +50,9 @@
               ></v-img>
             </v-flex>
             <v-divider vertical class="mx-2"></v-divider>
-            <v-flex class="display-1">
+            <v-flex class>
               <h2
-                class="display-2 mb-3 mt-1"
+                class="mb-3 mt-1"
                 v-html="item.highlight.name && item.highlight.name.length > 0 ? item.highlight.name[0] : item._source.name"
               ></h2>
               <p class="grey--text">

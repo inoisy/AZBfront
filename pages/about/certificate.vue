@@ -6,10 +6,10 @@
         <v-flex xs12 md4 class="menu-wrapper mb-4">
           <nav-menu :menuItems="aboutPages" type="about"></nav-menu>
         </v-flex>
-        <v-flex xs12 md8 >
+        <v-flex xs12 md8>
           <card v-for="item in certificates" :key="item.id" :item="item" :href="null">
             <template v-slot:subheader>
-              <p class="mb-2 d-inline-block display-1" v-if="item.manufacturer">
+              <p class="mb-2 d-inline-block" v-if="item.manufacturer">
                 Производитель:
                 <nuxt-link
                   class="link-hover"
@@ -17,7 +17,7 @@
                 >{{item.manufacturer.name}}</nuxt-link>
               </p>
               <p
-                class="mb-2 display-1"
+                class="mb-2"
               >Срок действия: {{new Date(item.expirationDate).toLocaleDateString("ru-RU", { year: 'numeric', month: 'numeric', day: 'numeric' })}}</p>
             </template>
             <template v-slot:addToHeader>{{item.manufacturer.name}}</template>

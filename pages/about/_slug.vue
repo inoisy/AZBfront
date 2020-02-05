@@ -7,7 +7,7 @@
           <nav-menu :menuItems="aboutPages" type="about"></nav-menu>
         </v-flex>
         <v-flex xs12 md8>
-          <div class="display-1" v-html="$md.render(page.content)"></div>
+          <div class v-html="$md.render(page.content)"></div>
         </v-flex>
       </v-layout>
     </v-container>
