@@ -1,42 +1,36 @@
 <template>
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="title"></default-header>
-
-    <!-- <section class="grey lighten-2">
-      <v-container grid-list-xs>
-        <breadcrumbs class="pl-1" :items="breadcrumbs"/>
-        <h1>{{title}}</h1>
-      </v-container>
-    </section>-->
     <section>
-      <v-container class="py-5">
+      <v-container class="py-12">
         <v-layout row wrap>
-          <v-flex xs12 class="mb-4">
-            <a :href="`tel:${contacts.phone}`" class="link font-weight-medium display-1">
+          <v-flex xs12 class="mb-3">
+            <a :href="`tel:${contacts.phone}`" class="link font-weight-medium">
               <v-icon class="mr-3">phone</v-icon>
               {{contacts.phone}}
             </a>
           </v-flex>
-          <v-flex xs12 class="mb-4">
-            <a :href="`mailto:${contacts.email}`" class="link font-weight-medium display-1">
+          <v-flex xs12 class="mb-3">
+            <a :href="`mailto:${contacts.email}`" class="link font-weight-medium">
               <v-icon class="mr-3">mail</v-icon>
               {{contacts.email}}
             </a>
           </v-flex>
-          <v-flex xs12 class="mb-4">
-            <a @click="$vuetify.goTo('#map')" class="link font-weight-medium display-1">
+          <v-flex xs12 class="mb-3">
+            <a @click="$vuetify.goTo('#map')" class="link font-weight-medium">
               <v-icon class="mr-3">location_on</v-icon>
               {{contacts.content.address.title}}
             </a>
           </v-flex>
-          <v-flex xs12 class="mb-4">
-            <p class="link font-weight-medium display-1">
+          <v-flex xs12 class="mb-3">
+            <div class="link font-weight-medium no-select">
               <v-icon class="mr-3">access_time</v-icon>
               {{contacts.content.accessTime}}
-            </p>
+            </div>
           </v-flex>
-          <no-ssr>
+          <client-only>
             <yandex-map
+              class="mt-9"
               id="map"
               :coords="contacts.content.address.coords"
               zoom="16"
@@ -47,9 +41,8 @@
                 marker-type="placemark"
                 :coords="contacts.content.address.coords"
               ></ymap-marker>
-              <!--Markers-->
             </yandex-map>
-          </no-ssr>
+          </client-only>
         </v-layout>
       </v-container>
     </section>
@@ -59,8 +52,6 @@
 <script>
 import Breadcrumbs from "~/components/Breadcrumbs";
 import DefaultHeader from "~/components/DefaultHeader";
-
-// import { yandexMap, ymapMarker } from "vue-yandex-maps";
 
 export default {
   head() {
@@ -78,8 +69,6 @@ export default {
   components: {
     Breadcrumbs,
     DefaultHeader
-    // yandexMap,
-    // ymapMarker
   },
   computed: {
     contacts() {
@@ -120,7 +109,13 @@ export default {
   }
 }
 
-.link:hover {
+.link {
+  color: #1d1d1d;
+  font-size: 1.1rem;
+  display: inline-flex;
+}
+
+.link:hover:not(.no-select) {
   color: #1F5BFF;
 }
 </style>

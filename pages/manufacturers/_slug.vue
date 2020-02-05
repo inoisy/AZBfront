@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="grey lighten-2">
-      <v-container class="pb-5">
+      <v-container class="pb-5" grid-list-lg>
         <v-layout row wrap>
           <v-flex>
             <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs" />
@@ -26,20 +26,20 @@
         </v-layout>
       </v-container>
     </section>
-    <v-container class="py-5" v-if="manufacturer.content">
+    <v-container class="py-12" v-if="manufacturer.content" grid-list-lg>
       <v-layout row wrap>
-        <v-flex xs12 class="display-1" v-html="$md.render(manufacturer.content)"></v-flex>
+        <v-flex xs12 v-html="$md.render(manufacturer.content)"></v-flex>
       </v-layout>
     </v-container>
     <section class="grey lighten-3" v-show="Object.keys(categories).length>0">
-      <v-container class="py-5">
+      <v-container class="py-12" grid-list-lg>
         <h2>Каталог {{manufacturer.name}}</h2>
         <div class="catalog-wrap">
           <div v-for="item in categories" :key="item.id">
             <v-subheader class="pl-0 text-uppercase mt-4">{{item.element.name}}</v-subheader>
             <div v-for="child in item.items" :key="child.id">
               <nuxt-link
-                class="display-1 text-decoration-none link-hover mb-1 d-inline-block"
+                class="text-decoration-none link-hover mb-1 d-inline-block"
                 :to="`/catalog/${item.element.slug}/${child.slug}/${manufacturer.slug}`"
               >{{child.name}}</nuxt-link>
             </div>
@@ -50,7 +50,7 @@
     <!-- {{manufacturer.catalog}} -->
 
     <section class="certificate-wrap grey lighten-3" v-if="manufacturer.certificate">
-      <v-container class="pt-5 pb-0">
+      <v-container grid-list-lg class="pt-12 pb-8">
         <v-layout row wrap>
           <v-flex xs12 md4 class="align-center display-flex mb-5" style="max-height: 25rem">
             <v-img

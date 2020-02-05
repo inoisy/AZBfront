@@ -73,13 +73,13 @@ module.exports = {
         type: 'image/x-icon',
         href: '/favicon.ico'
       },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&amp;subset=cyrillic'
-      }, {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Material+Icons'
-      }
+      // {
+      //   rel: 'stylesheet',
+      //   href: 'https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&amp;subset=cyrillic'
+      // }, {
+      //   rel: 'stylesheet',
+      //   href: 'https://fonts.googleapis.com/css?family=Material+Icons'
+      // }
     ]
   },
 
@@ -94,14 +94,14 @@ module.exports = {
    ** Global CSS
    */
   css: [
-    '~/assets/style/app.styl'
+    '~/assets/style/app.styl',
   ],
 
   /*
    ** Plugins to load before mounting the App
    */
   plugins: [
-    '@/plugins/vuetify',
+    // '@/plugins/vuetify',
     // '@/plugins/debounce',
     // '@/plugins/instant',
     "@/plugins/lazyload.js",
@@ -109,12 +109,14 @@ module.exports = {
       src: '@/plugins/aos.js',
       ssr: false
     },
+
   ],
 
   /*
    ** Nuxt.js modules
    */
   modules: [
+
     // "nuxt-ssr-cache",
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
@@ -143,7 +145,26 @@ module.exports = {
         // accurateTrackBounce:true,
       }
     ],
-
+    ['@nuxtjs/vuetify', {
+      treeShake: true,
+      defaultAssets: {
+        font: {
+          family: 'Montserrat'
+        },
+        icons: "md"
+      },
+      customVariables: ['~/assets/variables.scss'],
+      theme: {
+        primary: '#121212', // a color that is not in the material colors palette
+        //  accent: colors.grey.darken3,
+        //  secondary: colors.amber.darken3,
+        //  info: colors.teal.lighten1,
+        //  warning: colors.amber.base,
+        //  error: colors.deepOrange.accent4,
+        //  success: colors.green.accent3
+      }
+      /* module options */
+    }],
   ],
   redirect: [{
     from: '^/about_us',
@@ -262,16 +283,13 @@ module.exports = {
     baseURL: backendUrl
   },
   apollo: {
-
     // errorHandler(error) {
     //   console.log('%cError', 'background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;', error.message)
     // },
     clientConfigs: {
       default: {
         httpEndpoint: backendUrl + '/graphql',
-
       },
-
     }
   },
   /*
@@ -281,6 +299,17 @@ module.exports = {
     /*
      ** You can extend webpack config here
      */
+    babel: {
+      sourceType: 'unambiguous',
+      "presets": [
+        ["@nuxt/babel-preset-app", {
+          "corejs": {
+            "version": 3
+          }
+        }],
+      ]
+    },
+    transpile: [/^aos/, /^vue-awesome-swiper/, /^@nuxtjs\/apollo/, "vue2-google-maps", "vue-particles", "nuxt-i18n", "vuetify"],
     extend(config, ctx) {
 
     }

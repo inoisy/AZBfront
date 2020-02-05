@@ -1,17 +1,18 @@
 <template>
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
-    <v-container class="pt-5 d-flex">
-      <v-layout class="d-flex all-wrapper" id="contentWrapper">
-        <div class="menu-wrapper" v-show="showFilters || manufacturers && manufacturers.length>1">
+    <v-container grid-list-lg class="pt-12 d-flex">
+      <v-layout class="d-flex all-wrapper">
+        <div class="menu-wrapper" v-show="showLeftColumn">
           <sticky-menu class="menu-child">
             <slot>
-              <div v-if="manufacturers && manufacturers.length>1" class="mb-3">
-                <v-card class="pt-2">
-                  <v-subheader>ПРОИЗВОДИТЕЛИ</v-subheader>
+              <div v-if="showManufacturers" class="mb-3">
+                <v-card class="pt-0">
+                  <v-subheader class="pb-0">ПРОИЗВОДИТЕЛИ</v-subheader>
                   <v-card-text class="pt-0">
                     <v-checkbox
-                      height="1px"
+                      hide-details
+                      class="mt-1"
                       v-model="manufacturerSelected"
                       :label="checkbox.name"
                       v-for="(checkbox) in manufacturers"
@@ -21,29 +22,24 @@
                   </v-card-text>
                 </v-card>
               </div>
-              <v-expansion-panel v-if="showFilters ">
-                <v-expansion-panel-content
-                  v-for="(item, i) in Object.keys(category.filters)"
-                  :key="i"
-                >
-                  <template v-slot:header>
-                    <div>{{item}}</div>
-                  </template>
-                  <v-card>
-                    <v-card-text class="grey lighten-3">
-                      <v-checkbox
-                        height="1px"
-                        v-model="dataFilters[item]"
-                        :label="checkbox"
-                        v-for="(checkbox,index) in category.filters[item]"
-                        :key="index"
-                        :value="checkbox"
-                        @change="checkboxChange"
-                      >{{checkbox}}</v-checkbox>
-                    </v-card-text>
-                  </v-card>
-                </v-expansion-panel-content>
-              </v-expansion-panel>
+              <v-expansion-panels v-if="showFilters">
+                <v-expansion-panel v-for="(item, i) in Object.keys(category.filters)" :key="i">
+                  <v-expansion-panel-header>{{item}}</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <v-checkbox
+                      class="mt-1"
+                      hide-details
+                      v-model="dataFilters[item]"
+                      :label="checkbox"
+                      v-for="(checkbox,index) in category.filters[item]"
+                      :key="index"
+                      :value="checkbox"
+                      @change="checkboxChange"
+                    >{{checkbox}}</v-checkbox>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
+              </v-expansion-panels>
+
               <v-btn
                 v-if="showClearFilters"
                 class="ml-0 mt-2"
@@ -56,9 +52,12 @@
             </slot>
           </sticky-menu>
         </div>
-        <v-flex class="content-wrapper">
+        <div
+          class="content-wrapper"
+          :class="showLeftColumn ? 'content-wrapper-fit' : ''"
+          id="contentWrapper"
+        >
           <div v-if="products && products.length > 0">
-            <!-- {{item.id}} -->
             <product-card v-for="item in products" :key="item.id" :item="item" />
           </div>
           <div v-else-if="$store.state.loading">
@@ -81,28 +80,28 @@
               @click="flushFilters"
             >Сбросить фильтры</v-btn>
           </div>
-        </v-flex>
+        </div>
       </v-layout>
     </v-container>
-    <v-flex xs12 v-if="pagesTotal>1">
-      <v-card>
-        <v-card-text>
-          <v-pagination
-            v-model="pageCurr"
-            :length="pagesTotal"
-            light
-            color="#1867c0"
-            class="justify-center align-center"
-            style="display:flex"
-          ></v-pagination>
-        </v-card-text>
-      </v-card>
-    </v-flex>
+    <!-- <v-flex xs12> -->
+    <section v-if="pagesTotal>1" class="position-relative grey lighten-1">
+      <v-container grid-list-lg>
+        <v-pagination
+          v-model="pageCurr"
+          :length="pagesTotal"
+          light
+          color="#1867c0"
+          class="justify-center align-center"
+          style="display:flex"
+        ></v-pagination>
+      </v-container>
+    </section>
+    <!-- </v-flex> -->
     <section
       class="grey lighten-2 position-relative"
       v-if="category.content && category.content.length>0"
     >
-      <v-container class="py-5">
+      <v-container class="py-12">
         <v-layout row wrap>
           <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
           <div v-html="$md.render(category.content)"></div>
@@ -129,7 +128,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-height: 60vh;
+    min-height: 70vh;
     // margin-top:30px;
   }
 }
@@ -166,7 +165,7 @@
       }
     }
 
-    .content-wrapper {
+    .content-wrapper-fit {
       width: calc(100% - 20rem);
     }
   }
@@ -220,6 +219,13 @@ export default {
     headerHeight() {
       return this.$vuetify.breakpoint.mdAndUp ? 140 : 80;
     },
+
+    showLeftColumn() {
+      return this.showFilters && this.showManufacturers;
+    },
+    showManufacturers() {
+      return this.manufacturers && this.manufacturers.length > 1;
+    },
     showFilters() {
       return (
         this.category.filters && Object.keys(this.category.filters).length > 0
@@ -227,10 +233,10 @@ export default {
     },
     showClearFilters() {
       let newArr = [];
-      console.log(
-        "TCL: showClearFilters -> this.dataFilters",
-        this.dataFilters
-      );
+      // console.log(
+      //   "TCL: showClearFilters -> this.dataFilters",
+      //   this.dataFilters
+      // );
 
       if (this.dataFilters && Object.keys(this.dataFilters).length > 0) {
         for (let item of Object.keys(this.dataFilters)) {
@@ -240,7 +246,7 @@ export default {
           !!this.manufacturerSelected || newArr.some(item => item === true)
             ? true
             : false;
-        console.log("TCL: showClearFilters -> returnVal", returnVal);
+        // console.log("TCL: showClearFilters -> returnVal", returnVal);
 
         return returnVal;
       } else return false;
@@ -281,7 +287,7 @@ export default {
   watch: {
     async manufacturerSelected(val) {
       // await this.$vuetify.goTo("#contentWrapper", {
-      //   offset: this.headerHeight
+      //   // offset: 100
       // });
       const manufacturer = this.manufacturers.find(item => item.id === val);
 
@@ -309,7 +315,7 @@ export default {
     },
     async pageCurr(val) {
       await this.$vuetify.goTo("#contentWrapper", {
-        offset: this.headerHeight
+        // offset: this.headerHeight
       });
 
       // console.log(
@@ -354,9 +360,9 @@ export default {
       this.manufacturerSelected = null;
     },
     async checkboxChange() {
-      // await this.$vuetify.goTo("#contentWrapper", {
-      //   offset: this.headerHeight
-      // });
+      await this.$vuetify.goTo("#contentWrapper", {
+        // offset: this.headerHeight
+      });
 
       await this.$store.commit("filters", this.dataFilters);
       this.pageCurr = 1;

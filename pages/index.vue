@@ -3,7 +3,6 @@
     <section class="main-wrapper" :style="`background-image:url(${require('~/assets/bg1.jpg')})`">
       <v-carousel
         hide-delimiters
-        :show-arrows="sliders.length < 2"
         height="35rem"
         light
         :cycle="false"
@@ -20,7 +19,7 @@
             <v-layout justify-center align-center>
               <v-flex md7 lg8 class="text-xs-left justify-center column">
                 <h2 class="mb-4 font-weight-bold" style="font-size:2rem" v-text="item.header" />
-                <div class="mb-4" style="font-size:1.2rem" v-html="$md.render(item.content)" />
+                <div class="mb-7" style="font-size:1.2rem" v-html="$md.render(item.content)" />
                 <v-btn
                   v-if="item.buttontext"
                   color="#1F5BFF"
@@ -45,7 +44,7 @@
       </v-carousel>
       <div v-else>
         <v-container fill-height>
-          <v-layout row wrap align-center class="text-xs-center">
+          <v-layout row wrap align-center class="text-center">
             <h1 class="display-3 font-weight-bold w-100">{{page.title}}</h1>
             <p class="display-1">{{page.description}}</p>
           </v-layout>
@@ -53,10 +52,10 @@
       </div>
     </section>
     <section>
-      <v-container class="py-5" grid-list-lg>
+      <v-container class="py-12" grid-list-lg>
         <v-layout row wrap>
           <v-flex xs12>
-            <h2 class="text-uppercase text-xs-center mb-4">КАТЕГОРИИ ТОВАРОВ</h2>
+            <h2 class="text-uppercase text-center mb-4">КАТЕГОРИИ ТОВАРОВ</h2>
           </v-flex>
           <v-flex xs12 sm6 md4 lg3 xl2 v-for="category in categories" :key="category.id">
             <v-card
@@ -83,9 +82,9 @@
       </v-container>
     </section>
     <section class="grey lighten-3">
-      <v-container class="pt-5 pb-1" grid-list-lg>
+      <v-container class="pt-12 pb-10" grid-list-lg>
         <v-layout row wrap justify-center>
-          <h2 class="text-uppercase text-xs-center xs12 flex mb-4">ПРОИЗВОДИТЕЛИ</h2>
+          <h2 class="text-uppercase text-center xs12 flex mb-4">ПРОИЗВОДИТЕЛИ</h2>
           <v-flex xs6 sm4 md4 lg3 xl2 v-for="item in manufacturers" :key="item.slug" class="mb-4">
             <v-card
               :to="`/manufacturers/${item.slug}`"
@@ -101,7 +100,7 @@
                 class="mx-auto d-block"
                 v-lazy="imageBaseUrl + item.img.url"
                 :alt="item.name"
-                style="max-width:75%; max-height: 75%; object-fit: contain;"
+                style="max-width:75%; max-height: 75%; object-fit: contain; height: 85px;"
               />
               <p v-else>{{item.name}}</p>
             </v-card>
@@ -110,10 +109,10 @@
       </v-container>
     </section>
     <section>
-      <v-container class="py-5">
+      <v-container class="py-12">
         <v-layout row wrap>
           <v-flex xs12>
-            <div class="display-1 mb-4" data-aos="fade-up" v-html="$md.render(page.content)"></div>
+            <div class="mb-8" data-aos="fade-up" v-html="$md.render(page.content)"></div>
             <v-btn color="#1F5BFF" large dark class="ml-0" to="/about">О компании</v-btn>
           </v-flex>
         </v-layout>

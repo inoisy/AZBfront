@@ -3,11 +3,11 @@
     <section class="grey lighten-2">
       <v-container class="pb-5">
         <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs" />
-        <h1 class="mb-4">Производители</h1>
+        <h1 class="mb-12">Производители</h1>
       </v-container>
     </section>
     <!-- {{manufacturers}} -->
-    <v-container class="py-5">
+    <v-container class="py-12">
       <v-layout row wrap>
         <v-card
           :to="`/manufacturers/${item.slug}`"
@@ -21,15 +21,15 @@
             <v-flex class="xs12 sm4 justify-center align-center layout">
               <img
                 class="display-block"
-                style="max-width:80%"
+                style="max-width:70%"
                 v-if="item.img"
                 :src="imageBaseUrl+item.img.url"
                 :alt="item.name"
               />
             </v-flex>
-            <v-flex class="xs12 sm8">
+            <v-flex class="xs12 sm8 pb-2">
               <h2 class="mb-2 font-weight-bold">{{item.name}}</h2>
-              <div class="display-1" v-html="item.description"></div>
+              <div v-html="item.description"></div>
             </v-flex>
           </v-layout>
         </v-card>

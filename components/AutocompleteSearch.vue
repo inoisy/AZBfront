@@ -17,26 +17,24 @@
     flat
     hide-no-data
     hide-selected
+    hide-details
     append-icon="none"
     @change="handleChange"
     @input="handleInput"
     v-on:keyup.enter="handleEnter"
     v-on:keyup.esc="$emit('searchChange', false)"
   >
-    <!-- v-on:keyup.esc="$emit('searchChange', false)" -->
-    <!-- v-debounce:700ms="throttledMethod" -->
-    <!-- v-on:keyup.enter="handleSearch" -->
     <template v-slot:item="data">
       <!-- <div> -->
       <div
-        v-if="data.item.productimage.thumbnail"
+        v-if="data.item.productimage && data.item.productimage.thumbnail"
         class="align-center justify-center"
         style="max-width:60px; min-width: 60px; width:60px;    display: inline-flex;"
       >
         <img
           style="max-width:50px; max-height: 50px; width:50px"
           :src="data.item.productimage.thumbnail ? imageBaseUrl+data.item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
-        >
+        />
       </div>
       <!-- <v-divider vertical class="ma-1 py-1"></v-divider> -->
       <div style="max-width: calc(100% - 60px);">
@@ -185,10 +183,8 @@ export default {
 </script>
 
 <style lang="stylus">
-.v-text-field.v-text-field--solo .v-input__prepend-outer, .v-text-field.v-text-field--solo .v-input__append-outer {
-  margin-top: 0;
-  margin-bottom: 0;
-  margin-right: 0;
+.v-text-field.v-text-field--solo .v-input__prepend-outer {
+  margin: 0 !important;
 }
 
 .highlight {

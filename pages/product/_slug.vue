@@ -2,14 +2,14 @@
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="product.name"></default-header>
     <!-- <section class="grey lighten-2">
-      <v-container class="text-xs-center text-md-left">
+      <v-container class="text-center text-md-left">
         <breadcrumbs class="pl-1" :items="breadcrumbs"/>
         <h1>{{product.name}}</h1>
       </v-container>
     </section>-->
-    <v-container class="py-5">
+    <v-container class="py-12">
       <v-layout row wrap>
-        <v-flex xs12 md8 lg9 order-xs2 order-md1 class="pr-3 display-1">
+        <v-flex xs12 md8 lg9 order-xs2 order-md1 class="pr-3">
           <p v-if="product.manufacturer">
             <span class="font-weight-bold">Производитель:</span>
             <nuxt-link
@@ -27,7 +27,7 @@
           <a
             target="_blank"
             v-if="product.document"
-            class="display-1 mb-3 link-hover display-flex align-center text-decoration-none"
+            class="mb-3 link-hover display-flex align-center text-decoration-none"
             :href="imageBaseUrl+product.document.url"
           >
             <v-icon class="mr-2 text-decoration-none" style="color:currentColor">picture_as_pdf</v-icon>
@@ -58,10 +58,10 @@
             >
               <v-btn
                 class="close-btn"
-                flat
+                text
                 icon
                 large
-                outline
+                outlined
                 color="primary"
                 @click="dialogImg = false"
                 style="position:absolute; top:5px; right: 5px; z-index: 10"

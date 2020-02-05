@@ -32,7 +32,6 @@
 
     <v-flex>
       <v-btn class="ml-0" color="#1F5BFF" dark @click="submit">Отправить</v-btn>
-      <!-- <v-btn flat @click="clear">Очистить</v-btn> -->
     </v-flex>
 
     <v-slide-y-transition>

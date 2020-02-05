@@ -1,31 +1,37 @@
 <template>
   <v-app>
-    <v-toolbar class="pa-0" fixed>
+    <v-app-bar app class="pa-0" fixed :height="$vuetify.breakpoint.smAndDown ? '64px' : '92px'">
       <div class="toolbar-top hidden-sm-and-down fill-height" style>
         <div class="toolbar-top-inner fill-height">
           <v-btn
+            tile
+            small
             :href="`tel:${contacts.phone}`"
             class="toolbar-top-btn white--text ma-0 fill-height"
             style="text-decoration:none"
-            flat
+            text
           >
             <v-icon class="mr-1" style="color:currentcolor">phone</v-icon>
             <span>{{contacts.phone}}</span>
           </v-btn>
           <v-btn
+            tile
+            small
             :href="`mailto:${contacts.email}`"
             class="toolbar-top-btn white--text ma-0 fill-height"
             style="text-decoration:none"
-            flat
+            text
           >
             <v-icon class="mr-1" style="color:currentcolor">mail</v-icon>
             <span>{{contacts.email}}</span>
           </v-btn>
           <v-btn
+            tile
+            small
             to="/contacts#map"
             class="toolbar-top-btn white--text ma-0 fill-height"
             style="text-decoration:none"
-            flat
+            text
           >
             <v-icon class="mr-1" style="color:currentcolor">location_on</v-icon>
             <span class="hidden-md-and-down">{{contacts.content.address.title}}</span>
@@ -38,7 +44,7 @@
           to="/"
           class="fill-height logo-link ma-0 py-2 ml-2"
           color="transparent"
-          flat
+          text
         >
           <img class="logo-img d-block" :src="require('~/assets/azblogo.png')" />
         </v-btn>
@@ -59,37 +65,48 @@
             <v-menu
               :key="index"
               v-if="item.items && item.items.length>0"
-              class="fill-height"
-              style="display:flex"
               open-on-hover
               offset-y
               left
               transition="slide-y-transition"
             >
-              <v-btn class="fill-height ma-0 header-link" slot="activator" flat nuxt :to="item.to">
-                {{item.name}}
-                <v-icon>arrow_drop_down</v-icon>
-              </v-btn>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  v-on="on"
+                  class="ma-0 header-link"
+                  slot="activator"
+                  height="64px"
+                  text
+                  nuxt
+                  tile
+                  :to="item.to"
+                >
+                  {{item.name}}
+                  <v-icon>arrow_drop_down</v-icon>
+                </v-btn>
+              </template>
 
               <v-list :class="item.items.length > 8 ? 'two-columns' : ''">
-                <v-list-tile
+                <v-list-item
                   class="list-item"
                   active-class="text--accent"
                   v-for="(child, index) in item.items"
                   :key="index"
                   nuxt
                   :to="`${item.to}/${child.slug}`"
-                >{{ child.name }}</v-list-tile>
+                >{{ child.name }}</v-list-item>
               </v-list>
             </v-menu>
             <v-btn
               v-else
-              flat
-              nuxt
-              exact
+              :to="item.to"
               :key="index"
               class="ma-0 fill-height header-link"
-              :to="item.to"
+              height="64px"
+              text
+              nuxt
+              exact
+              tile
             >{{item.name}}</v-btn>
           </template>
         </div>
@@ -118,7 +135,7 @@
           <v-icon>menu</v-icon>
         </v-btn>
       </div>
-    </v-toolbar>
+    </v-app-bar>
     <v-content>
       <nuxt />
     </v-content>
@@ -126,20 +143,20 @@
       <v-list class="pt-0">
         <template v-for="(item,i) in menuItems">
           <v-list-group v-if="item.items && item.items.length>0" :key="item.to">
-            <v-list-tile slot="activator" :to="item.to">
-              <v-list-tile-content>{{ item.name}}</v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile
+            <v-list-item slot="activator" :to="item.to">
+              <v-list-item-content>{{ item.name}}</v-list-item-content>
+            </v-list-item>
+            <v-list-item
               v-for="product in item.items"
               :key="product.name"
               nuxt
               exact
               :to="`${item.to}/${product.slug}`"
             >
-              <v-list-tile-content class="ml-4">{{ product.name}}</v-list-tile-content>
-            </v-list-tile>
+              <v-list-item-content class="ml-4">{{ product.name}}</v-list-item-content>
+            </v-list-item>
           </v-list-group>
-          <v-list-tile
+          <v-list-item
             v-else
             active-class="text--accent"
             :key="item.name"
@@ -148,40 +165,28 @@
             ripple
             exact
           >
-            <v-list-tile-title>{{item.name}}</v-list-tile-title>
-          </v-list-tile>
+            <v-list-item-title>{{item.name}}</v-list-item-title>
+          </v-list-item>
         </template>
       </v-list>
-
-      <!-- <v-list>
-        <v-list-tile
-          active-class="text--accent"
-          v-for="item in menuItems"
-          :key="item.name"
-          :to="item.slug"
-          nuxt
-          ripple
-        >
-          <v-list-tile-title>{{item.name}}</v-list-tile-title>
-        </v-list-tile>
-      </v-list>-->
     </v-navigation-drawer>
     <v-footer
       height="auto"
       style="position: relative; background-size: cover; background-position: center;"
       :style="`background-image: url(${require('~/assets/footer-bg.png')})`"
     >
-      <v-container class="pt-5">
-        <v-layout row wrap align-center d-flex class="mb-5">
+      <v-container class="pt-12">
+        <v-layout row wrap justify-center d-flex class="mb-10">
           <v-btn
+            class="ma-2"
             dark
             v-for="item in menuItems"
             :key="item.name"
             :to="item.to"
             nuxt
             ripple
-            flat
-            round
+            text
+            rounded
           >{{item.name}}</v-btn>
         </v-layout>
         <v-layout row wrap class="mb-4">
@@ -191,9 +196,9 @@
               class="contact-link display-flex white--text align-center text-decoration-none link-hover text-xs-left text-md-center"
             >
               <div class="icon-wrapper d-inline-flex">
-                <v-icon class="ma-auto" size="2rem" dark>phone</v-icon>
+                <v-icon class="ma-auto" large dark>phone</v-icon>
               </div>
-              {{contacts.phone}}
+              <span class="text-wrapper">{{contacts.phone}}</span>
             </a>
           </v-flex>
           <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
@@ -204,7 +209,7 @@
               <div class="icon-wrapper">
                 <v-icon class="ma-auto" size="2rem" dark>mail</v-icon>
               </div>
-              {{contacts.email}}
+              <span class="text-wrapper">{{contacts.email}}</span>
             </a>
           </v-flex>
           <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
@@ -215,11 +220,11 @@
               <div class="icon-wrapper">
                 <v-icon class="ma-auto" size="2rem" dark>location_on</v-icon>
               </div>
-              {{contacts.content.address.title}}
+              <span class="text-wrapper">{{contacts.content.address.title}}</span>
             </nuxt-link>
           </v-flex>
         </v-layout>
-        <p class="text-xs-center white--text mb-0">©Азбука Электроснабжения. Все права защищены.</p>
+        <p class="text-center white--text mb-0">©Азбука Электроснабжения. Все права защищены.</p>
       </v-container>
     </v-footer>
     <catalog-dialog />
@@ -228,7 +233,7 @@
 <style lang="stylus" >
 .two-columns {
   column-count: 2;
-  max-width: 600px;
+  max-width: 40rem;
 
   .list-item {
     float: left;
@@ -249,6 +254,10 @@
       .icon-wrapper {
         background: #1f5bff;
       }
+
+      .text-wrapper {
+        color: #1f5bff;
+      }
     }
   }
 }
@@ -257,16 +266,12 @@
   margin: 0 !important;
 }
 
-.v-toolbar__content {
-  height: auto !important;
-}
+// .v-toolbar__content {
+// height: auto !important;
+// }
 
-.v-content {
-  padding-top: 64px !important;
-}
-
-// .toolbar-bottom {
-// height: 64px;
+// .v-content {
+// padding-top: 64px !important;
 // }
 .icon-wrapper {
   background: rgba(255, 255, 255, 0.1);
@@ -298,7 +303,7 @@
 
 .toolbar-top {
   display: flex;
-  height: 38px;
+  height: 28px;
   width: 100%;
   background-color: #2E2E35;
 }
@@ -331,12 +336,11 @@
   margin-right: auto;
 }
 
-@media (max-width: 600px) {
-  .logo-img {
-    max-width: 120px;
-  }
-}
-
+// @media (max-width: 600px) {
+// .logo-img {
+// max-width: 120px;
+// }
+// }
 @media (min-width: 960px) {
   .contact-wrapper {
     align-items: flex-start;
@@ -356,12 +360,8 @@
   // max-width: 900px;
   // }
   .toolbar-bottom {
-    height: 90px;
-    min-height: 90px;
-  }
-
-  .v-content {
-    padding-top: 128px !important;
+    height: 64px;
+    min-height: 64px;
   }
 }
 
@@ -373,14 +373,14 @@
   }
 }
 
-.logo-link.nuxt-link-exact-active:hover {
+.logo-link.v-btn--active:hover {
   .logo-img {
     transform: none;
   }
 }
 
 .logo-img {
-  max-height: 55px;
+  max-height: 48px;
   transition: ease 0.3s;
   image-rendering: crisp-edges;
 }
@@ -441,7 +441,6 @@ export default {
       return this.search && this.search.length > 3;
     },
     toolbarHeight() {
-      // console.log(this.$vuetify.breakpoint.mdAndUp ? "124px" : "64px");
       return this.$vuetify.breakpoint.mdAndUp ? "124px" : "64px";
     },
     isLoading() {

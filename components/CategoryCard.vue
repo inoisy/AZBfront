@@ -17,8 +17,8 @@
     <v-divider vertical class="hidden-sm-and-down mx-3"></v-divider>
 
     <v-flex>
-      <h2 class="display-2 font-weight-bold">{{item.name}}</h2>
-      <div class="display-1">{{item.description}}</div>
+      <h2 class="font-weight-bold mb-3">{{item.name}}</h2>
+      <div>{{item.description}}</div>
     </v-flex>
   </v-card>
 </template>

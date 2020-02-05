@@ -2,32 +2,28 @@
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
 
-    <v-container class="py-5">
+    <v-container class="pt-8" grid-list-lg>
       <v-layout row wrap>
         <v-flex xs12 md4 lg3 class="menu-wrapper mb-4 hidden-sm-and-down">
           <nav-menu :menuItems="categories" type="catalog"></nav-menu>
         </v-flex>
         <v-flex xs12 md8 lg9>
-          <v-layout row wrap v-if="category.child && category.child.length > 0">
-            <v-card
-              hover
-              ripple
-              :to="`/catalog/${category.slug}/${item.slug}`"
-              class="mb-4 flex xs12 pa-3 text-decoration-none display-flex row wrap layout"
-              v-for="item in category.child"
-              :key="item.id"
-            >
-              <v-flex xs12 md9 lg10>
-                <h2 class="display-2 font-weight-bold mb-0">{{item.name}}</h2>
-                <div v-show="item.description" class="mt-3">{{item.description}}</div>
-              </v-flex>
-            </v-card>
-          </v-layout>
+          <v-card
+            hover
+            ripple
+            :to="`/catalog/${category.slug}/${item.slug}`"
+            class="mb-4 pa-3"
+            v-for="item in category.child"
+            :key="item.id"
+          >
+            <h2 class="font-weight-bold mb-0">{{item.name}}</h2>
+            <div class="mt-3" v-show="item.description">{{item.description}}</div>
+          </v-card>
         </v-flex>
       </v-layout>
     </v-container>
     <section class="grey lighten-2" v-if="category.content && category.content.length>0">
-      <v-container class="py-5">
+      <v-container class="py-12">
         <v-layout row wrap>
           <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
           <div v-html="$md.render(category.content)"></div>

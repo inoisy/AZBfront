@@ -2,7 +2,7 @@
   <div
     v-scroll="onScroll"
     id="sidebarContent"
-    class="sidebarContent"
+    class="sidebarContent pl-1"
     v-resize="onResize"
     :class="sidebarStyles"
     ref="sidebarContent"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import _ from "lodash";
+// import _ from "lodash";
 export default {
   mounted() {},
   computed: {
@@ -53,7 +53,7 @@ export default {
       const clientRect = elem ? elem.getBoundingClientRect().y : "";
       this.sidebar.elemHeight = elem.getBoundingClientRect().height;
       this.sidebar.clientRect = clientRect;
-      this.sidebar.toolbarHeight = this.$vuetify.breakpoint.mdAndUp ? 124 : 64;
+      this.sidebar.toolbarHeight = this.$vuetify.breakpoint.mdAndUp ? 92 : 64;
       this.sidebar.innerHeight = window.innerHeight;
       this.sidebar.offsetHeight = elem ? elem.offsetTop : 0;
       this.sidebar.marginBottom =
@@ -124,7 +124,7 @@ export default {
 
 @media only screen and (min-width: 960px) {
   .fixed-top, .fixed-bottom {
-    top: 150px;
+    top: 100px;
     padding-bottom: 160px;
   }
 }

@@ -14,7 +14,9 @@
     <v-divider class="hidden-md-and-up mt-3 mb-2 w-100"></v-divider>
     <v-divider vertical class="hidden-sm-and-down mx-3"></v-divider>
     <v-flex>
-      <h2 class="mb-1" style="font-size: 1.7rem;">{{item.name}}</h2>
+      <nuxt-link :to="`/product/${item.slug}`">
+        <h2 class="mb-0 d-inline-block" style="font-size: 1.7rem;">{{item.name}}</h2>
+      </nuxt-link>
       <div style="color: #757575; font-size: 14px;" class="my-2">
         <span>Артикул:&nbsp;</span>
         <span class="font-weight-bold">{{item.SKU}}</span>
@@ -34,7 +36,8 @@
           style="font-size: 12px !important;"
           v-show="!showDesc"
           dark
-          flat
+          small
+          text
           @click="showDesc=!showDesc"
         >Технические характеристики</v-btn>
         <div v-show="showDesc">
@@ -45,17 +48,17 @@
         </div>
       </div>
 
-      <div>
-        <v-btn class="ml-0" dark @click="handleOffer" color="#1F5BFF">Заказать</v-btn>
-        <v-btn
+      <!-- <div> -->
+      <v-btn class="ml-0 mt-2" dark @click="handleOffer" color="#1F5BFF">Заказать</v-btn>
+      <!-- <v-btn
           class="ml-0"
           dark
-          outline
+          outlined
           color="#1F5BFF"
           nuxt
           :to="`/product/${item.slug}`"
-        >Подробнее</v-btn>
-      </div>
+      >Подробнее</v-btn>-->
+      <!-- </div> -->
     </v-flex>
   </v-card>
 </template>
@@ -84,7 +87,10 @@ export default {
 .img-wrapper {
   img {
     width: 10rem;
-    max-height: 250px;
+    min-width: 10rem;
+    max-height: 180px;
+    object-fit: contain;
+    padding: 20px 10px;
   }
 }
 </style>

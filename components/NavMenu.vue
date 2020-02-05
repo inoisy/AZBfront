@@ -1,12 +1,12 @@
 <template>
-  <v-list class="nav-menu-wrapper elevation-2 flex w-100">
-    <v-list-tile
+  <v-list class="nav-menu-wrapper elevation-2 w-100 pa-0">
+    <v-list-item
       class="nav-menu-item"
       active-class="text--accent"
       v-for="item in menuItems"
       :key="item.title"
       :to="`/${type}/${item.slug}`"
-    >{{type === "about" ? item.title : item.name }}</v-list-tile>
+    >{{type === "about" ? item.title : item.name }}</v-list-item>
   </v-list>
 </template>
 <style lang="stylus" scoped>

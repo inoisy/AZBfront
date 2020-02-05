@@ -19,9 +19,14 @@ export default {
 
   a {
     // color: #ffffff;
+    color: #1d1d1d;
     text-decoration: none;
     font-weight: 500;
     font-size: 1.1rem;
+
+    &:hover {
+      color: #1976d2;
+    }
   }
 
   a.nuxt-link-active {

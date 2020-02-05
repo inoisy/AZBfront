@@ -2,7 +2,7 @@
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="page.title"></default-header>
     <section>
-      <v-container class="py-5">
+      <v-container class="py-12">
         <v-layout row wrap>
           <v-flex xs12 md4 class="menu-wrapper mb-4">
             <nav-menu :menuItems="aboutPages" type="about"></nav-menu>

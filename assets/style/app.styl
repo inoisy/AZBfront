@@ -1,8 +1,13 @@
 // Import Vuetify styling
-@import '~vuetify/src/stylus/settings/_variables'
-$body-font-family = 'Montserrat'
-$heading-font-family = 'Montserrat'
-@require '~vuetify/src/stylus/main.styl'
+// @import '~vuetify/src/stylus/settings/_variables'
+// $body-font-family = 'Montserrat'
+// $heading-font-family = 'Montserrat'
+// @require '~vuetify/src/stylus/main.styl'
+// @import '~vuetify/src/styles/styles.sass'
+.v-toolbar__content, .v-toolbar__extension{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
 .text--accent
     color:#1F5BFF
 .w-100
@@ -21,6 +26,10 @@ img
     &:hover
         color:#1F5BFF !important
 
+img[lazy=loading] {
+    background-image: url(https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif);
+    background-position: center;
+}
 // @import '~vuetify/src/stylus/app'
 
 // .page-enter-active, .page-leave-active {

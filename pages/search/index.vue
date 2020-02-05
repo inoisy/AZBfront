@@ -19,7 +19,7 @@
         </v-layout>
       </v-container>
     </section>
-    <v-container class="py-5">
+    <v-container class="py-12">
       <v-layout wrap>
         <!-- <v-flex xs12 class="mb-3"></v-flex> -->
         <!-- <v-divider></v-divider> -->
