@@ -47,9 +47,7 @@
         </div>
       </v-container>
     </section>
-    <!-- {{manufacturer.catalog}} -->
-
-    <section class="certificate-wrap grey lighten-3" v-if="manufacturer.certificate">
+    <section class="certificate-wrap grey lighten-2" v-if="manufacturer.certificate">
       <v-container grid-list-lg class="pt-12 pb-8">
         <v-layout row wrap>
           <v-flex xs12 md4 class="align-center display-flex mb-5" style="max-height: 25rem">
@@ -240,10 +238,16 @@ export default {
   padding-left: 0;
 }
 
-// }
 @media (min-width: 960px) {
   .catalog-wrap {
     columns: 2;
+
+    &> div {
+      float: left;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      width: 100%;
+    }
   }
 
   .certificate-text-wrap {

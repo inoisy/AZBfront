@@ -2,8 +2,9 @@
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
     <v-container grid-list-lg class="pt-12 d-flex">
+      <!-- {{showManufacturers}} -->
       <v-layout class="d-flex all-wrapper">
-        <div class="menu-wrapper" v-show="showLeftColumn">
+        <div class="menu-wrapper" v-show="showManufacturers || showFilters">
           <sticky-menu class="menu-child">
             <slot>
               <div v-if="showManufacturers" class="mb-3">
@@ -54,7 +55,7 @@
         </div>
         <div
           class="content-wrapper"
-          :class="showLeftColumn ? 'content-wrapper-fit' : ''"
+          :class="showManufacturers || showFilters ? 'content-wrapper-fit' : ''"
           id="contentWrapper"
         >
           <div v-if="products && products.length > 0">
@@ -220,9 +221,9 @@ export default {
       return this.$vuetify.breakpoint.mdAndUp ? 140 : 80;
     },
 
-    showLeftColumn() {
-      return this.showFilters && this.showManufacturers;
-    },
+    // showLeftColumn() {
+    //   return this.showFilters && this.showManufacturers;
+    // },
     showManufacturers() {
       return this.manufacturers && this.manufacturers.length > 1;
     },
