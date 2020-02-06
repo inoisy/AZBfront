@@ -84,20 +84,23 @@
         </div>
       </v-layout>
     </v-container>
-    <!-- <v-flex xs12> -->
     <section v-if="pagesTotal>1" class="position-relative grey lighten-1">
       <v-container grid-list-lg>
-        <v-pagination
-          v-model="pageCurr"
-          :length="pagesTotal"
-          light
-          color="#1867c0"
-          class="justify-center align-center"
-          style="display:flex"
-        ></v-pagination>
+        <v-layout row wrap>
+          <v-flex xs12 sm4 md3 align-center d-flex>Всего товаров: {{productsTotal}}</v-flex>
+          <v-flex xs12 sm8 md9 justify-right d-flex>
+            <v-pagination
+              v-model="pageCurr"
+              :length="pagesTotal"
+              total-visible="10"
+              style="justify-content: flex-end;"
+              light
+              color="#1867c0"
+            ></v-pagination>
+          </v-flex>
+        </v-layout>
       </v-container>
     </section>
-    <!-- </v-flex> -->
     <section
       class="grey lighten-2 position-relative"
       v-if="category.content && category.content.length>0"
@@ -109,7 +112,6 @@
         </v-layout>
       </v-container>
     </section>
-    <!-- <catalog-dialog :name="selectedName" /> -->
   </div>
 </template>
 <style lang="stylus" scoped>
