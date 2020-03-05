@@ -157,6 +157,11 @@ export const actions = {
     let query = {
       size: size,
       from: from,
+      // sort: [{
+      //   id: {
+      //     order: "asc"
+      //   }
+      // }],
       query: {
         bool: {
           must: [{

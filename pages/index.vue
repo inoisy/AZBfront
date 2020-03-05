@@ -100,7 +100,7 @@
                 class="mx-auto d-block"
                 v-lazy="imageBaseUrl + item.img.url"
                 :alt="item.name"
-                style="max-width:75%; max-height: 75%; object-fit: contain; height: 85px;"
+                style="object-fit: contain; height: 130px;"
               />
               <p v-else>{{item.name}}</p>
             </v-card>
