@@ -92,7 +92,7 @@
 
           <v-tabs-items v-model="tab">
             <v-tab-item v-if="product.content">
-              <v-card flat>
+              <v-card flat class="content-wrapper">
                 <v-card-text v-html="product.content"></v-card-text>
               </v-card>
             </v-tab-item>
@@ -135,6 +135,81 @@
   </div>
 </template>
 
+<style lang="stylus" >
+.content-wrapper {
+  table {
+    background-color: #FFFFFF;
+    color: rgba(0, 0, 0, 0.87);
+    border-spacing: 0;
+
+    td {
+      >* {
+        min-height: 36px;
+        display: inline-flex;
+        align-items: center;
+      }
+    }
+  }
+
+  table td {
+    min-height: 36px;
+    // box-sizing: border-box;
+  }
+
+  table thead tr:last-child th {
+    border-bottom: thin solid rgba(0, 0, 0, 0.12);
+  }
+
+  table thead tr th {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  table tbody tr:not(:last-child) td, table tbody tr:not(:last-child) th {
+    border-bottom: thin solid rgba(0, 0, 0, 0.12);
+  }
+
+  table tbody tr:not(:last-child) td:last-child, table tbody tr:not(:last-child) th:last-child {
+    border-bottom: thin solid rgba(0, 0, 0, 0.12);
+  }
+
+  table tbody tr.active {
+    background: #f5f5f5;
+  }
+
+  table tbody tr:hover {
+    background: #eeeeee;
+  }
+}
+
+.dialog-inner {
+  position: relative;
+
+  .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+.img-thumbnail {
+  max-width: 100%;
+  max-height: 200px;
+}
+
+.fullscreen-img {
+  background-color: white;
+  position: relative;
+  height: 90vh;
+  background-repeat: no-repeat;
+  width: 100%;
+  background-position: center;
+  background-size: contain;
+  padding: 20px 0;
+  background-origin: content-box;
+  /* margin: 15px; */
+}
+</style>
+
 <script>
 import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
@@ -167,12 +242,7 @@ export default {
       dialog: false,
       dialogImg: false,
       tab: null,
-      items: ["Техническое описание", "Доставка", "Оплата"],
-      tabsItems: [
-        { title: "Техническое описание", content: "sds" },
-        { title: "Доставка", content: "sds" },
-        { title: "Оплата", content: "sds" }
-      ]
+      items: ["Техническое описание", "Доставка", "Оплата"]
     };
   },
   components: {
@@ -218,7 +288,7 @@ export default {
   },
   async asyncData(ctx) {
     const params = ctx.route.params;
-    console.log("TCL: Data -> params", params);
+    // console.log("TCL: Data -> params", params);
     let client = ctx.app.apolloProvider.defaultClient;
     // const { data: categoriesData } = await client.query({
     //   query: gql`
@@ -276,7 +346,7 @@ export default {
         slug: ctx.route.params.slug
       }
     });
-    console.log("TCL: productData", productData);
+    // console.log("TCL: productData", productData);
     await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
@@ -288,33 +358,3 @@ export default {
   }
 };
 </script>
-
-<style lang="stylus">
-.dialog-inner {
-  position: relative;
-
-  .close-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-  }
-}
-
-.img-thumbnail {
-  max-width: 100%;
-  max-height: 200px;
-}
-
-.fullscreen-img {
-  background-color: white;
-  position: relative;
-  height: 90vh;
-  background-repeat: no-repeat;
-  width: 100%;
-  background-position: center;
-  background-size: contain;
-  padding: 20px 0;
-  background-origin: content-box;
-  /* margin: 15px; */
-}
-</style>
