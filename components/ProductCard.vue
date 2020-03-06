@@ -15,7 +15,10 @@
     <v-divider vertical class="hidden-sm-and-down mx-3"></v-divider>
     <v-flex>
       <nuxt-link :to="`/product/${item.slug}`">
-        <h2 class="mb-0 d-inline-block" style="font-size: 1.7rem;">{{item.name}}</h2>
+        <h2
+          class="mb-0 d-inline-block"
+          style="font-size: 1.1rem; line-height: normal;"
+        >{{item.name}}</h2>
       </nuxt-link>
       <div style="color: #757575; font-size: 14px;" class="my-2">
         <span>Артикул:&nbsp;</span>

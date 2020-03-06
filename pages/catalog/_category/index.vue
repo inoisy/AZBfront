@@ -16,7 +16,10 @@
             v-for="item in category.child"
             :key="item.id"
           >
-            <h2 class="font-weight-bold mb-0">{{item.name}}</h2>
+            <h2
+              class="font-weight-bold mb-0"
+              style="font-size: 1.2rem; line-height: normal;"
+            >{{item.name}}</h2>
             <div class="mt-3" v-show="item.description">{{item.description}}</div>
           </v-card>
         </v-flex>

@@ -10,6 +10,7 @@
     <v-container class="py-12">
       <v-layout row wrap>
         <v-flex xs12 md8 lg9 order-xs2 order-md1 class="pr-3">
+          <p v-if="product.description">{{product.description}}</p>
           <p v-if="product.manufacturer">
             <span class="font-weight-bold">Производитель:</span>
             <nuxt-link
@@ -84,12 +85,10 @@
         <v-flex>
           <v-tabs v-model="tab" grow>
             <v-tabs-slider color="#1F5BFF"></v-tabs-slider>
-
             <v-tab v-if="product.content">Техническое описание</v-tab>
             <v-tab>Доставка</v-tab>
             <v-tab>Оплата</v-tab>
           </v-tabs>
-
           <v-tabs-items v-model="tab">
             <v-tab-item v-if="product.content">
               <v-card flat class="content-wrapper">
@@ -104,7 +103,6 @@
                       <b>Самовывоз с нашего склада:</b>
                       <br />По адресу: г. Москва Загородное шоссе дом 1 корпус 2 офис 212
                     </p>
-
                     <p>
                       <b>Доставка до двери</b>
                       <br />Осуществляется курьерской службой или транспортной компанией (на Ваш выбор). Мы работаем с ведущими транспортными компаниями и доставляем заказы во все регионы России и Казахстана.

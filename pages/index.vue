@@ -134,6 +134,10 @@ export default {
           name: "description",
           content:
             "Электротехника и электрооборудование со склада и на заказ - Азбука электронабжения"
+        },
+        {
+          name:"yandex-verification",
+          content: "044a19bb8ebb9bef"
         }
       ]
     };
