@@ -18,7 +18,7 @@
     "@nuxtjs/markdownit": "^1.2.5",
     "@nuxtjs/redirect-module": "^0.2.0",
     "@nuxtjs/robots": "^2.2.0",
-    "@nuxtjs/sitemap": "^1.2.0",
+    "@nuxtjs/sitemap": "^2.0.1",
     "@nuxtjs/vuetify": "^1.10.3",
     "@nuxtjs/yandex-metrika": "^0.1.2",
     "aos": "^2.3.4",

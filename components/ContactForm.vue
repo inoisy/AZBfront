@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid" class="layout wrap">
+  <v-form class="layout wrap">
     <v-text-field
       class="xs12 py-0 flex"
       solo
@@ -70,8 +70,7 @@ export default {
     formError: false,
     name: "",
     email: "",
-    phone: "",
-    valid: ""
+    phone: ""
   }),
   methods: {
     clear() {

@@ -403,10 +403,7 @@ export default {
 
   computed: {
     contacts() {
-      return this.$store.state.generalInfo.contacts &&
-        this.$store.state.generalInfo.contacts.length > 0
-        ? this.$store.state.generalInfo.contacts[0]
-        : {};
+      return this.$store.state.generalInfo.contacts;
     },
     menuItems() {
       return [

@@ -16,7 +16,16 @@ export const state = () => ({
   categories: [],
   mainCategories: [],
 
-  generalInfo: {},
+  generalInfo: {
+    contacts: {
+      content: {
+        address: {}
+      }
+    },
+    categories: [],
+    aboutPages: [],
+    manufacturers: []
+  },
   dialog: {
     isShow: false,
     name: ''
@@ -113,7 +122,7 @@ export const actions = {
       manufacturers: generalData.manufacturers,
       aboutPages: generalData.pages[0].children,
       categories: generalData.categories,
-      contacts: generalData.contacts
+      contacts: generalData.contacts[0]
     }
 
     await ctx.commit('generalInfo', returnData)

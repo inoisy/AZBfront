@@ -1,10 +1,13 @@
 <template>
-  <v-dialog v-model="isShow" width="500" persistent>
+  <v-dialog v-model="isShow" width="500">
     <v-card class="dialog-inner">
-      <v-card-title class="headline grey lighten-2 pr-5" primary-title>Заказать {{name}}</v-card-title>
-      <v-btn class="close-btn" text icon large color="primary" @click="close">
-        <v-icon>close</v-icon>
-      </v-btn>
+      <div class="headline grey lighten-2 d-flex py-3 px-5 align-center" primary-title>
+        <span class="pr-3">Заказать {{name}}</span>
+        <v-btn class="ml-auto" text icon outlined large color="primary" @click="close">
+          <v-icon>close</v-icon>
+        </v-btn>
+      </div>
+
       <v-card-text>
         <p class="mb-4 mt-4">
           Пожалуйста, заполните краткую контактную информацию,
@@ -44,6 +47,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

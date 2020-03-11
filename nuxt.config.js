@@ -1,10 +1,13 @@
 const pkg = require('./package')
 const axios = require("axios")
+const routes = require("./routes")
 
 const siteURL = "https://azb-es.ru"
 const backURL = "https://api.azb-es.ru"
 const backendUrl = process.env.BACKEND_URL || backURL
 const imageBaseUrl = process.env.IMAGE_BASE_URL || backURL
+
+
 
 module.exports = {
   version: pkg.version,
@@ -214,56 +217,59 @@ module.exports = {
   sitemap: {
     // hostname: os.hostname(),
     gzip: true,
+    cacheTime: 1000 * 60 * 60 * 24 * 90,
+    routes
     // exclude: [
     //   '/secret',
     //   '/admin/**'
     // ],
-    async routes() {
-      // console.log("sitemap-generation")
 
-      // console.log("TCL: routes -> data", data)
-      // console.log("TCL: routes -> categories", categories)
-      let routes = []
+    // async routes() {
+    //   // console.log("sitemap-generation")
 
-      const {
-        data: manufacturers
-      } = await axios.get(backendUrl + '/manufacturers?_limit=99999')
-      console.log("TCL: routes -> manufacturers", manufacturers)
-      for (let item of manufacturers) {
-        routes.push(`/manufacturers/${item.slug}`)
-      }
+    //   // console.log("TCL: routes -> data", data)
+    //   // console.log("TCL: routes -> categories", categories)
+    //   let routes = []
+
+    //   const {
+    //     data: manufacturers
+    //   } = await axios.get(backendUrl + '/manufacturers?_limit=99999')
+    //   console.log("TCL: routes -> manufacturers", manufacturers)
+    //   for (let item of manufacturers) {
+    //     routes.push(`/manufacturers/${item.slug}`)
+    //   }
 
 
-      const {
-        data: pages
-      } = await axios.get(backendUrl + '/pages?parent.slug=about')
-      console.log("TCL: routes -> pages", pages)
-      for (let item of pages) {
-        routes.push(`/about/${item.slug}`)
-      }
+    //   const {
+    //     data: pages
+    //   } = await axios.get(backendUrl + '/pages?parent.slug=about')
+    //   console.log("TCL: routes -> pages", pages)
+    //   for (let item of pages) {
+    //     routes.push(`/about/${item.slug}`)
+    //   }
 
-      const {
-        data: categories
-      } = await axios.get(backendUrl + '/categories?ismain=true&_limit=99999')
-      for (let category of categories) {
-        routes.push(`/catalog/${category.slug}`)
+    //   const {
+    //     data: categories
+    //   } = await axios.get(backendUrl + '/categories?ismain=true&_limit=99999')
+    //   for (let category of categories) {
+    //     routes.push(`/catalog/${category.slug}`)
 
-      }
-      for (let category of categories) {
-        for (let subcategory of category.child) {
-          routes.push(`/catalog/${category.slug}/${subcategory.slug}`)
-        }
-      }
-      const {
-        data: products
-      } = await axios.get(backendUrl + '/products?_limit=99999')
-      // console.log("TCL: routes ->  products.length", products.length)
-      for (let product of products) {
-        routes.push(`/product/${product.slug}`)
-      }
+    //   }
+    //   for (let category of categories) {
+    //     for (let subcategory of category.child) {
+    //       routes.push(`/catalog/${category.slug}/${subcategory.slug}`)
+    //     }
+    //   }
+    //   const {
+    //     data: products
+    //   } = await axios.get(backendUrl + '/products?_limit=99999')
+    //   // console.log("TCL: routes ->  products.length", products.length)
+    //   for (let product of products) {
+    //     routes.push(`/product/${product.slug}`)
+    //   }
 
-      return routes
-    }
+    //   return routes
+    // }
   },
   markdownit: {
     preset: 'default',

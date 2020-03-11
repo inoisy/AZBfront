@@ -7,7 +7,7 @@
         <h1>{{product.name}}</h1>
       </v-container>
     </section>-->
-    <v-container class="py-12">
+    <v-container class="py-12" grid-list-lg>
       <v-layout row wrap>
         <v-flex xs12 md8 lg9 order-xs2 order-md1 class="pr-3">
           <p v-if="product.description">{{product.description}}</p>
@@ -133,7 +133,7 @@
   </div>
 </template>
 
-<style lang="stylus" >
+<style lang="stylus" scoped>
 .content-wrapper {
   table {
     background-color: #FFFFFF;
@@ -176,16 +176,6 @@
 
   table tbody tr:hover {
     background: #eeeeee;
-  }
-}
-
-.dialog-inner {
-  position: relative;
-
-  .close-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
   }
 }
 
