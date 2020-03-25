@@ -91,12 +91,12 @@
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item v-if="product.content">
-              <v-card flat class="content-wrapper">
+              <v-card flat class="content-wrapper" color="#f9f9f9">
                 <v-card-text v-html="product.content"></v-card-text>
               </v-card>
             </v-tab-item>
             <v-tab-item>
-              <v-card flat>
+              <v-card flat color="#f9f9f9">
                 <v-card-text>
                   <div class="tabsText" style="display: block;">
                     <p>
@@ -116,7 +116,7 @@
               </v-card>
             </v-tab-item>
             <v-tab-item>
-              <v-card flat>
+              <v-card flat color="#f9f9f9">
                 <v-card-text>
                   Банковский перевод: счет на оплату формируется после оформления заказа или отправки заявки в произвольной форме на электронную почту
                   <a
@@ -133,12 +133,19 @@
   </div>
 </template>
 
-<style lang="stylus" scoped>
+<style lang="stylus" >
 .content-wrapper {
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
   table {
-    background-color: #FFFFFF;
+    // background-color: #FFFFFF;
     color: rgba(0, 0, 0, 0.87);
     border-spacing: 0;
+    margin-bottom: 1.5rem;
+    width: 100%;
 
     td {
       >* {
@@ -150,7 +157,9 @@
   }
 
   table td {
-    min-height: 36px;
+    height: 36px;
+    padding: 5px;
+    // display: inline-flex;
     // box-sizing: border-box;
   }
 
@@ -162,19 +171,19 @@
     color: rgba(0, 0, 0, 0.6);
   }
 
-  table tbody tr:not(:last-child) td, table tbody tr:not(:last-child) th {
+  table tr:not(:last-child) td, table tr:not(:last-child) th {
     border-bottom: thin solid rgba(0, 0, 0, 0.12);
   }
 
-  table tbody tr:not(:last-child) td:last-child, table tbody tr:not(:last-child) th:last-child {
+  table tr:not(:last-child) td:last-child, table tr:not(:last-child) th:last-child {
     border-bottom: thin solid rgba(0, 0, 0, 0.12);
   }
 
-  table tbody tr.active {
+  table tr.active {
     background: #f5f5f5;
   }
 
-  table tbody tr:hover {
+  table tr:hover {
     background: #eeeeee;
   }
 }
@@ -242,6 +251,7 @@ export default {
       return this.$store.state.contacts;
     },
     breadcrumbs() {
+      if (!this.product) return;
       return [
         {
           text: "Главная",

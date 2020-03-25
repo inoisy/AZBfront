@@ -4,17 +4,18 @@
     style="border-radius: 4px; width: 100%"
     tag="article"
   >
-    <div class="img-wrapper ma-auto px-2">
+    <nuxt-link :to="`/product/${item.slug}`" :title="item.name" class="img-wrapper ma-auto px-2">
       <img
         class="ma-auto d-block"
         v-lazy="item.productimage && item.productimage.thumbnail.url ? imageBaseUrl+item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
         :alt="item.name"
+        :title="item.name"
       />
-    </div>
+    </nuxt-link>
     <v-divider class="hidden-md-and-up mt-3 mb-2 w-100"></v-divider>
     <v-divider vertical class="hidden-sm-and-down mx-3"></v-divider>
     <v-flex>
-      <nuxt-link :to="`/product/${item.slug}`">
+      <nuxt-link :to="`/product/${item.slug}`" :title="item.name">
         <h2
           class="mb-0 d-inline-block"
           style="font-size: 1.1rem; line-height: normal;"

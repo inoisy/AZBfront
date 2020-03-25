@@ -45,13 +45,17 @@ import CategoryCard from "~/components/CategoryCard";
 
 export default {
   head() {
+    const name = this.category.name;
+    const description = this.category.description
+      ? this.category.description + " - Азбука электроснабжения"
+      : `Купить ${name} по выгодным ценам. Отгрузка со склада в Москве, доставка по всей РФ. Азбука Электроснабжения.`;
     return {
-      title: this.category.name,
+      title: name,
       meta: [
         {
           hid: "description",
           name: "description",
-          content: this.category.description + " - Азбука электроснабжения"
+          content: description
         }
       ]
     };
@@ -121,13 +125,12 @@ export default {
       }
     });
     const category = categoryData.categories[0];
-    console.log("TCL: categoryData", categoryData);
+    // console.log("TCL: categoryData", categoryData);
     await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
       filters: category.filters || {},
       categories: ctx.store.state.generalInfo.categories, //categoryData.categoriesMain, //await ctx.store.dispatch("fetchMainCategories"),
-
       category: category
     };
   }

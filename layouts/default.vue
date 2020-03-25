@@ -46,7 +46,12 @@
           color="transparent"
           text
         >
-          <img class="logo-img d-block" :src="require('~/assets/azblogo.png')" />
+          <img
+            class="logo-img d-block"
+            :src="require('~/assets/azblogo.png')"
+            alt="Логотип Азбука Электроснабжения"
+            title="Логотип"
+          />
         </v-btn>
         <v-spacer v-show="!searchActive"></v-spacer>
         <v-btn v-show="!searchActive" @click="searchActive=true" class icon>
