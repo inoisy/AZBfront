@@ -162,15 +162,26 @@ export const actions = {
     const from = input.from || 0
     const manufacturer = input.manufacturers || null
     // console.log("TCL: fetchProducts -> manufacturer", manufacturer)
+    // curl -X PUT "localhost:9200/product/doc/_mappings?include_type_name=true" -H 'Content-Type: application/json' -d'
+    // {
+    //   "properties": {
+    //     "name": {
+    //       "type":     "text",
+    //       "fielddata": true
+    //     }
+    //   }
+    // }
+    // '
+
     const condition = []
     let query = {
       size: size,
       from: from,
-      // sort: [{
-      //   id: {
-      //     order: "asc"
-      //   }
-      // }],
+      sort: [{
+        name: {
+          order: "asc"
+        }
+      }],
       query: {
         bool: {
           must: [{
