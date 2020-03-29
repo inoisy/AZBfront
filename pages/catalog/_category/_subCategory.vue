@@ -80,7 +80,7 @@
               </div>
               <!-- <v-spacer></v-spacer> -->
               <!-- <v-flex></v-flex> -->
-              <div class="top-pagination-wrap">
+              <div class="top-pagination-wrap" v-if="pagesTotal>1">
                 <v-pagination
                   v-model="pageCurr"
                   :length="pagesTotal"
@@ -204,6 +204,7 @@
 @media (min-width: 960px) {
   .top-nav-wrap {
     flex-wrap: nowrap;
+    justify-content: flex-start;
 
     .top-pagination-wrap {
       flex-basis: calc(100% - 340px);
@@ -326,6 +327,7 @@ export default {
       return Math.ceil(this.$store.state.productsTotal / this.itemsPerPage);
     },
     breadcrumbs() {
+      if (!this.category) return;
       return [
         {
           text: "Главная",

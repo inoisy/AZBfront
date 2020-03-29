@@ -1,6 +1,5 @@
 import gql from "graphql-tag";
 const baseUrl = process.env.baseUrl
-// console.log("TCL: fetchProducts -> manufacturer", manufacturer)
 // curl -X PUT "localhost:9200/product/doc/_mappings?include_type_name=true" -H 'Content-Type: application/json' -d'
 // {
 //   "properties": {
@@ -157,12 +156,10 @@ export const actions = {
         `
     });
     const manufacturers = manufacturerData.manufacturers
-    // console.log("TCL: fetchManufacturers -> ManufacturerData", ManufacturerData)
     await ctx.commit('manufacturers', manufacturers)
     return manufacturers
   },
   async fetchProducts(ctx, input) {
-    // console.log("TCL: fetchProducts -> input", input)
 
     // let client = this.app.apolloProvider.defaultClient;
     const filters = input.filters
@@ -215,14 +212,12 @@ export const actions = {
     }
 
     if (manufacturer) {
-      // console.log("TCL: fetchProducts -> manufacturer", manufacturer)
       query.query.bool.must.push({
         match: {
           ['manufacturer.id']: manufacturer
         }
       })
     }
-    console.log("TCL: fetchProducts -> query", query.query.bool.must)
 
     const {
       data: returnData
@@ -238,7 +233,6 @@ export const actions = {
     return products
   },
   async autocompleteSearch(ctx, input) {
-    // console.log("TCL: autocompleteSearch -> input", input)
     await ctx.commit('loading', true)
     await ctx.commit("autocompleteSearchItems", []);
     const query = {
@@ -273,7 +267,6 @@ export const actions = {
       "products/search",
       query
     );
-    // console.log("TCL: autocompleteSearch -> data", data)
 
     const items = data.hits.map(item => {
       const highlight = item.highlight
@@ -286,199 +279,5 @@ export const actions = {
     await ctx.commit('loading', false)
     return items
   },
-  // async search(ctx, input) {
-  //   const nameQuery = {
-  //     highlight: {
-  //       pre_tags: ["<span class='highlight'>"],
-  //       post_tags: ["</span>"],
-  //       fields: [{
-  //           "SKU": {}
-  //         },
-  //         {
-  //           "name": {}
-  //         },
-  //         {
-  //           "description": {}
-  //         }
-  //       ]
-  //     },
-  //     size: 20,
-  //     from: 0,
-  //     query: {
-  //       multi_match: {
-  //         query: input,
-  //         fields: ["SKU", "description", "name"],
-  //         "fuzziness": "AUTO",
 
-  //       }
-  //     }
-  //   };
-
-  //   let items;
-  //   const {
-  //     data: nameData
-  //   } = await this.$axios.post(
-  //     "products/search",
-  //     nameQuery
-  //   );
-  //   if (nameData.hits.length === 0) {
-  //     console.log("nothing at name");
-  //   } else {
-  //     console.log("total", nameData.total);
-
-  //     items = nameData.hits;
-  //     // .filter(item => {
-  //     //   if (item._score > data.max_score * 0.75) return item;
-  //     // });
-  //   }
-  //   // console.log(items);
-  //   ctx.commit("searchItems", items);
-  //   return input
-  //   // ctx.commit('searchItems', items);
-  // }
 }
-// nested: {
-//   path: "filters",
-//   query: {
-//     bool: {
-//       must: condition
-//     }
-//   }
-// }
-// }
-// const {
-//   data
-// } = await this.$axios.post(
-//    "products/search",
-//   query
-// );
-// returnData = data
-//  else {
-// query = {
-//   size: size,
-//   from: from,
-//   query: {
-//     bool: {
-//       must: [{
-//         match: {
-//           subcategory: category
-//         }
-//       }]
-//     }
-//   }
-// };
-// console.log("TCL: fetchProducts -> category", category)
-
-// console.log("TCL: fetchProducts -> query", query)
-
-
-// console.log("TCL: fetchProducts -> data", data)
-
-// returnData = data
-// }
-// const descriptionQuery = {
-//   size: 20,
-//   from: 0,
-//   query: {
-//     match: {
-//       description: {
-//         query: input,
-//         fuzziness: "AUTO"
-//       }
-//     }
-//   }
-// };
-// const skuQuery = {
-//   size: 20,
-//   from: 0,
-//   query: {
-//     match: {
-//       SKU: {
-//         query: input
-//         // fuzziness: "AUTO"
-//       }
-//     }
-//   }
-// };
-// async filter(ctx, input, category) {
-//   const condition = []
-//   for (let i of Object.keys(input)) {
-//     console.log(i, input[i])
-//     let match = {}
-//     match[`filters.${i}`] = input[i]
-//     condition.push({
-//       match
-//     })
-//   }
-//   // console.log(condition)
-//   const query = {
-//     query: {
-//       bool: {
-//         must: [{
-//             match: {
-//               category: category
-//             }
-//           }, {
-//             nested: {
-//               path: "filters",
-//               query: {
-//                 bool: {
-//                   must: condition
-//                 }
-//               }
-//             }
-//           }
-
-//         ]
-//       }
-
-//     }
-//   }
-//   const {
-//     data
-//   } = await this.$axios.post(
-//     "http://localhost:1337/products/search",
-//     query
-//   );
-//   ctx.commit('products', data.hits.map(item => item._source))
-//   console.log('data.total',
-//     data.total)
-// },
-
-// console.log('fetchProductsdata',
-//   data)
-// let manufacturerSet = new Set()
-// let manufacturers = []
-// for (let i of data.hits) {
-//   manufacturerSet.add(i._source.manufacturer)
-// }
-// manufacturerSet.forEach(async item => {
-//   const {
-//     data: manufacturer
-//   } = await client.query({
-//     query: gql `
-//       query ManufacturerQuery($id: ID!) {
-//         manufacturers(where: {
-//           id: $id
-//         }) {
-//           id
-//           name
-//           slug
-//         }
-//       }
-//     `,
-//     variables: {
-//       id: item
-//     }
-//   });
-//   manufacturers.push(manufacturer.manufacturers)
-//   // console.log(manufacturer)
-// })
-// ctx.commit('manufacturers', manufacturers)
-// console.log(manufacturers)
-// const manufacturers = data.hits.map(item => {
-//   console.log(item._source.manufacturer);
-//   manufacturerSet.add(item._source.manufacturer)
-// })
-// console.log('manufacturers', manufacturerSet)
-// ctx.commit('products', data.hits.map(item => item._source))
