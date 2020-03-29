@@ -25,7 +25,7 @@ export const state = () => ({
   filters: [],
   categories: [],
   mainCategories: [],
-
+  category: "",
   generalInfo: {
     contacts: {
       content: {
@@ -82,6 +82,9 @@ export const mutations = {
   },
   loading(state, item) {
     state.loading = item
+  },
+  category(state, item) {
+    state.category = item
   },
 }
 export const strict = false
@@ -169,10 +172,14 @@ export const actions = {
     const manufacturer = input.manufacturers || null
 
     await ctx.commit('loading', true)
-    if (from === 0) {
-      await ctx.commit('productsTotal', 0)
-    }
     await ctx.commit('products', [])
+    // console.log("fetchProducts -> ctx.state.category", ctx.state.category)
+
+    if (ctx.state.category !== category) {
+      await ctx.commit('productsTotal', 0)
+
+    }
+
 
     const condition = []
     let query = {
@@ -227,6 +234,7 @@ export const actions = {
     );
 
     const products = returnData.hits.map(item => item._source)
+    await ctx.commit('category', category)
     await ctx.commit('products', products)
     await ctx.commit('productsTotal', returnData.total.value)
     await ctx.commit('loading', false)

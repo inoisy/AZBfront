@@ -26,6 +26,20 @@ export default {
   components: {
     ContactForm
   },
+  // data() {
+  //   return {
+  //     show: false
+  //   };
+  // },
+  // watch: {
+  //   async show(val) {
+  //     console.log("show -> val", val);
+  //     await this.$store.commit("dialog", {
+  //       name: "",
+  //       isShow: val
+  //     });
+  //   }
+  // },
   methods: {
     async close() {
       await this.$store.commit("dialog", {
@@ -41,8 +55,16 @@ export default {
     name() {
       return this.$store.state.dialog.name;
     },
-    isShow() {
-      return this.$store.state.dialog.isShow;
+    isShow: {
+      get() {
+        return this.$store.state.dialog.isShow;
+      },
+      async set(val) {
+        await this.$store.commit("dialog", {
+          name: "",
+          isShow: val
+        });
+      }
     }
   }
 };

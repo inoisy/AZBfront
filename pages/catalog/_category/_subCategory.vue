@@ -2,7 +2,6 @@
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
     <v-container grid-list-lg class="pt-12 d-flex" id="contentWrapper">
-      <!-- {{showManufacturers}} -->
       <v-layout class="d-flex all-wrapper">
         <div class="menu-wrapper" v-show="showManufacturers || showFilters">
           <sticky-menu class="menu-child">
@@ -57,10 +56,9 @@
           class="content-wrapper"
           :class="showManufacturers || showFilters ? 'content-wrapper-fit' : ''"
         >
-          <!-- <v-flex xs12 class="pt-0 mb-2"> -->
           <div class="pa-2 pt-0">
-            <v-card color="white" class="top-nav-wrap">
-              <div class="px-3 d-inline-flex align-center">
+            <v-card color="white" class="top-nav-wrap py-3">
+              <div class="top-nav-inner px-3 d-inline-flex align-center">
                 <v-btn-toggle mandatory v-model="viewMode">
                   <v-btn class="pa-0" small height="32" min-width="38">
                     <v-icon>view_list</v-icon>
@@ -70,16 +68,18 @@
                   </v-btn>
                 </v-btn-toggle>
                 <!-- Всего товаров: {{productsTotal}} -->
-                <v-subheader class="text-no-wrap">Показывать по</v-subheader>
+                <v-subheader
+                  class="text-no-wrap"
+                  style="height: 32px;"
+                  v-show="showNum30"
+                >Показывать по</v-subheader>
 
-                <v-btn-toggle mandatory v-model="showNum">
+                <v-btn-toggle mandatory v-model="showNum" v-show="showNum30">
                   <v-btn class="pa-0" small height="32" min-width="38">30</v-btn>
-                  <v-btn class="pa-0" small height="32" min-width="38">60</v-btn>
-                  <v-btn class="pa-0" small height="32" min-width="38">90</v-btn>
+                  <v-btn v-if="showNum60" class="pa-0" small height="32" min-width="38">60</v-btn>
+                  <v-btn v-if="showNum90" class="pa-0" small height="32" min-width="38">90</v-btn>
                 </v-btn-toggle>
               </div>
-              <!-- <v-spacer></v-spacer> -->
-              <!-- <v-flex></v-flex> -->
               <div class="top-pagination-wrap" v-if="pagesTotal>1">
                 <v-pagination
                   v-model="pageCurr"
@@ -92,9 +92,6 @@
               </div>
             </v-card>
           </div>
-
-          <!-- </v-flex> -->
-
           <div
             v-if="products && products.length > 0"
             class="d-flex"
@@ -117,17 +114,17 @@
               class="mx-auto my-5 d-flex"
             ></v-progress-circular>
           </div>
-          <div v-else>
+          <v-flex v-else>
             <v-alert type="error" :value="true">Ничего не найдено</v-alert>
             <v-btn
               v-if="showClearFilters"
-              class="ml-0 mt-4"
+              class="ml-0"
               large
               style="width: 100%"
               color="white"
               @click="flushFilters"
             >Сбросить фильтры</v-btn>
-          </div>
+          </v-flex>
         </div>
       </v-layout>
     </v-container>
@@ -188,13 +185,17 @@
   display: flex;
   justify-content: center;
 
+  .top-nav-inner {
+    padding-bottom: 8px;
+  }
+
   .top-pagination-wrap {
     flex-basis: 100%;
     max-width: 100%;
     display: inline-flex;
     padding-top: 8px;
-    padding-bottom: 8px;
 
+    // padding-bottom: 8px;
     .top-pagination-inner {
       justify-content: center;
     }
@@ -204,12 +205,18 @@
 @media (min-width: 960px) {
   .top-nav-wrap {
     flex-wrap: nowrap;
-    justify-content: flex-start;
+    justify-content: space-between;
+
+    .top-nav-inner {
+      padding-bottom: 0px;
+    }
 
     .top-pagination-wrap {
       flex-basis: calc(100% - 340px);
       max-width: calc(100% - 340px);
+      padding-top: 0px;
 
+      // padding-bottom: 0px;
       .top-pagination-inner {
         justify-content: flex-end;
       }
@@ -279,13 +286,15 @@ export default {
     };
   },
   computed: {
-    // headerHeight() {
-    //   return this.$vuetify.breakpoint.mdAndUp ? 140 : 80;
-    // },
-
-    // showLeftColumn() {
-    //   return this.showFilters && this.showManufacturers;
-    // },
+    showNum30() {
+      return this.productsTotal && this.productsTotal > 30;
+    },
+    showNum60() {
+      return this.productsTotal && this.productsTotal > 60;
+    },
+    showNum90() {
+      return this.productsTotal && this.productsTotal > 90;
+    },
     showManufacturers() {
       return this.manufacturers && this.manufacturers.length > 1;
     },
@@ -296,11 +305,6 @@ export default {
     },
     showClearFilters() {
       let newArr = [];
-      // console.log(
-      //   "TCL: showClearFilters -> this.dataFilters",
-      //   this.dataFilters
-      // );
-
       if (this.dataFilters && Object.keys(this.dataFilters).length > 0) {
         for (let item of Object.keys(this.dataFilters)) {
           newArr.push(!!this.dataFilters[item]);
@@ -365,6 +369,13 @@ export default {
         default:
           break;
       }
+      this.$router.push({
+        // path: this.$route.path,
+        query: {
+          // page: 0
+        }
+      });
+      this.pageCurr = 1;
       await this.$store.dispatch("fetchProducts", {
         categoryId: this.category.id,
         filters: this.dataFilters,
@@ -507,7 +518,7 @@ export default {
     const products = await ctx.store.dispatch("fetchProducts", {
       categoryId: categoryData.categories[0].id,
       filters: null,
-      size: 10,
+      size: 30,
       from: 0,
       manufacturers: manufacturer ? manufacturer.id : null
     });

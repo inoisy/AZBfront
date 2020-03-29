@@ -10,19 +10,22 @@
     <v-container class="py-12" grid-list-lg>
       <v-layout row wrap>
         <v-flex xs12 md8 lg9 order-xs2 order-md1 class="pr-3">
-          <p v-if="product.description">{{product.description}}</p>
+          <p v-if="product.description">
+            <span class="font-weight-bold">Описание:&nbsp;</span>
+            {{product.description}}
+          </p>
           <p v-if="product.manufacturer">
-            <span class="font-weight-bold">Производитель:</span>
+            <span class="font-weight-bold">Производитель:&nbsp;</span>
             <nuxt-link
               :to="`/manufacturers/${product.manufacturer.slug}`"
             >{{product.manufacturer.name}}</nuxt-link>
           </p>
           <p>
-            <span class="font-weight-bold">Артикул:</span>
+            <span class="font-weight-bold">Артикул:&nbsp;</span>
             {{product.SKU}}
           </p>
           <p v-for="(item,index) in Object.keys(product.filters)" :key="index">
-            <span class="font-weight-bold">{{item}}:</span>
+            <span class="font-weight-bold">{{item}}:&nbsp;</span>
             {{product.filters[item]}}
           </p>
           <a
@@ -65,7 +68,7 @@
                 outlined
                 color="primary"
                 @click="dialogImg = false"
-                style="position:absolute; top:5px; right: 5px; z-index: 10"
+                style="position:absolute; top:16px; right: 16px; z-index: 10"
               >
                 <v-icon>close</v-icon>
               </v-btn>
@@ -91,39 +94,33 @@
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item v-if="product.content">
-              <v-card flat class="content-wrapper" color="#f9f9f9">
-                <v-card-text v-html="product.content"></v-card-text>
+              <v-card flat class="content-wrapper pa-3" color="#f9f9f9" v-html="product.content"></v-card>
+            </v-tab-item>
+            <v-tab-item>
+              <v-card flat color="#f9f9f9" class="pa-3">
+                <div class="tabsText" style="display: block;">
+                  <p>
+                    <b>Самовывоз с нашего склада:</b>
+                    <br />По адресу: г. Москва Загородное шоссе дом 1 корпус 2 офис 212
+                  </p>
+                  <p>
+                    <b>Доставка до двери</b>
+                    <br />Осуществляется курьерской службой или транспортной компанией (на Ваш выбор). Мы работаем с ведущими транспортными компаниями и доставляем заказы во все регионы России и Казахстана.
+                  </p>
+                  <p>
+                    <b>Доставка до терминала</b>
+                    <br />Транспортной компании в Москва – БЕСПЛАТНО.
+                  </p>
+                </div>
               </v-card>
             </v-tab-item>
             <v-tab-item>
-              <v-card flat color="#f9f9f9">
-                <v-card-text>
-                  <div class="tabsText" style="display: block;">
-                    <p>
-                      <b>Самовывоз с нашего склада:</b>
-                      <br />По адресу: г. Москва Загородное шоссе дом 1 корпус 2 офис 212
-                    </p>
-                    <p>
-                      <b>Доставка до двери</b>
-                      <br />Осуществляется курьерской службой или транспортной компанией (на Ваш выбор). Мы работаем с ведущими транспортными компаниями и доставляем заказы во все регионы России и Казахстана.
-                    </p>
-                    <p>
-                      <b>Доставка до терминала</b>
-                      <br />Транспортной компании в Москва – БЕСПЛАТНО.
-                    </p>
-                  </div>
-                </v-card-text>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item>
-              <v-card flat color="#f9f9f9">
-                <v-card-text>
-                  Банковский перевод: счет на оплату формируется после оформления заказа или отправки заявки в произвольной форме на электронную почту
-                  <a
-                    :href="`mailto:mail@azb-es.ru`"
-                  >mail@azb-es.ru</a>
-                  <br />Специалист свяжется с вами для уточнения деталей.
-                </v-card-text>
+              <v-card flat color="#f9f9f9" class="pa-3">
+                Банковский перевод: счет на оплату формируется после оформления заказа или отправки заявки в произвольной форме на электронную почту
+                <a
+                  :href="`mailto:mail@azb-es.ru`"
+                >mail@azb-es.ru</a>
+                <br />Специалист свяжется с вами для уточнения деталей.
               </v-card>
             </v-tab-item>
           </v-tabs-items>
