@@ -154,6 +154,10 @@
         align-items: center;
       }
     }
+
+    .val {
+      min-width: 70px;
+    }
   }
 
   table td {

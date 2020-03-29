@@ -1,7 +1,7 @@
 <template>
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
-    <v-container grid-list-lg class="pt-12 d-flex">
+    <v-container grid-list-lg class="pt-12 d-flex" id="contentWrapper">
       <!-- {{showManufacturers}} -->
       <v-layout class="d-flex all-wrapper">
         <div class="menu-wrapper" v-show="showManufacturers || showFilters">
@@ -56,12 +56,59 @@
         <div
           class="content-wrapper"
           :class="showManufacturers || showFilters ? 'content-wrapper-fit' : ''"
-          id="contentWrapper"
         >
-          <div v-if="products && products.length > 0">
-            <product-card v-for="item in products" :key="item.id" :item="item" />
+          <!-- <v-flex xs12 class="pt-0 mb-2"> -->
+          <div class="pa-2 pt-0">
+            <v-card color="white" class="top-nav-wrap">
+              <div class="px-3 d-inline-flex align-center">
+                <v-btn-toggle mandatory v-model="viewMode">
+                  <v-btn class="pa-0" small height="32" min-width="38">
+                    <v-icon>view_list</v-icon>
+                  </v-btn>
+                  <v-btn class="pa-0" small height="32" min-width="38">
+                    <v-icon>view_module</v-icon>
+                  </v-btn>
+                </v-btn-toggle>
+                <!-- Всего товаров: {{productsTotal}} -->
+                <v-subheader class="text-no-wrap">Показывать по</v-subheader>
+
+                <v-btn-toggle mandatory v-model="showNum">
+                  <v-btn class="pa-0" small height="32" min-width="38">30</v-btn>
+                  <v-btn class="pa-0" small height="32" min-width="38">60</v-btn>
+                  <v-btn class="pa-0" small height="32" min-width="38">90</v-btn>
+                </v-btn-toggle>
+              </div>
+              <!-- <v-spacer></v-spacer> -->
+              <!-- <v-flex></v-flex> -->
+              <div class="top-pagination-wrap">
+                <v-pagination
+                  v-model="pageCurr"
+                  :length="pagesTotal"
+                  total-visible="7"
+                  class="top-pagination-inner"
+                  light
+                  color="#1867c0"
+                ></v-pagination>
+              </div>
+            </v-card>
           </div>
-          <div v-else-if="$store.state.loading">
+
+          <!-- </v-flex> -->
+
+          <div
+            v-if="products && products.length > 0"
+            class="d-flex"
+            style="flex-wrap: wrap; display: flex;"
+          >
+            <v-flex
+              v-for="item in products"
+              :key="item.id"
+              :class="viewMode ? 'xs12 sm6 md4' : 'xs12'"
+            >
+              <product-card :item="item" :viewMode="!!viewMode" />
+            </v-flex>
+          </div>
+          <div v-else-if="$store.state.loading" class="my-12">
             <v-progress-circular
               v-if="$store.state.loading"
               :size="150"
@@ -136,24 +183,38 @@
   }
 }
 
-.product-card-wrapper {
+.top-nav-wrap {
+  flex-wrap: wrap;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
 
-  .img-wrapper {
-    min-height: 150px;
-    margin: auto;
-    min-width: 150px;
+  .top-pagination-wrap {
+    flex-basis: 100%;
+    max-width: 100%;
+    display: inline-flex;
+    padding-top: 8px;
+    padding-bottom: 8px;
 
-    img {
-      display: block;
-      max-height: 100%;
-      margin: auto;
+    .top-pagination-inner {
+      justify-content: center;
     }
   }
 }
 
 @media (min-width: 960px) {
+  .top-nav-wrap {
+    flex-wrap: nowrap;
+
+    .top-pagination-wrap {
+      flex-basis: calc(100% - 340px);
+      max-width: calc(100% - 340px);
+
+      .top-pagination-inner {
+        justify-content: flex-end;
+      }
+    }
+  }
+
   .all-wrapper {
     flex-direction: row;
 
@@ -171,10 +232,6 @@
     .content-wrapper-fit {
       width: calc(100% - 20rem);
     }
-  }
-
-  .product-card-wrapper {
-    flex-direction: row;
   }
 }
 </style>
@@ -209,19 +266,21 @@ export default {
   },
   data() {
     return {
-      itemsPerPage: 10,
+      itemsPerPage: 30,
       pageCurr: this.$route.query.page ? Number(this.$route.query.page) : 1,
       dataFilters: {},
       selectedName: null,
       dialog: false,
       imageBaseUrl: process.env.imageBaseUrl,
-      manufacturerFilter: this.$route.params.filter
+      manufacturerFilter: this.$route.params.filter,
+      viewMode: 0,
+      showNum: 0
     };
   },
   computed: {
-    headerHeight() {
-      return this.$vuetify.breakpoint.mdAndUp ? 140 : 80;
-    },
+    // headerHeight() {
+    //   return this.$vuetify.breakpoint.mdAndUp ? 140 : 80;
+    // },
 
     // showLeftColumn() {
     //   return this.showFilters && this.showManufacturers;
@@ -288,10 +347,34 @@ export default {
     }
   },
   watch: {
+    async showNum(val) {
+      // console.log("showNum -> val", val);
+
+      switch (val) {
+        case 0:
+          this.itemsPerPage = 30;
+          break;
+        case 1:
+          this.itemsPerPage = 60;
+          break;
+        case 2:
+          this.itemsPerPage = 90;
+          break;
+        default:
+          break;
+      }
+      await this.$store.dispatch("fetchProducts", {
+        categoryId: this.category.id,
+        filters: this.dataFilters,
+        size: this.itemsPerPage,
+        from: (this.pageCurr - 1) * this.itemsPerPage,
+        manufacturers: this.manufacturerSelected
+      });
+    },
     async manufacturerSelected(val) {
-      // await this.$vuetify.goTo("#contentWrapper", {
-      //   // offset: 100
-      // });
+      await this.$vuetify.goTo("#contentWrapper", {
+        // offset: 100
+      });
       const manufacturer = this.manufacturers.find(item => item.id === val);
 
       await this.$store.dispatch("fetchProducts", {
@@ -334,14 +417,14 @@ export default {
       });
       if (val && val > 1) {
         this.$router.push({
-          path: this.$route.path,
+          // path: this.$route.path,
           query: {
             page: val
           }
         });
       } else {
         this.$router.push({
-          path: this.$route.path,
+          // path: this.$route.path,
           query: {}
         });
       }

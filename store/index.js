@@ -1,5 +1,16 @@
 import gql from "graphql-tag";
 const baseUrl = process.env.baseUrl
+// console.log("TCL: fetchProducts -> manufacturer", manufacturer)
+// curl -X PUT "localhost:9200/product/doc/_mappings?include_type_name=true" -H 'Content-Type: application/json' -d'
+// {
+//   "properties": {
+//     "name": {
+//       "type":     "text",
+//       "fielddata": true
+//     }
+//   }
+// }
+// '
 export const state = () => ({
   autocompleteSearchItems: [],
   search: {
@@ -152,26 +163,19 @@ export const actions = {
   },
   async fetchProducts(ctx, input) {
     // console.log("TCL: fetchProducts -> input", input)
-    await ctx.commit('loading', true)
-    await ctx.commit('products', [])
-    await ctx.commit('productsTotal', 0)
+
     // let client = this.app.apolloProvider.defaultClient;
     const filters = input.filters
     const category = input.categoryId
     const size = input.size || 10
     const from = input.from || 0
     const manufacturer = input.manufacturers || null
-    // console.log("TCL: fetchProducts -> manufacturer", manufacturer)
-    // curl -X PUT "localhost:9200/product/doc/_mappings?include_type_name=true" -H 'Content-Type: application/json' -d'
-    // {
-    //   "properties": {
-    //     "name": {
-    //       "type":     "text",
-    //       "fielddata": true
-    //     }
-    //   }
-    // }
-    // '
+
+    await ctx.commit('loading', true)
+    if (from === 0) {
+      await ctx.commit('productsTotal', 0)
+    }
+    await ctx.commit('products', [])
 
     const condition = []
     let query = {
@@ -192,17 +196,7 @@ export const actions = {
         }
       }
     }
-    // if (category){
-    // let newObj = {}
-    // newObj[`category.id`] = category
-    // query.query.bool.must.push(newObj)
-    // condition.push({
-    //   match
-    // })
-    // }
-    // let returnData = {}
     if (filters) {
-      // query
       for (let i of Object.keys(filters)) {
         if (filters[i]) {
           let match = {}
@@ -211,13 +205,10 @@ export const actions = {
             match
           })
         }
-
       }
       if (condition.length > 0) {
         query.query.bool.must.push(
-          // {
           ...condition
-
         )
       }
 
@@ -256,6 +247,7 @@ export const actions = {
       query: {
         multi_match: {
           query: input,
+          // "type": "most_fields",
           fields: ["SKU", "description", "name"],
           "fuzziness": "AUTO"
         }
@@ -281,7 +273,7 @@ export const actions = {
       "products/search",
       query
     );
-    console.log("TCL: autocompleteSearch -> data", data)
+    // console.log("TCL: autocompleteSearch -> data", data)
 
     const items = data.hits.map(item => {
       const highlight = item.highlight
@@ -294,56 +286,56 @@ export const actions = {
     await ctx.commit('loading', false)
     return items
   },
-  async search(ctx, input) {
-    const nameQuery = {
-      highlight: {
-        pre_tags: ["<span class='highlight'>"],
-        post_tags: ["</span>"],
-        fields: [{
-            "SKU": {}
-          },
-          {
-            "name": {}
-          },
-          {
-            "description": {}
-          }
-        ]
-      },
-      size: 20,
-      from: 0,
-      query: {
-        multi_match: {
-          query: input,
-          fields: ["SKU", "description", "name"],
-          "fuzziness": "AUTO",
+  // async search(ctx, input) {
+  //   const nameQuery = {
+  //     highlight: {
+  //       pre_tags: ["<span class='highlight'>"],
+  //       post_tags: ["</span>"],
+  //       fields: [{
+  //           "SKU": {}
+  //         },
+  //         {
+  //           "name": {}
+  //         },
+  //         {
+  //           "description": {}
+  //         }
+  //       ]
+  //     },
+  //     size: 20,
+  //     from: 0,
+  //     query: {
+  //       multi_match: {
+  //         query: input,
+  //         fields: ["SKU", "description", "name"],
+  //         "fuzziness": "AUTO",
 
-        }
-      }
-    };
+  //       }
+  //     }
+  //   };
 
-    let items;
-    const {
-      data: nameData
-    } = await this.$axios.post(
-      "products/search",
-      nameQuery
-    );
-    if (nameData.hits.length === 0) {
-      console.log("nothing at name");
-    } else {
-      console.log("total", nameData.total);
+  //   let items;
+  //   const {
+  //     data: nameData
+  //   } = await this.$axios.post(
+  //     "products/search",
+  //     nameQuery
+  //   );
+  //   if (nameData.hits.length === 0) {
+  //     console.log("nothing at name");
+  //   } else {
+  //     console.log("total", nameData.total);
 
-      items = nameData.hits;
-      // .filter(item => {
-      //   if (item._score > data.max_score * 0.75) return item;
-      // });
-    }
-    // console.log(items);
-    ctx.commit("searchItems", items);
-    return input
-    // ctx.commit('searchItems', items);
-  }
+  //     items = nameData.hits;
+  //     // .filter(item => {
+  //     //   if (item._score > data.max_score * 0.75) return item;
+  //     // });
+  //   }
+  //   // console.log(items);
+  //   ctx.commit("searchItems", items);
+  //   return input
+  //   // ctx.commit('searchItems', items);
+  // }
 }
 // nested: {
 //   path: "filters",

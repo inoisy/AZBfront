@@ -1,7 +1,8 @@
 <template>
   <v-card
-    class="product-card-wrapper mb-3 pa-2"
-    style="border-radius: 4px; width: 100%"
+    :class="viewMode ? 'grid-view' : ''"
+    class="product-card-wrapper pa-1"
+    style="border-radius: 4px;"
     tag="article"
   >
     <nuxt-link :to="`/product/${item.slug}`" :title="item.name" class="img-wrapper ma-auto px-2">
@@ -12,28 +13,25 @@
         :title="item.name"
       />
     </nuxt-link>
-    <v-divider class="hidden-md-and-up mt-3 mb-2 w-100"></v-divider>
-    <v-divider vertical class="hidden-sm-and-down mx-3"></v-divider>
+    <!-- <v-divider v-if="viewMode" :class="!viewMode ? 'hidden-md-and-up' : ''" class="mt-3 mb-2 w-100"></v-divider>
+    <v-divider v-if="!viewMode" vertical class="hidden-sm-and-down mx-3"></v-divider>-->
     <v-flex>
-      <nuxt-link :to="`/product/${item.slug}`" :title="item.name">
-        <h2
-          class="mb-0 d-inline-block"
-          style="font-size: 1.1rem; line-height: normal;"
-        >{{item.name}}</h2>
+      <nuxt-link :to="`/product/${item.slug}`" :title="item.name" class="mb-1 product-card-header">
+        <h2 class="mb-0 d-inline-block">{{item.name}}</h2>
       </nuxt-link>
-      <div style="color: #757575; font-size: 14px;" class="my-2">
+      <div style="color: #757575; " class="product-card-text mb-1">
         <span>Артикул:&nbsp;</span>
         <span class="font-weight-bold">{{item.SKU}}</span>
       </div>
-      <div class="mb-1">{{item.description}}</div>
-      <div class="mb-1" v-if="item.manufacturer">
+      <div class="mb-1" v-if="!viewMode">{{item.description}}</div>
+      <div class="mb-1 product-card-text" v-if="item.manufacturer">
         Производитель:
         <nuxt-link
           class="font-weight-bold link-hover"
           :to="`/manufacturers/${item.manufacturer.slug}`"
         >{{item.manufacturer.name}}</nuxt-link>
       </div>
-      <div v-if="Object.keys(item.filters).length>0">
+      <div v-if="!viewMode && Object.keys(item.filters).length>0">
         <v-btn
           color="#1F5BFF"
           class="ml-0 mb-1 px-1 my-0"
@@ -52,8 +50,8 @@
         </div>
       </div>
 
-      <!-- <div> -->
-      <v-btn class="ml-0 mt-2" dark @click="handleOffer" color="#1F5BFF">Заказать</v-btn>
+      <!-- <div> :class="viewMode ? 'w-100' : ''"-->
+      <v-btn small class="offer-button ml-0 mt-2" dark @click="handleOffer" color="#1F5BFF">Заказать</v-btn>
       <!-- <v-btn
           class="ml-0"
           dark
@@ -69,7 +67,13 @@
 
 <script>
 export default {
-  props: ["item"],
+  props: {
+    item: Object,
+    viewMode: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     handleOffer() {
       this.$store.commit("dialog", {
@@ -88,13 +92,65 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.grid-view {
+  flex-direction: column !important;
+  height: 100%;
+
+  .offer-button {
+    width: 100%;
+  }
+
+  .product-card-header {
+    height: 38px;
+    overflow: hidden;
+  }
+}
+
+.product-card-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  .product-card-text {
+    font-size: 14px;
+  }
+
+  .product-card-header {
+    font-size: 16px;
+    line-height: normal;
+    display: flex;
+
+    >* {
+      font-size: 16px;
+    }
+  }
+
+  .img-wrapper {
+    min-height: 120px;
+    margin: auto;
+
+    // min-width: 150px;
+    img {
+      display: block;
+      // max-height: 100%;
+      margin: auto;
+      width: 10rem;
+      min-width: 10rem;
+      height: 120px;
+      // max-height: 180px;
+      object-fit: contain;
+      padding: 10px;
+    }
+  }
+}
+
+@media (min-width: 960px) {
+  .product-card-wrapper {
+    flex-direction: row;
+  }
+}
+
 .img-wrapper {
   img {
-    width: 10rem;
-    min-width: 10rem;
-    max-height: 180px;
-    object-fit: contain;
-    padding: 20px 10px;
   }
 }
 </style>

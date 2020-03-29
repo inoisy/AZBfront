@@ -26,19 +26,15 @@
   >
     <template v-slot:item="data">
       <!-- <div> -->
-      <div
-        v-if="data.item.productimage && data.item.productimage.thumbnail"
-        class="align-center justify-center"
-        style="max-width:60px; min-width: 60px; width:60px;    display: inline-flex;"
-      >
+      <div class="align-center justify-center mr-3" style="min-width:50px; display: inline-flex;">
         <img
-          style="max-width:50px; max-height: 50px; width:50px"
-          :src="data.item.productimage.thumbnail ? imageBaseUrl+data.item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
+          style="max-width:50px; max-height: 50px; width:50px; object-fit: contain; padding:3px;"
+          :src="data.item.productimage && data.item.productimage.thumbnail ? imageBaseUrl+data.item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
         />
       </div>
       <!-- <v-divider vertical class="ma-1 py-1"></v-divider> -->
       <div style="max-width: calc(100% - 60px);">
-        <p class="mb-1 text-truncate" style="font-size: 1rem">
+        <div class="text-truncate" style="font-size: 1rem">
           <span
             v-html="data.item.highlight.name && data.item.highlight.name.length > 0 ? data.item.highlight.name[0] : data.item.name"
           ></span>
@@ -49,12 +45,12 @@
               v-html="data.item.highlight.SKU && data.item.highlight.SKU.length > 0 ? data.item.highlight.SKU[0] : data.item.SKU"
             ></span>)
           </span>
-        </p>
-        <p
+        </div>
+        <div
           class="mb-0 text-truncate"
-          style="font-size:1rem"
+          style="font-size: 0.9rem"
           v-html="data.item.highlight.description && data.item.highlight.description.length > 0 ? data.item.highlight.description[0] : data.item.description"
-        ></p>
+        ></div>
       </div>
       <!-- {{data.item.productimage.thumbnail.url}} -->
       <!-- </div> -->
