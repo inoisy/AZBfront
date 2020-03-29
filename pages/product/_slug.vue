@@ -1,12 +1,6 @@
 <template>
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="product.name"></default-header>
-    <!-- <section class="grey lighten-2">
-      <v-container class="text-center text-md-left">
-        <breadcrumbs class="pl-1" :items="breadcrumbs"/>
-        <h1>{{product.name}}</h1>
-      </v-container>
-    </section>-->
     <v-container class="py-12" grid-list-lg>
       <v-layout row wrap>
         <v-flex xs12 md8 lg9 order-xs2 order-md1 class="pr-3">
@@ -38,7 +32,6 @@
             <u>Техническая документация</u>
           </a>
         </v-flex>
-        <!-- {{product.productimage}} -->
         <v-flex xs12 md4 lg3 order-xs1 order-md2 class="mb-4" v-if="product.productimage">
           <v-card
             class="pa-5 mb-4"
