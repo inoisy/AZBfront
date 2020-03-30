@@ -18,7 +18,7 @@
           >
             <h2
               class="font-weight-bold mb-0"
-              style="font-size: 1.2rem; line-height: normal;"
+              style="font-size: 1.3rem; line-height: normal;"
             >{{item.name}}</h2>
             <div class="mt-3" v-show="item.description">{{item.description}}</div>
           </v-card>

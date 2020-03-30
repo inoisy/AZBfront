@@ -17,7 +17,7 @@
     <v-divider vertical class="hidden-sm-and-down mx-3"></v-divider>
 
     <v-flex>
-      <h2 class="font-weight-bold mb-3">{{item.name}}</h2>
+      <h2 class="category-card-header font-weight-bold mb-3">{{item.name}}</h2>
       <div>{{item.description}}</div>
     </v-flex>
   </v-card>
@@ -26,6 +26,11 @@
 .category-card-wrapper {
   display: flex;
   flex-direction: column;
+
+  .category-card-header {
+    font-size: 1.6rem;
+    line-height: normal;
+  }
 
   .img-wrapper {
     min-height: 150px;

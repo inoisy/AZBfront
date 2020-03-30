@@ -1,7 +1,7 @@
 <template>
   <div>
     <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
-    <v-container grid-list-lg class="pt-12 d-flex" id="contentWrapper">
+    <v-container grid-list-lg class="pt-9 pb-6 d-flex" id="contentWrapper">
       <v-layout class="d-flex all-wrapper">
         <div class="menu-wrapper" v-show="showManufacturers || showFilters">
           <sticky-menu class="menu-child">

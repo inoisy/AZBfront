@@ -16,42 +16,83 @@ module.exports = {
     baseUrl: backendUrl,
     imageBaseUrl: imageBaseUrl
   },
-  // router: {
-  //   scrollBehavior: async (to, from, savedPosition) => {
-  //     if (savedPosition) {
-  //       return savedPosition
-  //     }
+  router: {
+    scrollBehavior: async (to, from, savedPosition) => {
+      const fromName = from.name
+      const toName = to.name
+      // console.log("from", fromName, "to", toName)
+      // const fromFilter = fromName === "catalog-category-subCategory-filter" && toName === "catalog-category-subCategory"
+      // const filters = fromName === "catalog-category-subCategory-filter" || toName === "catalog-category-subCategory-filter"
+      // const toFilter = 
+      // const subToSub = 
+      // const mantoFilter = 
 
-  //     const findEl = async (hash, x) => {
-  //       return document.querySelector(hash) ||
-  //         new Promise((resolve, reject) => {
-  //           if (x > 50) {
-  //             return resolve()
-  //           }
-  //           setTimeout(() => {
-  //             resolve(findEl(hash, ++x || 1))
-  //           }, 100)
-  //         })
-  //     }
+      if (to.hash) {
+        const findEl = async (hash, x) => {
+          return document.querySelector(hash) ||
+            new Promise((resolve, reject) => {
+              if (x > 50) {
+                return resolve()
+              }
+              setTimeout(() => {
+                resolve(findEl(hash, ++x || 1))
+              }, 100)
+            })
+        }
+        let el = await findEl(to.hash)
+        if ('scrollBehavior' in document.documentElement.style) {
+          return window.scrollTo({
+            top: el.offsetTop,
+            behavior: 'smooth'
+          })
+        } else {
+          return window.scrollTo(0, el.offsetTop)
+        }
+      }
+      if (fromName === "manufacturers-slug" && toName === "catalog-category-subCategory-filter") {
+        return {
+          x: 0,
+          y: 0
+        }
+      }
+      if (fromName === "catalog-category-subCategory-filter" || toName === "catalog-category-subCategory-filter" || fromName === "catalog-category-subCategory" && toName === "catalog-category-subCategory") {
+        return
+      }
+      if (fromName === "catalog-category-subCategory-filter" && toName === "catalog-category-subCategory" || fromName === "catalog-category-subCategory" && toName === "catalog-category-subCategory-filter" && savedPosition) {
+        return savedPosition
+      }
 
-  //     if (to.hash) {
-  //       let el = await findEl(to.hash)
-  //       if ('scrollBehavior' in document.documentElement.style) {
-  //         return window.scrollTo({
-  //           top: el.offsetTop,
-  //           behavior: 'smooth'
-  //         })
-  //       } else {
-  //         return window.scrollTo(0, el.offsetTop)
-  //       }
-  //     }
+      return {
+        x: 0,
+        y: 0
+      }
 
-  //     return {
-  //       x: 0,
-  //       y: 0
-  //     }
-  //   }
-  // },
+      // const catalogToCategory = fromName === "catalog" && toName === "catalog-category"
+      // const catalogToSubcategory = fromName === "catalog-category" && toName === "catalog-category-subCategory"
+      // const subcategoryToProduct = fromName === "catalog-category-subCategory" && toName === "product-slug"
+
+      // if (catalogToSubcategory || subcategoryToProduct || catalogToCategory) {
+      //   console.log("true")
+      //   return {
+      //     x: 0,
+      //     y: 0
+      //   }
+
+      // }
+      // console.log("to, from", to, from)
+      //     if (savedPosition) {
+      //       return savedPosition
+      //     }
+
+
+
+
+      //     return {
+      //       x: 0,
+      //       y: 0
+      //     }
+    }
+  },
   /*
    ** Headers of the page
    */
