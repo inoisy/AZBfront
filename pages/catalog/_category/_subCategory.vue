@@ -306,19 +306,10 @@ export default {
       );
     },
     showClearFilters() {
-      let newArr = [];
-      if (this.dataFilters && Object.keys(this.dataFilters).length > 0) {
-        for (let item of Object.keys(this.dataFilters)) {
-          newArr.push(!!this.dataFilters[item]);
-        }
-        const returnVal =
-          !!this.manufacturerSelected || newArr.some(item => item === true)
-            ? true
-            : false;
-        // console.log("TCL: showClearFilters -> returnVal", returnVal);
-
-        return returnVal;
-      } else return false;
+      const show = Object.keys(this.dataFilters).some(item => {
+        return this.dataFilters[item].length;
+      });
+      return show;
     },
     products() {
       return this.$store.state.products;
@@ -387,9 +378,7 @@ export default {
       });
     },
     async manufacturerSelected(val) {
-      await this.$vuetify.goTo("#contentWrapper", {
-        // offset: 100
-      });
+      await this.$vuetify.goTo("#contentWrapper");
       const manufacturer = this.manufacturers.find(item => item.id === val);
 
       await this.$store.dispatch("fetchProducts", {
@@ -415,14 +404,7 @@ export default {
       }
     },
     async pageCurr(val) {
-      await this.$vuetify.goTo("#contentWrapper", {
-        // offset: this.headerHeight
-      });
-
-      // console.log(
-      //   "TCL: pageCurr -> this.$vuetify",
-      //   this.$vuetify.goTo("#main-wrapper")
-      // );
+      await this.$vuetify.goTo("#contentWrapper");
       await this.$store.dispatch("fetchProducts", {
         categoryId: this.category.id,
         manufacturers: this.manufacturerSelected,
@@ -448,16 +430,19 @@ export default {
   methods: {
     async flushFilters() {
       this.pageCurr = 1;
-      if (Object.keys(this.dataFilters).length > 0) {
-        this.dataFilters = {};
-        await this.$store.commit("filters", []);
-        await this.$store.dispatch("fetchProducts", {
-          categoryId: this.category.id,
-          filters: this.dataFilters,
-          size: this.itemsPerPage,
-          from: (this.pageCurr - 1) * this.itemsPerPage
-        });
-      }
+      await this.$vuetify.goTo("#contentWrapper");
+      this.dataFilters = Object.keys(this.dataFilters).reduce((acc, val) => {
+        acc[val] = [];
+        return acc;
+      }, {});
+      await this.$store.commit("filters", this.dataFilters);
+      await this.$store.dispatch("fetchProducts", {
+        categoryId: this.category.id,
+        filters: this.dataFilters,
+        size: this.itemsPerPage,
+        from: (this.pageCurr - 1) * this.itemsPerPage
+      });
+      // }
       this.manufacturerSelected = null;
     },
     async checkboxChange() {
