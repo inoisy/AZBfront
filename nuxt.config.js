@@ -1,5 +1,5 @@
 const pkg = require('./package')
-const axios = require("axios")
+// const axios = require("axios")
 const routes = require("./routes")
 
 const siteURL = "https://azb-es.ru"
@@ -20,13 +20,6 @@ module.exports = {
     scrollBehavior: async (to, from, savedPosition) => {
       const fromName = from.name
       const toName = to.name
-      // console.log("from", fromName, "to", toName)
-      // const fromFilter = fromName === "catalog-category-subCategory-filter" && toName === "catalog-category-subCategory"
-      // const filters = fromName === "catalog-category-subCategory-filter" || toName === "catalog-category-subCategory-filter"
-      // const toFilter = 
-      // const subToSub = 
-      // const mantoFilter = 
-
       if (to.hash) {
         const findEl = async (hash, x) => {
           return document.querySelector(hash) ||
@@ -160,7 +153,6 @@ module.exports = {
    ** Nuxt.js modules
    */
   modules: [
-
     // "nuxt-ssr-cache",
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
@@ -260,57 +252,7 @@ module.exports = {
     gzip: true,
     cacheTime: 1000 * 60 * 60 * 24 * 90,
     routes
-    // exclude: [
-    //   '/secret',
-    //   '/admin/**'
-    // ],
 
-    // async routes() {
-    //   // console.log("sitemap-generation")
-
-    //   // console.log("TCL: routes -> data", data)
-    //   // console.log("TCL: routes -> categories", categories)
-    //   let routes = []
-
-    //   const {
-    //     data: manufacturers
-    //   } = await axios.get(backendUrl + '/manufacturers?_limit=99999')
-    //   console.log("TCL: routes -> manufacturers", manufacturers)
-    //   for (let item of manufacturers) {
-    //     routes.push(`/manufacturers/${item.slug}`)
-    //   }
-
-
-    //   const {
-    //     data: pages
-    //   } = await axios.get(backendUrl + '/pages?parent.slug=about')
-    //   console.log("TCL: routes -> pages", pages)
-    //   for (let item of pages) {
-    //     routes.push(`/about/${item.slug}`)
-    //   }
-
-    //   const {
-    //     data: categories
-    //   } = await axios.get(backendUrl + '/categories?ismain=true&_limit=99999')
-    //   for (let category of categories) {
-    //     routes.push(`/catalog/${category.slug}`)
-
-    //   }
-    //   for (let category of categories) {
-    //     for (let subcategory of category.child) {
-    //       routes.push(`/catalog/${category.slug}/${subcategory.slug}`)
-    //     }
-    //   }
-    //   const {
-    //     data: products
-    //   } = await axios.get(backendUrl + '/products?_limit=99999')
-    //   // console.log("TCL: routes ->  products.length", products.length)
-    //   for (let product of products) {
-    //     routes.push(`/product/${product.slug}`)
-    //   }
-
-    //   return routes
-    // }
   },
   markdownit: {
     preset: 'default',
@@ -351,14 +293,18 @@ module.exports = {
       "presets": [
         ["@nuxt/babel-preset-app", {
           "corejs": {
-            "version": 3
+            "version": 2
           }
         }],
       ]
     },
     transpile: [/^aos/, /^vue-awesome-swiper/, /^@nuxtjs\/apollo/, "vue2-google-maps", "vue-particles", "nuxt-i18n", "vuetify"],
     extend(config, ctx) {
-
+      // config.node = {
+      //   fs: 'empty',
+      //   net: 'empty',
+      //   debug: 'empty',
+      // }
     }
   }
 }

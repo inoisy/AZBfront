@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-const baseUrl = process.env.baseUrl
+// const baseUrl = process.env.baseUrl
 // curl -X PUT "localhost:9200/product/doc/_mappings?include_type_name=true" -H 'Content-Type: application/json' -d'
 // {
 //   "properties": {
@@ -166,6 +166,7 @@ export const actions = {
 
     // let client = this.app.apolloProvider.defaultClient;
     const filters = input.filters
+    console.log("fetchProducts -> filters", filters)
     const category = input.categoryId
     const size = input.size || 10
     const from = input.from || 0
@@ -181,7 +182,7 @@ export const actions = {
     }
 
 
-    const condition = []
+
     let query = {
       size: size,
       from: from,
@@ -200,23 +201,57 @@ export const actions = {
         }
       }
     }
-    if (filters) {
-      for (let i of Object.keys(filters)) {
-        if (filters[i]) {
-          let match = {}
-          match[`filters.${i}`] = filters[i]
-          condition.push({
-            match
-          })
-        }
-      }
-      if (condition.length > 0) {
-        query.query.bool.must.push(
-          ...condition
-        )
-      }
+    const condition = []
+    for (let filter in filters) {
+      // console.log("fetchProducts -> filter", filter)
+      if (filters[filter].length) {
+        console.log("fetchProducts -> filters[filter]", filters[filter])
+        let match = {}
+        let valueString = filters[filter].reduce((acc, val, index, arr) => {
+          console.log("fetchProducts -> index", index)
+          console.log("fetchProducts -> arr", arr.length)
+          // console.log()
+          if (arr.length === index) {
+            acc = `${acc} ${val}`
+          } else if (index === 0) {
+            acc = val
+          } else {
+            acc = `${acc} OR ${val}`
+          }
 
+          return acc
+        }, '')
+        console.log("fetchProducts -> valueString", valueString)
+
+        match[`filters.${filter}`] = valueString
+        condition.push({
+          match
+        })
+
+      }
     }
+    console.log("fetchProducts -> condition", condition)
+
+    if (condition.length > 0) {
+      query.query.bool.must.push(
+        ...condition
+      )
+    }
+
+
+    // if (filters) {
+    // for (let i of Object.keys(filters)) {
+    //   if (filters[i]) {
+    //     let match = {}
+    //     match[`filters.${i}`] = filters[i]
+    //     condition.push({
+    //       match
+    //     })
+    //   }
+    // }
+
+
+    // }
 
     if (manufacturer) {
       query.query.bool.must.push({
@@ -225,7 +260,7 @@ export const actions = {
         }
       })
     }
-
+    console.log("fetchProducts -> query", JSON.stringify(query))
     const {
       data: returnData
     } = await this.$axios.post(

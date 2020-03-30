@@ -29,13 +29,15 @@
                     <v-checkbox
                       class="mt-1"
                       hide-details
-                      v-model="dataFilters[item]"
-                      :label="checkbox"
                       v-for="(checkbox,index) in category.filters[item]"
-                      :key="index"
+                      v-model="dataFilters[item]"
+                      :key="`${item}-${index}`"
                       :value="checkbox"
+                      :label="checkbox"
                       @change="checkboxChange"
                     >{{checkbox}}</v-checkbox>
+                    <!-- {{dataFilters[item]}} -->
+                    <!--  -->
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-expansion-panels>
@@ -276,7 +278,7 @@ export default {
     return {
       itemsPerPage: 30,
       pageCurr: this.$route.query.page ? Number(this.$route.query.page) : 1,
-      dataFilters: {},
+      // dataFilters: {},
       selectedName: null,
       dialog: false,
       imageBaseUrl: process.env.imageBaseUrl,
@@ -509,14 +511,12 @@ export default {
         slug: ctx.route.params.subCategory
       }
     });
-
+    const category = categoryData.categories[0];
     let manufacturer = params.filter
-      ? categoryData.categories[0].manufacturers.find(
-          item => item.slug === params.filter
-        )
+      ? category.manufacturers.find(item => item.slug === params.filter)
       : null;
     const products = await ctx.store.dispatch("fetchProducts", {
-      categoryId: categoryData.categories[0].id,
+      categoryId: category.id,
       filters: null,
       size: 30,
       from: 0,
@@ -524,10 +524,17 @@ export default {
     });
     await ctx.store.dispatch("fetchGeneralInfo");
 
+    const filters = Object.keys(category.filters).reduce((acc, val) => {
+      // console.log("val", val);
+      acc[val] = [];
+      return acc;
+    }, {});
+    // console.log("category", filters);
     return {
-      category: categoryData.categories[0],
-      manufacturers: categoryData.categories[0].manufacturers,
-      manufacturerSelected: manufacturer ? manufacturer.id : null
+      category: category,
+      manufacturers: category.manufacturers,
+      manufacturerSelected: manufacturer ? manufacturer.id : null,
+      dataFilters: filters
     };
   }
 };
