@@ -507,11 +507,13 @@ export default {
     });
     await ctx.store.dispatch("fetchGeneralInfo");
 
-    const filters = Object.keys(category.filters).reduce((acc, val) => {
-      // console.log("val", val);
-      acc[val] = [];
-      return acc;
-    }, {});
+    const filters = category.filters
+      ? Object.keys(category.filters).reduce((acc, val) => {
+          // console.log("val", val);
+          acc[val] = [];
+          return acc;
+        }, {})
+      : {};
     // console.log("category", filters);
     return {
       category: category,
