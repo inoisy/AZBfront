@@ -22,7 +22,7 @@
                   </v-card-text>
                 </v-card>
               </div>
-              <v-expansion-panels v-if="showFilters">
+              <v-expansion-panels v-if="showFilters" multiple>
                 <v-expansion-panel v-for="(item, i) in Object.keys(category.filters)" :key="i">
                   <v-expansion-panel-header>{{item}}</v-expansion-panel-header>
                   <v-expansion-panel-content>
@@ -36,8 +36,6 @@
                       :label="checkbox"
                       @change="checkboxChange"
                     >{{checkbox}}</v-checkbox>
-                    <!-- {{dataFilters[item]}} -->
-                    <!--  -->
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-expansion-panels>
