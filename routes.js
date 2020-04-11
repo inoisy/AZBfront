@@ -82,7 +82,7 @@ async function routes() {
   }
 
   const products = await getAllProducts()
-  routes.push(...products)
+
   // const {
   //   data: productsCount
   // } = await axios.get(backendUrl + '/products/count')
@@ -96,7 +96,11 @@ async function routes() {
   //     routes.push(`/product/${product.slug}`)
   //   }
   // }
+  for (let product of products) {
+    routes.push(`/product/${product.slug}`)
+  }
   console.log('routesLength', routes.length)
+
   //   const {
   //     data: products
   //   } = await axios.get(backendUrl + '/products?_limit=1000')
