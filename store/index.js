@@ -276,6 +276,7 @@ export const actions = {
     return products
   },
   async autocompleteSearch(ctx, input) {
+    console.log("autocompleteSearch -> input", input)
     await ctx.commit('loading', true)
     await ctx.commit("autocompleteSearchItems", []);
     const query = {

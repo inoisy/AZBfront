@@ -139,7 +139,7 @@ module.exports = {
    */
   plugins: [
     // '@/plugins/vuetify',
-    // '@/plugins/debounce',
+    '@/plugins/debounce',
     // '@/plugins/instant',
     "@/plugins/lazyload.js",
     {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="grey lighten-2">
-      <v-container class="pb-4">
+      <v-container class="pb-4" grid-list-lg>
         <v-layout row wrap>
           <v-flex>
             <breadcrumbs class="pl-1 mb-4 flex xs12" :items="breadcrumbs" />
@@ -12,81 +12,45 @@
               ref="search"
               label="Поиск по каталогу"
               v-model="search"
-              :rules="[rules.required, rules.counterMax,rules.counterMin]"
-              v-debounce:1s="throttledMethod"
+              v-debounce:1s="searchFunc"
+              type="text"
             ></v-text-field>
+            <!-- :rules="[rules.required, rules.counterMax,rules.counterMin]" -->
           </v-flex>
         </v-layout>
       </v-container>
     </section>
-    <v-container class="py-12">
-      <v-layout wrap>
-        <!-- <v-flex xs12 class="mb-3"></v-flex> -->
-        <!-- <v-divider></v-divider> -->
-        <!-- {{searchItems}} -->
-        <!-- <div v-for="(item, $index) in items" :key="$index" class="infinite-wrapper">
-      {{item}}
-    </div>
-        <infinite-loading @infinite="infiniteHandler" force-use-infinite-wrapper=".infinite-wrapper"></infinite-loading>-->
-        <v-flex v-if="searchItems && searchItems.length > 0">
-          <h2 class="mb-12">Результаты поиска</h2>
-          <v-card
-            class="mb-3 layout row display-flex pa-3"
-            v-for="item in searchItems"
-            :key="item.id"
-            :to="`/product/${item._source.slug}`"
-            nuxt
-            hover
-            ripple
-          >
-            <!-- {{item._source.productimage.thumbnail}} -->
-            <v-flex xs2 style="min-width:60px" class="flex-center justify-center">
-              <v-img
-                contain
-                min-width="60px"
-                max-width="170px"
-                max-height="170px"
-                :src="item._source.productimage ? imageBaseUrl+item._source.productimage.thumbnail.url : require('~/assets/no-image1.png')"
-              ></v-img>
-            </v-flex>
-            <v-divider vertical class="mx-2"></v-divider>
-            <v-flex class>
-              <h2
-                class="mb-3 mt-1"
-                v-html="item.highlight.name && item.highlight.name.length > 0 ? item.highlight.name[0] : item._source.name"
-              ></h2>
-              <p class="grey--text">
-                Артикул:
-                <span
-                  v-html="item.highlight.SKU && item.highlight.SKU.length > 0 ? item.highlight.SKU[0] : item._source.SKU"
-                ></span>
-              </p>
-              <p
-                v-html="item.highlight.description && item.highlight.description.length > 0 ? item.highlight.description[0] : item._source.description"
-              ></p>
-            </v-flex>
-          </v-card>
-        </v-flex>
-        <div v-else-if="$store.state.loading">
-          <v-progress-circular
-            v-if="$store.state.loading"
-            :size="150"
-            color="primary"
-            indeterminate
-            class="mx-auto mt-5 d-flex"
-          ></v-progress-circular>
-        </div>
-        <v-flex v-else-if="valid">
-          <v-alert type="error" :value="true">Ничего не найдено</v-alert>
-        </v-flex>
-        <!-- {{search}} -->
-      </v-layout>
+    <v-container class="py-7" grid-list-lg>
+      <template v-if="searchItems && searchItems.length > 0">
+        <h2 class="mb-7">Результаты поиска</h2>
+        <v-layout wrap>
+          <v-flex xs12 v-for="item in searchItems" :key="item.id">
+            <product-card :item="item" :viewMode="false" />
+          </v-flex>
+        </v-layout>
+      </template>
+      <div v-else-if="$store.state.loading">
+        <v-progress-circular
+          v-if="$store.state.loading"
+          :size="150"
+          color="primary"
+          indeterminate
+          class="mx-auto mt-5 d-flex"
+        ></v-progress-circular>
+      </div>
+      <v-flex v-else>
+        <v-alert type="error" :value="true">Ничего не найдено</v-alert>
+      </v-flex>
     </v-container>
   </div>
 </template>
 
 <script>
 import Breadcrumbs from "~/components/Breadcrumbs";
+// import debounce from "v-debounce";
+import ProductCard from "~/components/ProductCard";
+// import { debounce } from 'vue-debounce'
+// import debounce from "vue-debounce";
 
 export default {
   head() {
@@ -101,53 +65,51 @@ export default {
       ]
     };
   },
+  // directives: {
+  //   debounce
+  // },
   components: {
-    Breadcrumbs
+    Breadcrumbs,
+    ProductCard
   },
   data() {
     return {
       imageBaseUrl: process.env.imageBaseUrl,
-      from: 0,
+      // from: 0,
       total: null,
-      items: [],
+      // items: [],
       loading: false,
-      search: this.$route.query.q,
-      rules: {
-        required: value => !!value || "Required.",
-        counterMax: value =>
-          (value && value.length <= 60) || "Max 60 characters",
-        counterMin: value => (value && value.length >= 3) || "Min 3 characters"
-      }
+      delay: 1000
+      // rules: {
+      //   required: value => !!value || "Required.",
+      //   counterMax: value =>
+      //     (value && value.length <= 60) || "Max 60 characters",
+      //   counterMin: value => (value && value.length >= 3) || "Min 3 characters"
+      // }
     };
   },
   watch: {
-    //  async search(val) {
-
-    // }
     async search(val) {
-      console.log("TCL: breadcrumbs -> this.$route", this.$route);
-      if (val && val.length < 4) {
-        await this.$store.commit("searchItems", []);
-      }
-      if (this.$refs.search.valid) {
-        this.$router.push({ path: this.$route.path, query: { q: val.trim() } });
-      } else {
-        this.$router.push({ path: this.$route.path, query: {} });
-        this.items = [];
+      if (!val || val.length < 4) {
+        await this.$store.commit("autocompleteSearchItems", []);
       }
     }
   },
   async asyncData(ctx) {
     if (ctx.route.query.q) {
-      await ctx.store.dispatch("search", ctx.route.query.q);
+      await ctx.store.dispatch("autocompleteSearch", ctx.route.query.q);
     }
     await ctx.store.dispatch("fetchGeneralInfo");
+    // await ctx.store.dispatch("autocompleteSearch", ctx.route.query.q);
+    return {
+      search: ctx.route.query.q
+    };
   },
 
   computed: {
-    valid() {
-      return this.$refs.search ? this.$refs.search.valid : null;
-    },
+    // valid() {
+    //   return this.$refs.search ? this.$refs.search.valid : null;
+    // },
     breadcrumbs() {
       return [
         {
@@ -161,13 +123,30 @@ export default {
       ];
     },
     searchItems() {
-      return this.$store.state.searchItems;
+      return this.$store.state.autocompleteSearchItems;
     }
   },
   methods: {
-    async throttledMethod(input) {
-      await this.$store.dispatch("search", input);
+    async searchFunc() {
+      const val = this.search;
+      console.log("search -> val", val);
+      // console.log("search -> this.$refs.search.valid", this.$refs.search.valid);
+      // console.log("TCL: breadcrumbs -> this.$route", this.$route);
+      if (!val || val.length < 4) {
+        await this.$store.commit("autocompleteSearchItems", []);
+      }
+      if (val.length > 3) {
+        this.$router.push({ path: this.$route.path, query: { q: val.trim() } });
+        await this.$store.dispatch("autocompleteSearch", val);
+      } else {
+        this.$router.push({ path: this.$route.path, query: {} });
+        // this.items = [];
+      }
     }
+    // async throttledMethod(input) {
+    //   console.log("throttledMethod -> input", input);
+    //   await this.$store.dispatch("autocompleteSearch", input);
+    // }
   }
 };
 </script>

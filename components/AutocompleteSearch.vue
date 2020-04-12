@@ -19,11 +19,12 @@
     hide-selected
     hide-details
     append-icon="none"
-    @change="handleChange"
-    @input="handleInput"
-    v-on:keyup.enter="handleEnter"
+    v-on:keyup.enter="handleSearch"
     v-on:keyup.esc="$emit('searchChange', false)"
   >
+    <!-- @change="handleChange"    @input="handleInput"
+    -->
+
     <template v-slot:item="data">
       <!-- <div> -->
       <div class="align-center justify-center mr-3" style="min-width:50px; display: inline-flex;">
@@ -123,43 +124,44 @@ export default {
       } else if (val && val.length > 3) {
         await this.$store.dispatch("autocompleteSearch", val);
       }
-    },
-    async model(val) {
-      // if (Object.keys(val).length > 0 && val.slug) {
-      //   this.$router.push(`/product/${val.slug}`);
-      //   this.clear();
-      // }
-      console.log("TCL: model -> val", val);
     }
+    // async model(val) {
+    //   // if (Object.keys(val).length > 0 && val.slug) {
+    //   //   this.$router.push(`/product/${val.slug}`);
+    //   //   this.clear();
+    //   // }
+    //   console.log("TCL: model -> val", val);
+    // }
   },
   methods: {
-    async handleEnter(val) {
-      console.log("handleEnter", val);
-      this.handleSearch();
-      // if (Object.keys(val).length > 0 && val.slug) {
-      //   this.$router.push(`/product/${val.slug}`);
-      //   this.clear();
-      // }
-    },
-    async handleInput(val) {
-      console.log("handleInput", val);
-      // if (Object.keys(val).length > 0 && val.slug) {
-      //   this.$router.push(`/product/${val.slug}`);
-      //   this.clear();
-      // }
-    },
-    async handleChange(val) {
-      console.log("change", val);
-      if (Object.keys(val).length > 0 && val.slug) {
-        this.$router.push(`/product/${val.slug}`);
-        this.clear();
-      }
-    },
+    // async handleEnter(val) {
+    //   // console.log("handleEnter", val);
+    //   this.handleSearch();
+    //   // if (Object.keys(val).length > 0 && val.slug) {
+    //   //   this.$router.push(`/product/${val.slug}`);
+    //   //   this.clear();
+    //   // }
+    // },
+    // async handleInput(val) {
+    //   console.log("handleInput", val);
+    //   // if (Object.keys(val).length > 0 && val.slug) {
+    //   //   this.$router.push(`/product/${val.slug}`);
+    //   //   this.clear();
+    //   // }
+    // },
+    // async handleChange(val) {
+    //   console.log("change", val);
+    //   if (Object.keys(val).length > 0 && val.slug) {
+    //     this.$router.push(`/product/${val.slug}`);
+    //     this.clear();
+    //   }
+    // },
     async handleSearch() {
-      console.log(this.search);
+      // console.log(this.search);
       if (this.search && this.search.length > 3) {
         await this.$router.push({ path: "/search", query: { q: this.search } });
-        this.clear();
+        this.$emit("searchChange", false);
+        // this.clear();
         // this.model = "";
         // this.search = "";
         // await this.$store.commit("autocompleteSearchItems", []);

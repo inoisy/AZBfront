@@ -18,7 +18,6 @@ async function getAllProducts() {
                     name
                     SKU
                     slug
-                  
                 }
             }
         `
