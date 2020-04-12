@@ -21,20 +21,16 @@
     append-icon="none"
     v-on:keyup.enter="handleSearch"
     v-on:keyup.esc="$emit('searchChange', false)"
+    @change="handleChange"
   >
-    <!-- @change="handleChange"    @input="handleInput"
-    -->
-
     <template v-slot:item="data">
-      <!-- <div> -->
-      <div class="align-center justify-center mr-3" style="min-width:50px; display: inline-flex;">
+      <div class="autocomplete-item-img-wrap align-center justify-center mr-3" style>
         <img
-          style="max-width:50px; max-height: 50px; width:50px; object-fit: contain; padding:3px;"
+          class="autocomplete-item-img"
           :src="data.item.productimage && data.item.productimage.thumbnail ? imageBaseUrl+data.item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
         />
       </div>
-      <!-- <v-divider vertical class="ma-1 py-1"></v-divider> -->
-      <div style="max-width: calc(100% - 60px);">
+      <div>
         <div class="text-truncate" style="font-size: 1rem">
           <span
             v-html="data.item.highlight.name && data.item.highlight.name.length > 0 ? data.item.highlight.name[0] : data.item.name"
@@ -53,11 +49,6 @@
           v-html="data.item.highlight.description && data.item.highlight.description.length > 0 ? data.item.highlight.description[0] : data.item.description"
         ></div>
       </div>
-      <!-- {{data.item.productimage.thumbnail.url}} -->
-      <!-- </div> -->
-      <!-- @click="$router.push(`/product/${data.item.slug}`); clear()" -->
-
-      <!-- </div> -->
     </template>
     <template v-slot:prepend>
       <v-btn class="my-0 mx-2" @click="handleSearch" icon :disabled="!isSearchValid">
@@ -149,13 +140,13 @@ export default {
     //   //   this.clear();
     //   // }
     // },
-    // async handleChange(val) {
-    //   console.log("change", val);
-    //   if (Object.keys(val).length > 0 && val.slug) {
-    //     this.$router.push(`/product/${val.slug}`);
-    //     this.clear();
-    //   }
-    // },
+    async handleChange(val) {
+      console.log("change", val);
+      if (Object.keys(val).length > 0 && val.slug) {
+        this.$router.push(`/product/${val.slug}`);
+        this.clear();
+      }
+    },
     async handleSearch() {
       // console.log(this.search);
       if (this.search && this.search.length > 3) {
@@ -180,13 +171,27 @@ export default {
 };
 </script>
 
-<style lang="stylus">
-.v-text-field.v-text-field--solo .v-input__prepend-outer {
-  margin: 0 !important;
+<style lang="stylus" >
+.autocomplete-item-img-wrap {
+  min-width: 50px;
+  display: inline-flex;
+
+  .autocomplete-item-img {
+    max-width: 50px;
+    max-height: 50px;
+    width: 50px;
+    object-fit: contain;
+    padding: 3px;
+  }
 }
 
 .highlight {
   color: #1F5BFF;
   font-weight: bold;
+}
+
+// }
+.v-text-field.v-text-field--solo .v-input__prepend-outer {
+  margin: 0 !important;
 }
 </style>
