@@ -26,10 +26,12 @@
       </v-layout>
     </v-container>
     <section class="grey lighten-2" v-if="category.content && category.content.length>0">
-      <v-container class="py-12">
+      <v-container class="py-10" grid-list-lg>
         <v-layout row wrap>
-          <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
-          <div v-html="$md.render(category.content)"></div>
+          <v-flex xs12>
+            <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
+            <div v-html="$md.render(category.content)"></div>
+          </v-flex>
         </v-layout>
       </v-container>
     </section>

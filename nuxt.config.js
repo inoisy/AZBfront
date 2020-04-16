@@ -255,14 +255,12 @@ module.exports = {
 
   },
   markdownit: {
-    preset: 'default',
-    linkify: true,
+    injected: true,
+    html: true,
+    xhtmlOut: true,
     breaks: true,
-    injected: true
-    // use: [
-    //   ['markdown-it-container', containerName],
-    //   'markdown-it-attrs'
-    // ]
+    typographer: true,
+    linkify: true
   },
   /*
    ** Axios module configuration

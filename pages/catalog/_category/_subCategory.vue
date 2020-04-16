@@ -1,6 +1,18 @@
 <template>
   <div>
-    <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
+    <default-header :breadcrumbs="breadcrumbs" :title="category.name">
+      <div class="subcategories display-flex wrap" v-if="showManufacturers">
+        <v-btn
+          v-for="child in manufacturers"
+          :to="`/catalog/${category.parent[0].slug}/${category.slug}/${child.slug}`"
+          class="subcategory-btn ma-0"
+          text
+          :key="child.id"
+          :title="`${category.name} ${child.name}`"
+          @click="manufacturerSelected = [child.id]"
+        >{{child.name}}</v-btn>
+      </div>
+    </default-header>
     <v-container grid-list-lg class="pt-9 pb-6 d-flex" id="contentWrapper">
       <v-layout class="d-flex all-wrapper">
         <div class="menu-wrapper" v-show="showManufacturers || showFilters">
@@ -14,8 +26,8 @@
                       hide-details
                       class="mt-1"
                       v-model="manufacturerSelected"
-                      :label="checkbox.name"
                       v-for="(checkbox) in manufacturers"
+                      :label="checkbox.name"
                       :key="checkbox.id"
                       :value="checkbox.id"
                     ></v-checkbox>
@@ -145,14 +157,13 @@
         </v-layout>
       </v-container>
     </section>
-    <section
-      class="grey lighten-2 position-relative"
-      v-if="category.content && category.content.length>0"
-    >
-      <v-container class="py-12">
+    <section class="grey lighten-2" v-if="category.content && category.content.length>0">
+      <v-container class="py-10" grid-list-lg>
         <v-layout row wrap>
-          <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
-          <div v-html="$md.render(category.content)"></div>
+          <v-flex xs12>
+            <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
+            <div v-html="$md.render(category.content)"></div>
+          </v-flex>
         </v-layout>
       </v-container>
     </section>
@@ -185,10 +196,9 @@
   display: flex;
   justify-content: center;
 
-  .top-nav-inner {
-    padding-bottom: 8px;
-  }
-
+  // .top-nav-inner {
+  // padding-bottom: 8px;
+  // }
   .top-pagination-wrap {
     flex-basis: 100%;
     max-width: 100%;
@@ -322,7 +332,7 @@ export default {
       return Math.ceil(this.$store.state.productsTotal / this.itemsPerPage);
     },
     breadcrumbs() {
-      if (!this.category) return;
+      if (!this.category || !this.category.parent) return;
       return [
         {
           text: "Главная",
@@ -375,9 +385,9 @@ export default {
         manufacturers: this.manufacturerSelected
       });
     },
+    // async "this.$router.params"() {},
     async manufacturerSelected(val) {
       await this.$vuetify.goTo("#contentWrapper");
-      const manufacturer = this.manufacturers.find(item => item.id === val);
 
       await this.$store.dispatch("fetchProducts", {
         categoryId: this.category.id,
@@ -387,7 +397,11 @@ export default {
         manufacturers: val
       });
       const { filter, ...omitted } = this.$route.params;
-      if (val) {
+
+      if (val && val.length === 1) {
+        const manufacturer = this.manufacturers.find(
+          item => item.id === val[0]
+        );
         this.$router.push({
           name: "catalog-category-subCategory-filter",
           params: {
@@ -441,7 +455,7 @@ export default {
         from: (this.pageCurr - 1) * this.itemsPerPage
       });
       // }
-      this.manufacturerSelected = null;
+      this.manufacturerSelected = [];
     },
     async checkboxChange() {
       await this.$vuetify.goTo("#contentWrapper", {
@@ -503,22 +517,20 @@ export default {
       filters: null,
       size: 30,
       from: 0,
-      manufacturers: manufacturer ? manufacturer.id : null
+      manufacturers: manufacturer ? [manufacturer.id] : null
     });
     await ctx.store.dispatch("fetchGeneralInfo");
 
     const filters = category.filters
       ? Object.keys(category.filters).reduce((acc, val) => {
-          // console.log("val", val);
           acc[val] = [];
           return acc;
         }, {})
       : {};
-    // console.log("category", filters);
     return {
       category: category,
       manufacturers: category.manufacturers,
-      manufacturerSelected: manufacturer ? manufacturer.id : null,
+      manufacturerSelected: manufacturer ? [manufacturer.id] : [],
       dataFilters: filters
     };
   }

@@ -166,7 +166,7 @@ export const actions = {
 
     // let client = this.app.apolloProvider.defaultClient;
     const filters = input.filters
-    console.log("fetchProducts -> filters", filters)
+    // console.log("fetchProducts -> filters", filters)
     const category = input.categoryId
     const size = input.size || 10
     const from = input.from || 0
@@ -178,11 +178,7 @@ export const actions = {
 
     if (ctx.state.category !== category) {
       await ctx.commit('productsTotal', 0)
-
     }
-
-
-
     let query = {
       size: size,
       from: from,
@@ -203,14 +199,9 @@ export const actions = {
     }
     const condition = []
     for (let filter in filters) {
-      // console.log("fetchProducts -> filter", filter)
       if (filters[filter].length) {
-        console.log("fetchProducts -> filters[filter]", filters[filter])
-        let match = {}
+        // let match = {}
         let valueString = filters[filter].reduce((acc, val, index, arr) => {
-          console.log("fetchProducts -> index", index)
-          console.log("fetchProducts -> arr", arr.length)
-          // console.log()
           if (arr.length === index) {
             acc = `${acc} ${val}`
           } else if (index === 0) {
@@ -218,19 +209,19 @@ export const actions = {
           } else {
             acc = `${acc} OR ${val}`
           }
-
           return acc
         }, '')
-        console.log("fetchProducts -> valueString", valueString)
-
-        match[`filters.${filter}`] = valueString
+        // match[`filters.${filter}`] = valueString
+        // const filterName = `filters.${filter}`
         condition.push({
-          match
+          match: {
+            [`filters.${filter}`]: valueString
+          }
         })
 
       }
     }
-    console.log("fetchProducts -> condition", condition)
+    // console.log("fetchProducts -> condition", condition)
 
     if (condition.length > 0) {
       query.query.bool.must.push(
@@ -238,29 +229,35 @@ export const actions = {
       )
     }
 
+    if (manufacturer && manufacturer.length) {
+      // console.log("fetchProducts -> manufacturer", manufacturer)
+      //  if (filters[filter].length) {
+      //  let match = {}
+      let valueString = manufacturer.reduce((acc, val, index, arr) => {
+        if (arr.length === index) {
+          acc = `${acc} ${val}`
+        } else if (index === 0) {
+          acc = val
+        } else {
+          acc = `${acc} OR ${val}`
+        }
+        return acc
+      }, '')
+      // console.log("fetchProducts -> valueString", valueString)
 
-    // if (filters) {
-    // for (let i of Object.keys(filters)) {
-    //   if (filters[i]) {
-    //     let match = {}
-    //     match[`filters.${i}`] = filters[i]
-    //     condition.push({
-    //       match
-    //     })
-    //   }
-    // }
+      //  match[`filters.${filter}`] = valueString
+      //  condition.push({
+      //    match
+      //  })
 
-
-    // }
-
-    if (manufacturer) {
+      //  }
       query.query.bool.must.push({
         match: {
-          ['manufacturer.id']: manufacturer
+          'manufacturer.id': valueString
         }
       })
     }
-    console.log("fetchProducts -> query", JSON.stringify(query))
+    // console.log("fetchProducts -> query", JSON.stringify(query))
     const {
       data: returnData
     } = await this.$axios.post(
