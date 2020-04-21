@@ -200,7 +200,6 @@ export const actions = {
     const condition = []
     for (let filter in filters) {
       if (filters[filter].length) {
-        // let match = {}
         let valueString = filters[filter].reduce((acc, val, index, arr) => {
           if (arr.length === index) {
             acc = `${acc} ${val}`
@@ -211,8 +210,6 @@ export const actions = {
           }
           return acc
         }, '')
-        // match[`filters.${filter}`] = valueString
-        // const filterName = `filters.${filter}`
         condition.push({
           match: {
             [`filters.${filter}`]: valueString
@@ -221,8 +218,6 @@ export const actions = {
 
       }
     }
-    // console.log("fetchProducts -> condition", condition)
-
     if (condition.length > 0) {
       query.query.bool.must.push(
         ...condition
@@ -230,9 +225,6 @@ export const actions = {
     }
 
     if (manufacturer && manufacturer.length) {
-      // console.log("fetchProducts -> manufacturer", manufacturer)
-      //  if (filters[filter].length) {
-      //  let match = {}
       let valueString = manufacturer.reduce((acc, val, index, arr) => {
         if (arr.length === index) {
           acc = `${acc} ${val}`
@@ -243,21 +235,12 @@ export const actions = {
         }
         return acc
       }, '')
-      // console.log("fetchProducts -> valueString", valueString)
-
-      //  match[`filters.${filter}`] = valueString
-      //  condition.push({
-      //    match
-      //  })
-
-      //  }
       query.query.bool.must.push({
         match: {
           'manufacturer.id': valueString
         }
       })
     }
-    // console.log("fetchProducts -> query", JSON.stringify(query))
     const {
       data: returnData
     } = await this.$axios.post(

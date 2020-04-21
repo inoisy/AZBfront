@@ -157,7 +157,10 @@
         </v-layout>
       </v-container>
     </section>
-    <section class="grey lighten-2" v-if="category.content && category.content.length>0">
+    <section
+      class="grey lighten-2 position-relative"
+      v-if="category.content && category.content.length>0"
+    >
       <v-container class="py-10" grid-list-lg>
         <v-layout row wrap>
           <v-flex xs12>

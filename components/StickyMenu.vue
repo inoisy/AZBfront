@@ -2,18 +2,17 @@
   <div
     v-scroll="onScroll"
     id="sidebarContent"
-    class="sidebarContent pl-1"
+    class="sidebarContent"
     v-resize="onResize"
-    :class="sidebarStyles"
+    :class="fixedTop ? 'fixed-top':''"
     ref="sidebarContent"
-    :style="sidebarStyles['fixed-bottom'] && !sidebarStyles['fixed-top'] ? `padding-bottom: ${sidebar.marginBottom}px;` : ''"
+    :style="`max-height: ${sidebar.maxHeight}px;`"
   >
     <slot></slot>
   </div>
 </template>
 
 <script>
-// import _ from "lodash";
 export default {
   mounted() {},
   computed: {
@@ -22,19 +21,12 @@ export default {
         ? this.$vuetify.breakpoint.smAndDown
         : null;
     },
-    sidebarStyles() {
-      const currScroll =
-        this.sidebar.windowScrollTop + this.sidebar.innerHeight;
-      // console.log("TCL: sidebarStyles -> pos1", pos1);
-      const bottomSide = this.sidebar.offsetHeight + this.sidebar.elemHeight;
-      // console.log("TCL: sidebarStyles -> pos2", pos2);
-      const bottom = currScroll > bottomSide;
-
-      const top = this.sidebar.windowScrollTop > this.sidebar.offsetHeight;
-      return {
-        "fixed-top": !this.breakpoint && !bottom && top,
-        "fixed-bottom": top && !this.breakpoint && bottom
-      };
+    fixedTop() {
+      return (
+        !this.breakpoint &&
+        this.sidebar.windowScrollTop > this.sidebar.offsetHeight &&
+        this.sidebar.bottomOffset > 0
+      );
     }
   },
   methods: {
@@ -42,7 +34,6 @@ export default {
       const elem = this.$refs.sidebarContent
         ? this.$refs.sidebarContent.parentElement
         : null;
-      // this.windowSize = { x: window.innerWidth, y: window.innerHeight };
       this.sidebar.offsetHeight = elem.offsetTop;
       this.calculateSidebar();
     },
@@ -50,17 +41,12 @@ export default {
       const elem = this.$refs.sidebarContent
         ? this.$refs.sidebarContent.parentElement
         : null;
-      const clientRect = elem ? elem.getBoundingClientRect().y : "";
-      this.sidebar.elemHeight = elem.getBoundingClientRect().height;
-      this.sidebar.clientRect = clientRect;
-      this.sidebar.toolbarHeight = this.$vuetify.breakpoint.mdAndUp ? 92 : 64;
-      this.sidebar.innerHeight = window.innerHeight;
-      this.sidebar.offsetHeight = elem ? elem.offsetTop : 0;
-      this.sidebar.marginBottom =
-        this.sidebar.innerHeight -
-        (this.sidebar.clientRect + elem.offsetHeight) +
-        this.sidebar.toolbarHeight +
-        20;
+      // const toolbarHeight = this.breakpoint ? 92 : 92;
+      const bottomOffset = elem.getBoundingClientRect().bottom - 92;
+      const clientHeight = window.innerHeight - 92;
+      this.sidebar.maxHeight =
+        bottomOffset > clientHeight ? clientHeight : bottomOffset;
+      this.sidebar.bottomOffset = bottomOffset;
     },
     onScroll() {
       this.sidebar.windowScrollTop =
@@ -70,45 +56,53 @@ export default {
     }
   },
   mounted() {
+    const elem = this.$refs.sidebarContent
+      ? this.$refs.sidebarContent.parentElement
+      : null;
+    this.sidebar.windowScrollTop =
+      window.pageYOffset || document.documentElement.scrollTop;
+
+    this.sidebar.offsetHeight = elem.offsetTop;
     this.calculateSidebar();
   },
-  created() {},
   data() {
     return {
       offsetTop: 0,
-      // windowSize: {
-      //   x: 0,
-      //   y: 0
-      // },
       sidebar: {
-        height: 0,
-        windowHeight: 0,
-        clientRect: 500,
         windowScrollTop: 0,
-        innerHeight: 0,
-        offsetHeight: 0
+        offsetHeight: 0,
+        bottomOffset: 1000
       }
     };
   }
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .sidebarContent {
   width: 100%;
+  padding: 5px;
 
   &::-webkit-scrollbar {
-    width: 0 !important;
+    width: 16px;
   }
 
-  overflow: -moz-scrollbars-none;
-  -ms-overflow-style: none;
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    border-radius: 10px;
+    outline: 1px solid slategrey;
+  }
 }
 
 .fixed-bottom {
   position: fixed;
   width: inherit;
-  top: 80px;
+  // top: 80px;
   height: 100%;
   overflow-y: auto;
 }
@@ -116,16 +110,14 @@ export default {
 .fixed-top {
   position: fixed;
   width: inherit;
-  top: 80px;
+  // top: 56px;
   height: 100%;
   overflow-y: auto;
-  padding-bottom: 90px;
 }
 
 @media only screen and (min-width: 960px) {
   .fixed-top, .fixed-bottom {
     top: 100px;
-    padding-bottom: 160px;
   }
 }
 </style>
