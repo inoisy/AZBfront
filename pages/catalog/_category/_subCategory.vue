@@ -243,11 +243,6 @@
       width: 20rem;
       min-width: 20rem;
       margin-bottom: 0;
-
-      // padding-right: 16px;
-      .menu-child {
-        padding-right: 16px;
-      }
     }
 
     .content-wrapper-fit {

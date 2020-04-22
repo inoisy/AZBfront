@@ -6,7 +6,7 @@
     v-resize="onResize"
     :class="fixedTop ? 'fixed-top':''"
     ref="sidebarContent"
-    :style="`max-height: ${sidebar.maxHeight}px;`"
+    :style="!breakpoint ? `max-height: ${sidebar.maxHeight}px;` : ''"
   >
     <slot></slot>
   </div>
@@ -38,12 +38,13 @@ export default {
       this.calculateSidebar();
     },
     calculateSidebar() {
+      if (this.breakpoint) return;
       const elem = this.$refs.sidebarContent
         ? this.$refs.sidebarContent.parentElement
         : null;
       // const toolbarHeight = this.breakpoint ? 92 : 92;
-      const bottomOffset = elem.getBoundingClientRect().bottom - 92;
-      const clientHeight = window.innerHeight - 92;
+      const bottomOffset = elem.getBoundingClientRect().bottom - 105;
+      const clientHeight = window.innerHeight - 105;
       this.sidebar.maxHeight =
         bottomOffset > clientHeight ? clientHeight : bottomOffset;
       this.sidebar.bottomOffset = bottomOffset;
@@ -81,7 +82,7 @@ export default {
 <style lang="stylus" scoped>
 .sidebarContent {
   width: 100%;
-  padding: 5px;
+  padding: 0px 8px 8px 8px;
 
   &::-webkit-scrollbar {
     width: 16px;
