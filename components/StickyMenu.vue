@@ -31,6 +31,7 @@ export default {
   },
   methods: {
     onResize() {
+      if (this.breakpoint) return;
       const elem = this.$refs.sidebarContent
         ? this.$refs.sidebarContent.parentElement
         : null;
@@ -38,7 +39,6 @@ export default {
       this.calculateSidebar();
     },
     calculateSidebar() {
-      if (this.breakpoint) return;
       const elem = this.$refs.sidebarContent
         ? this.$refs.sidebarContent.parentElement
         : null;
@@ -50,6 +50,7 @@ export default {
       this.sidebar.bottomOffset = bottomOffset;
     },
     onScroll() {
+      if (this.breakpoint) return;
       this.sidebar.windowScrollTop =
         window.pageYOffset || document.documentElement.scrollTop;
 
@@ -57,6 +58,7 @@ export default {
     }
   },
   mounted() {
+    // if (this.breakpoint) return;
     const elem = this.$refs.sidebarContent
       ? this.$refs.sidebarContent.parentElement
       : null;
