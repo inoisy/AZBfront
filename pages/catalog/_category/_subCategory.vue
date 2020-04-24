@@ -16,7 +16,7 @@
     <v-container grid-list-lg class="pt-9 pb-6 d-flex" id="contentWrapper">
       <v-layout class="d-flex all-wrapper">
         <div class="menu-wrapper" v-show="showManufacturers || showFilters">
-          <sticky-menu class="menu-child">
+          <sticky-menu class="menu-child pa-2">
             <slot>
               <div v-if="showManufacturers" class="mb-3">
                 <v-card class="pt-0">
@@ -68,7 +68,7 @@
           class="content-wrapper"
           :class="showManufacturers || showFilters ? 'content-wrapper-fit' : ''"
         >
-          <div class="pa-2 pt-0">
+          <div v-if="showProducts" class="pa-2">
             <v-card color="white" class="top-nav-wrap py-3">
               <div class="top-nav-inner px-3 d-inline-flex align-center">
                 <v-btn-toggle mandatory v-model="viewMode">
@@ -104,11 +104,7 @@
               </div>
             </v-card>
           </div>
-          <div
-            v-if="products && products.length > 0"
-            class="d-flex"
-            style="flex-wrap: wrap; display: flex;"
-          >
+          <div v-if="showProducts" class="d-flex" style="flex-wrap: wrap; display: flex;">
             <v-flex
               v-for="item in products"
               :key="item.id"
@@ -294,6 +290,9 @@ export default {
     };
   },
   computed: {
+    showProducts() {
+      return this.products && this.products.length;
+    },
     showNum30() {
       return this.productsTotal && this.productsTotal > 30;
     },

@@ -84,7 +84,6 @@ export default {
 <style lang="stylus" scoped>
 .sidebarContent {
   width: 100%;
-  padding: 0px 8px 8px 8px;
 
   &::-webkit-scrollbar {
     width: 16px;

@@ -10,6 +10,22 @@ import gql from "graphql-tag";
 //   }
 // }
 // '
+// curl -X PUT "localhost:9200/product/_settings" -H 'Content-Type: application/json' -d'
+// {
+//     "analysis": {
+//       "analyzer": {
+//         "my_analyzer": {
+//           "type": "custom",
+//             "filter": [
+//               "lowercase"
+//             ],
+//               "tokenizer": "whitespace"
+//         }
+//       }
+//     }
+// }
+// '
+
 export const state = () => ({
   autocompleteSearchItems: [],
   search: {
@@ -183,7 +199,7 @@ export const actions = {
       size: size,
       from: from,
       sort: [{
-        name: {
+        "name.keyword": {
           order: "asc"
         }
       }],
@@ -199,20 +215,37 @@ export const actions = {
     }
     const condition = []
     for (let filter in filters) {
-      if (filters[filter].length) {
-        let valueString = filters[filter].reduce((acc, val, index, arr) => {
-          if (arr.length === index) {
-            acc = `${acc} ${val}`
+      let filterLength = filters[filter].length
+      if (filterLength) {
+        let valueString = filters[filter].reduce((acc, val, index) => {
+          let innerVal = val.includes("+") ? val.replace("+", "\\+") : val
+          if (innerVal.includes("/")) {
+            innerVal = innerVal.replace("/", "\\/")
+          }
+          // console.log("fetchProducts -> val.includes", val.includes("+"))
+          console.log("fetchProducts -> innerVal", innerVal)
+          if (filterLength === index) {
+            acc = `${acc} ${innerVal}`
           } else if (index === 0) {
-            acc = val
+            acc = innerVal
           } else {
-            acc = `${acc} OR ${val}`
+            acc = `${acc} OR ${innerVal}`
           }
           return acc
         }, '')
+        // console.log("fetchProducts -> valueString", valueString)
+
         condition.push({
+
           match: {
-            [`filters.${filter}`]: valueString
+            [`filters.${filter}`]: {
+              "query": valueString,
+              "analyzer": "my_analyzer"
+              // "auto_generate_synonyms_phrase_query": false.
+              // minimum_should_match: "50%"
+            },
+
+            // "operator": "AND"
           }
         })
 
@@ -223,8 +256,10 @@ export const actions = {
         ...condition
       )
     }
+    console.log("fetchProducts -> query", query)
 
     if (manufacturer && manufacturer.length) {
+      // let length = manufacturer.length
       let valueString = manufacturer.reduce((acc, val, index, arr) => {
         if (arr.length === index) {
           acc = `${acc} ${val}`
@@ -249,6 +284,7 @@ export const actions = {
     );
 
     const products = returnData.hits.map(item => item._source)
+    // console.log("fetchProducts -> products", products[0])
     await ctx.commit('category', category)
     await ctx.commit('products', products)
     await ctx.commit('productsTotal', returnData.total.value)
