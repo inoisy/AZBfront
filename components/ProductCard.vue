@@ -23,7 +23,7 @@
         <span>Артикул:&nbsp;</span>
         <span class="font-weight-bold">{{item.SKU}}</span>
       </div>
-      <div class="mb-1" v-if="!viewMode">{{item.description}}</div>
+      <div class="mb-1 product-card-text" v-if="!viewMode">{{item.description}}</div>
       <div class="mb-1 product-card-text" v-if="item.manufacturer">
         Производитель:
         <nuxt-link
@@ -42,7 +42,7 @@
           text
           @click="showDesc=!showDesc"
         >Технические характеристики</v-btn>
-        <div v-show="showDesc">
+        <div v-show="showDesc" class="product-card-text">
           <div class="mb-1" v-for="(filter,index) in Object.keys(item.filters)" :key="index">
             {{filter}}:
             <span class="font-weight-bold">{{item.filters[filter]}}</span>
@@ -112,6 +112,7 @@ export default {
 
   .product-card-text {
     font-size: 14px;
+    line-height: normal;
   }
 
   .product-card-header {

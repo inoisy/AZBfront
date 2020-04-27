@@ -60,7 +60,7 @@
                 color="white"
                 @click="flushFilters"
               >Сбросить фильтры</v-btn>
-              <v-divider class="hidden-md-and-up mt-3 mb-4"></v-divider>
+              <!-- <v-divider class="hidden-md-and-up mt-3 mb-4"></v-divider> -->
             </slot>
           </sticky-menu>
         </div>

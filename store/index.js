@@ -218,10 +218,14 @@ export const actions = {
       let filterLength = filters[filter].length
       if (filterLength) {
         let valueString = filters[filter].reduce((acc, val, index) => {
-          let innerVal = val.includes("+") ? val.replace("+", "\\+") : val
-          if (innerVal.includes("/")) {
-            innerVal = innerVal.replace("/", "\\/")
-          }
+          let innerVal = val //.toLowerCase() //.includes("+") ? val.replace("+", "_plus_") : val.toLowerCase()
+          // if (innerVal.includes("+")) {
+          //   innerVal = innerVal.replace("+", "\\+")
+          // }
+          // `\\"${innerVal}\\"` 
+          // if (innerVal.includes("/")) {
+          //   innerVal = innerVal.replace("/", "\\/")
+          // }
           // console.log("fetchProducts -> val.includes", val.includes("+"))
           console.log("fetchProducts -> innerVal", innerVal)
           if (filterLength === index) {
@@ -240,9 +244,13 @@ export const actions = {
           match: {
             [`filters.${filter}`]: {
               "query": valueString,
-              "analyzer": "my_analyzer"
-              // "auto_generate_synonyms_phrase_query": false.
-              // minimum_should_match: "50%"
+              // "fuzziness": 0,
+              // "transpositions": false
+              // "analyzer": "filtercharwhitespace",
+              // "pattern": "([^\p{L}\d]+)"
+              // transpositions: false,
+              // "auto_generate_synonyms_phrase_query": false
+              // minimum_should_match: "55%"
             },
 
             // "operator": "AND"
@@ -252,10 +260,11 @@ export const actions = {
       }
     }
     if (condition.length > 0) {
-      query.query.bool.must.push(
-        ...condition
-      )
+      query.query.bool.filter = [...condition] //.must.push(
+      //...condition
+      //)
     }
+    // query.query.bool.minimum_should_match = 1
     console.log("fetchProducts -> query", query)
 
     if (manufacturer && manufacturer.length) {
