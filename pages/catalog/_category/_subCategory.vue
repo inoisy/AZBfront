@@ -266,6 +266,20 @@ export default {
           name: "description",
           content: this.category.description + " - Азбука электроснабжения"
         }
+      ],
+      link: [
+        {
+          rel: "canonical",
+          href:
+            this.category &&
+            this.category.slug &&
+            this.category.parent.length &&
+            `${process.env.siteUrl}/catalog/${this.category.parent[0].slug}/${
+              this.category.slug
+            }${
+              this.$route.params.filter ? `/${this.$route.params.filter}` : ""
+            }`
+        }
       ]
     };
   },
@@ -451,14 +465,10 @@ export default {
         size: this.itemsPerPage,
         from: (this.pageCurr - 1) * this.itemsPerPage
       });
-      // }
       this.manufacturerSelected = [];
     },
     async checkboxChange() {
-      await this.$vuetify.goTo("#contentWrapper", {
-        // offset: this.headerHeight
-      });
-
+      await this.$vuetify.goTo("#contentWrapper");
       await this.$store.commit("filters", this.dataFilters);
       this.pageCurr = 1;
       await this.$store.dispatch("fetchProducts", {
@@ -471,9 +481,9 @@ export default {
     }
   },
 
-  async asyncData(ctx) {
-    const params = ctx.route.params;
-    let client = ctx.app.apolloProvider.defaultClient;
+  async asyncData({ params, app, store }) {
+    // const params = ctx.route.params;
+    let client = app.apolloProvider.defaultClient;
 
     const baseUrl = process.env.baseUrl;
     const { data: categoryData } = await client.query({
@@ -502,21 +512,21 @@ export default {
         }
       `,
       variables: {
-        slug: ctx.route.params.subCategory
+        slug: params.subCategory
       }
     });
     const category = categoryData.categories[0];
     let manufacturer = params.filter
       ? category.manufacturers.find(item => item.slug === params.filter)
       : null;
-    const products = await ctx.store.dispatch("fetchProducts", {
+    const products = await store.dispatch("fetchProducts", {
       categoryId: category.id,
       filters: null,
       size: 30,
       from: 0,
       manufacturers: manufacturer ? [manufacturer.id] : null
     });
-    await ctx.store.dispatch("fetchGeneralInfo");
+    await store.dispatch("fetchGeneralInfo");
 
     const filters = category.filters
       ? Object.keys(category.filters).reduce((acc, val) => {

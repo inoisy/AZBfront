@@ -218,15 +218,7 @@ export const actions = {
       let filterLength = filters[filter].length
       if (filterLength) {
         let valueString = filters[filter].reduce((acc, val, index) => {
-          let innerVal = val //.toLowerCase() //.includes("+") ? val.replace("+", "_plus_") : val.toLowerCase()
-          // if (innerVal.includes("+")) {
-          //   innerVal = innerVal.replace("+", "\\+")
-          // }
-          // `\\"${innerVal}\\"` 
-          // if (innerVal.includes("/")) {
-          //   innerVal = innerVal.replace("/", "\\/")
-          // }
-          // console.log("fetchProducts -> val.includes", val.includes("+"))
+          let innerVal = val
           console.log("fetchProducts -> innerVal", innerVal)
           if (filterLength === index) {
             acc = `${acc} ${innerVal}`
@@ -237,35 +229,21 @@ export const actions = {
           }
           return acc
         }, '')
-        // console.log("fetchProducts -> valueString", valueString)
 
         condition.push({
 
           match: {
             [`filters.${filter}`]: {
               "query": valueString,
-              // "fuzziness": 0,
-              // "transpositions": false
-              // "analyzer": "filtercharwhitespace",
-              // "pattern": "([^\p{L}\d]+)"
-              // transpositions: false,
-              // "auto_generate_synonyms_phrase_query": false
-              // minimum_should_match: "55%"
             },
-
-            // "operator": "AND"
           }
         })
 
       }
     }
     if (condition.length > 0) {
-      query.query.bool.filter = [...condition] //.must.push(
-      //...condition
-      //)
+      query.query.bool.filter = [...condition]
     }
-    // query.query.bool.minimum_should_match = 1
-    console.log("fetchProducts -> query", query)
 
     if (manufacturer && manufacturer.length) {
       // let length = manufacturer.length

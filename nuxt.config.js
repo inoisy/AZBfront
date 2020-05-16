@@ -13,6 +13,7 @@ module.exports = {
   version: pkg.version,
   mode: 'universal',
   env: {
+    siteUrl: siteURL,
     baseUrl: backendUrl,
     imageBaseUrl: imageBaseUrl
   },
