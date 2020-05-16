@@ -1,6 +1,6 @@
 <template>
   <div>
-    <default-header :breadcrumbs="breadcrumbs" :title="category.name">
+    <default-header :breadcrumbs="breadcrumbs" :title="name">
       <div class="subcategories display-flex wrap" v-if="showManufacturers">
         <v-btn
           v-for="child in manufacturers"
@@ -9,7 +9,7 @@
           text
           :key="child.id"
           :title="`${category.name} ${child.name}`"
-          @click="manufacturerSelected = [child.id]"
+          @click="manufacturerChange(child.id)"
         >{{child.name}}</v-btn>
       </div>
     </default-header>
@@ -259,7 +259,7 @@ import ProductCard from "~/components/ProductCard";
 export default {
   head() {
     return {
-      title: this.category.name,
+      title: this.name,
       meta: [
         {
           hid: "description",
@@ -304,6 +304,13 @@ export default {
     };
   },
   computed: {
+    name() {
+      let name = this.category.name;
+      if (this.manufacturer) {
+        name += ` ${this.manufacturer.name}`;
+      }
+      return name;
+    },
     showProducts() {
       return this.products && this.products.length;
     },
@@ -366,8 +373,6 @@ export default {
   },
   watch: {
     async showNum(val) {
-      // console.log("showNum -> val", val);
-
       switch (val) {
         case 0:
           this.itemsPerPage = 30;
@@ -382,10 +387,7 @@ export default {
           break;
       }
       this.$router.push({
-        // path: this.$route.path,
-        query: {
-          // page: 0
-        }
+        query: {}
       });
       this.pageCurr = 1;
       await this.$store.dispatch("fetchProducts", {
@@ -396,8 +398,8 @@ export default {
         manufacturers: this.manufacturerSelected
       });
     },
-    // async "this.$router.params"() {},
     async manufacturerSelected(val) {
+      console.log("manufacturerSelected -> val", val);
       await this.$vuetify.goTo("#contentWrapper");
 
       await this.$store.dispatch("fetchProducts", {
@@ -419,11 +421,13 @@ export default {
             filter: manufacturer.slug
           }
         });
+        this.manufacturer = manufacturer;
       } else {
         this.$router.push({
           name: "catalog-category-subCategory",
           params: {}
         });
+        this.manufacturer = null;
       }
     },
     async pageCurr(val) {
@@ -451,6 +455,16 @@ export default {
     }
   },
   methods: {
+    manufacturerChange(val) {
+      if (
+        this.manufacturerSelected.length === 1 &&
+        this.manufacturerSelected[0] === val
+      ) {
+        return;
+      }
+
+      this.manufacturerSelected = [val];
+    },
     async flushFilters() {
       this.pageCurr = 1;
       await this.$vuetify.goTo("#contentWrapper");
@@ -538,6 +552,7 @@ export default {
       category: category,
       manufacturers: category.manufacturers,
       manufacturerSelected: manufacturer ? [manufacturer.id] : [],
+      manufacturer: manufacturer,
       dataFilters: filters
     };
   }
