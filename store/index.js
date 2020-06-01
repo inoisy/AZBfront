@@ -126,9 +126,14 @@ export const actions = {
            categories(where:{
              ismain: true
            }, sort: "name:asc"){
-             id
-             name
-             slug
+              id
+              name
+              slug
+              child{
+                id
+                name
+                slug
+              }
            }
            contacts {
              name

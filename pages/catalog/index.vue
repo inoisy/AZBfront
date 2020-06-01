@@ -9,7 +9,6 @@
     <section>
       <v-container
         grid-list-lg
-        v-bind="{ [`grid-list-${$vuetify.breakpoint.name}`]: true }"
         class="py-12"
       >
         <v-layout row wrap>

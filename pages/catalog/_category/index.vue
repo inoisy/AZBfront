@@ -4,10 +4,10 @@
 
     <v-container class="pt-8" grid-list-lg>
       <v-layout row wrap>
-        <v-flex xs12 md4 lg3 class="menu-wrapper mb-4 hidden-sm-and-down">
-          <nav-menu :menuItems="categories" type="catalog"></nav-menu>
+        <v-flex xs12 md4 lg3 class="menu-wrapper mb-4 order-xs2 order-md1">
+          <nav-menu :menuItems="categories"></nav-menu>
         </v-flex>
-        <v-flex xs12 md8 lg9>
+        <v-flex xs12 md8 lg9 class="order-xs1 order-md2">
           <v-card
             hover
             ripple
