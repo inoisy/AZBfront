@@ -107,51 +107,54 @@ export const strict = false
 export const actions = {
   async fetchGeneralInfo(ctx) {
     let client = this.app.apolloProvider.defaultClient;
-    const {
-      data: generalData
-    } = await client.query({
-      query: gql `
-        {
-           pages(where: {
-             slug: "about"
-           }) {
-             title
-             slug
-             
-             children {
-               title
-               slug
-             }
-           }
-           categories(where:{
-             ismain: true
-           }, sort: "name:asc"){
-              id
-              name
-              slug
-              child{
-                id
-                name
-                slug
-              }
-           }
-           contacts {
-             name
-             content
-             email
-             phone
-           }
-          manufacturers {
-            id
-            name
-            slug
-            img{
-              url
-            }
-          }
-        }
-        `
-    });
+    const generalData = await this._vm.$getCachedData()
+    // console.log("fetchGeneralInfo -> generalData", generalData)
+
+    // const {
+    //   data: generalData
+    // } = await client.query({
+    //   query: gql `
+    //     {
+    //        pages(where: {
+    //          slug: "about"
+    //        }) {
+    //          title
+    //          slug
+
+    //          children {
+    //            title
+    //            slug
+    //          }
+    //        }
+    //        categories(where:{
+    //          ismain: true
+    //        }, sort: "name:asc"){
+    //           id
+    //           name
+    //           slug
+    //           child{
+    //             id
+    //             name
+    //             slug
+    //           }
+    //        }
+    //        contacts {
+    //          name
+    //          content
+    //          email
+    //          phone
+    //        }
+    //       manufacturers {
+    //         id
+    //         name
+    //         slug
+    //         img{
+    //           url
+    //         }
+    //       }
+    //     }
+    //     `
+    // });
     const returnData = {
       manufacturers: generalData.manufacturers,
       aboutPages: generalData.pages[0].children,

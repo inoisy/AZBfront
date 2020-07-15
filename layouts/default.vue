@@ -141,9 +141,9 @@
         </v-btn>
       </div>
     </v-app-bar>
-    <v-content>
+    <v-main>
       <nuxt />
-    </v-content>
+    </v-main>
     <v-navigation-drawer v-model="drawer" temporary fixed right>
       <v-list class="pt-0">
         <template v-for="(item,i) in menuItems">

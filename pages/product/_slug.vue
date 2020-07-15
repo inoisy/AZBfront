@@ -1,10 +1,15 @@
 <template>
-  <div>
-    <default-header :breadcrumbs="breadcrumbs" :title="product.name"></default-header>
+  <div itemscope itemtype="http://schema.org/Product">
+    <section class="grey lighten-2">
+      <v-container id="main-wrapper">
+        <breadcrumbs class="pl-1 mb-4" :items="breadcrumbs" />
+        <h1 class="mb-12 font-weight-bold" itemprop="name">{{ product.name }}</h1>
+      </v-container>
+    </section>
     <v-container class="py-12" grid-list-lg>
       <v-layout row wrap>
         <v-flex xs12 md8 lg9 order-xs2 order-md1 class="pr-3">
-          <p v-if="product.description">
+          <p v-if="product.description" itemprop="description">
             <span class="font-weight-bold">Описание:&nbsp;</span>
             {{product.description}}
           </p>
@@ -46,6 +51,7 @@
               :src="imageBaseUrl+product.productimage.thumbnail.url"
               :alt="product.name"
               :title="product.name"
+              itemprop="image"
             />
           </v-card>
           <v-dialog v-model="dialogImg" v-if="product.productimage.img">
@@ -204,7 +210,7 @@
 <script>
 import gql from "graphql-tag";
 import Breadcrumbs from "~/components/Breadcrumbs";
-import DefaultHeader from "~/components/DefaultHeader";
+// import DefaultHeader from "~/components/DefaultHeader";
 
 export default {
   methods: {
@@ -237,8 +243,8 @@ export default {
     };
   },
   components: {
-    Breadcrumbs,
-    DefaultHeader
+    Breadcrumbs
+    // DefaultHeader
   },
   computed: {
     contacts() {

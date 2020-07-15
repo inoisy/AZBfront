@@ -60,7 +60,6 @@
                 color="white"
                 @click="flushFilters"
               >Сбросить фильтры</v-btn>
-              <!-- <v-divider class="hidden-md-and-up mt-3 mb-4"></v-divider> -->
             </slot>
           </sticky-menu>
         </div>
@@ -79,7 +78,6 @@
                     <v-icon>view_module</v-icon>
                   </v-btn>
                 </v-btn-toggle>
-                <!-- Всего товаров: {{productsTotal}} -->
                 <v-subheader
                   class="text-no-wrap"
                   style="height: 32px;"

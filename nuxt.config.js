@@ -139,6 +139,7 @@ module.exports = {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    '@/plugins/cache.js',
     // '@/plugins/vuetify',
     '@/plugins/debounce',
     // '@/plugins/instant',
@@ -167,7 +168,7 @@ module.exports = {
 
     '@nuxtjs/sitemap',
     '@nuxtjs/robots',
-    '@nuxtjs/redirect-module',
+    // '@nuxtjs/redirect-module',
     // ['@nuxtjs/google-analytics', {
     //   id: 'UA-12301-2'
     // }],
@@ -203,10 +204,10 @@ module.exports = {
       /* module options */
     }],
   ],
-  redirect: [{
-    from: '^/about_us',
-    to: '/about'
-  }],
+  // redirect: [{
+  //   from: '^/about_us',
+  //   to: '/about'
+  // }],
   robots: {
     UserAgent: '*',
     Allow: '/',

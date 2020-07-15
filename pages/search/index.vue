@@ -47,10 +47,7 @@
 
 <script>
 import Breadcrumbs from "~/components/Breadcrumbs";
-// import debounce from "v-debounce";
 import ProductCard from "~/components/ProductCard";
-// import { debounce } from 'vue-debounce'
-// import debounce from "vue-debounce";
 
 export default {
   head() {
@@ -65,9 +62,6 @@ export default {
       ]
     };
   },
-  // directives: {
-  //   debounce
-  // },
   components: {
     Breadcrumbs,
     ProductCard
