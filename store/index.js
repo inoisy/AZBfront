@@ -111,7 +111,7 @@ export const actions = {
     try {
       // let client = this.app.apolloProvider.defaultClient;
       // TODO REPLACE false to this.app.context.isDev
-      const generalData = await this._vm.$getCachedData(false && this.app.context.isDev)
+      const generalData = await this._vm.$getCachedData(this.app.context.isDev)
       // console.log("🚀 ~ file: index.js ~ line 117 ~ nuxtServerInit ~ generalData", generalData)
 
       state.commit('generalInfo', {
