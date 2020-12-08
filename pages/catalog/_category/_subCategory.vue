@@ -10,7 +10,8 @@
           :key="child.id"
           :title="`${category.name} ${child.name}`"
           @click="manufacturerChange(child.id)"
-        >{{child.name}}</v-btn>
+          >{{ child.name }}</v-btn
+        >
       </div>
     </default-header>
     <v-container grid-list-lg class="pt-9 pb-6 d-flex" id="contentWrapper">
@@ -26,7 +27,7 @@
                       hide-details
                       class="mt-1"
                       v-model="manufacturerSelected"
-                      v-for="(checkbox) in manufacturers"
+                      v-for="checkbox in manufacturers"
                       :label="checkbox.name"
                       :key="checkbox.id"
                       :value="checkbox.id"
@@ -35,19 +36,25 @@
                 </v-card>
               </div>
               <v-expansion-panels v-if="showFilters" multiple>
-                <v-expansion-panel v-for="(item, i) in Object.keys(category.filters)" :key="i">
-                  <v-expansion-panel-header>{{item}}</v-expansion-panel-header>
+                <v-expansion-panel
+                  v-for="(item, i) in Object.keys(category.filters)"
+                  :key="i"
+                >
+                  <v-expansion-panel-header>{{
+                    item
+                  }}</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-checkbox
                       class="mt-1"
                       hide-details
-                      v-for="(checkbox,index) in category.filters[item]"
+                      v-for="(checkbox, index) in category.filters[item]"
                       v-model="dataFilters[item]"
                       :key="`${item}-${index}`"
                       :value="checkbox"
                       :label="checkbox"
                       @change="checkboxChange"
-                    >{{checkbox}}</v-checkbox>
+                      >{{ checkbox }}</v-checkbox
+                    >
                   </v-expansion-panel-content>
                 </v-expansion-panel>
               </v-expansion-panels>
@@ -59,7 +66,8 @@
                 style="width: 100%"
                 color="white"
                 @click="flushFilters"
-              >Сбросить фильтры</v-btn>
+                >Сбросить фильтры</v-btn
+              >
             </slot>
           </sticky-menu>
         </div>
@@ -80,17 +88,34 @@
                 </v-btn-toggle>
                 <v-subheader
                   class="text-no-wrap"
-                  style="height: 32px;"
+                  style="height: 32px"
                   v-show="showNum30"
-                >Показывать по</v-subheader>
+                  >Показывать по</v-subheader
+                >
 
                 <v-btn-toggle mandatory v-model="showNum" v-show="showNum30">
-                  <v-btn class="pa-0" small height="32" min-width="38">30</v-btn>
-                  <v-btn v-if="showNum60" class="pa-0" small height="32" min-width="38">60</v-btn>
-                  <v-btn v-if="showNum90" class="pa-0" small height="32" min-width="38">90</v-btn>
+                  <v-btn class="pa-0" small height="32" min-width="38"
+                    >30</v-btn
+                  >
+                  <v-btn
+                    v-if="showNum60"
+                    class="pa-0"
+                    small
+                    height="32"
+                    min-width="38"
+                    >60</v-btn
+                  >
+                  <v-btn
+                    v-if="showNum90"
+                    class="pa-0"
+                    small
+                    height="32"
+                    min-width="38"
+                    >90</v-btn
+                  >
                 </v-btn-toggle>
               </div>
-              <div class="top-pagination-wrap" v-if="pagesTotal>1">
+              <div class="top-pagination-wrap" v-if="pagesTotal > 1">
                 <v-pagination
                   v-model="pageCurr"
                   :length="pagesTotal"
@@ -102,7 +127,11 @@
               </div>
             </v-card>
           </div>
-          <div v-if="showProducts" class="d-flex" style="flex-wrap: wrap; display: flex;">
+          <div
+            v-if="showProducts"
+            class="d-flex"
+            style="flex-wrap: wrap; display: flex"
+          >
             <v-flex
               v-for="item in products"
               :key="item.id"
@@ -129,21 +158,24 @@
               style="width: 100%"
               color="white"
               @click="flushFilters"
-            >Сбросить фильтры</v-btn>
+              >Сбросить фильтры</v-btn
+            >
           </v-flex>
         </div>
       </v-layout>
     </v-container>
-    <section v-if="pagesTotal>1" class="position-relative grey lighten-1">
+    <section v-if="pagesTotal > 1" class="position-relative grey lighten-1">
       <v-container grid-list-lg>
         <v-layout row wrap>
-          <v-flex xs12 sm4 md3 align-center d-flex>Всего товаров: {{productsTotal}}</v-flex>
-          <v-flex xs12 sm8 md9 justify-right d-flex>
+          <v-flex xs12 sm4 md3 align-center d-flex
+            >Всего товаров: {{ productsTotal }}</v-flex
+          >
+          <v-flex xs12 sm8 md9 d-flex style="justify-content: flex-end">
             <v-pagination
               v-model="pageCurr"
               :length="pagesTotal"
               total-visible="10"
-              style="justify-content: flex-end;"
+              style="justify-content: flex-end"
               light
               color="#1867c0"
             ></v-pagination>
@@ -153,12 +185,15 @@
     </section>
     <section
       class="grey lighten-2 position-relative"
-      v-if="category.content && category.content.length>0"
+      v-if="category.content && category.content.length > 0"
     >
       <v-container class="py-10" grid-list-lg>
         <v-layout row wrap>
           <v-flex xs12>
-            <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
+            <h2 class="mb-4">
+              Купить {{ category.name.toLowerCase() }} в Москве с доставкой по
+              всей РФ.
+            </h2>
             <div v-html="$md.render(category.content)"></div>
           </v-flex>
         </v-layout>
@@ -197,10 +232,12 @@
   // padding-bottom: 8px;
   // }
   .top-pagination-wrap {
-    flex-basis: 100%;
-    max-width: 100%;
-    display: inline-flex;
+    // flex-basis: 100%;
+    // max-width: 100%;
+    // display: inline-flex;
     padding-top: 8px;
+    display: flex;
+    justify-content: flex-end;
 
     // padding-bottom: 8px;
     .top-pagination-inner {
@@ -262,8 +299,8 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: this.category.description + " - Азбука электроснабжения"
-        }
+          content: this.category.description + " - Азбука электроснабжения",
+        },
       ],
       link: [
         {
@@ -276,9 +313,9 @@ export default {
               this.category.slug
             }${
               this.$route.params.filter ? `/${this.$route.params.filter}` : ""
-            }`
-        }
-      ]
+            }`,
+        },
+      ],
     };
   },
   components: {
@@ -286,7 +323,7 @@ export default {
     StickyMenu,
     CatalogDialog,
     DefaultHeader,
-    ProductCard
+    ProductCard,
   },
   data() {
     return {
@@ -298,7 +335,7 @@ export default {
       imageBaseUrl: process.env.imageBaseUrl,
       manufacturerFilter: this.$route.params.filter,
       viewMode: 0,
-      showNum: 0
+      showNum: 0,
     };
   },
   computed: {
@@ -330,7 +367,7 @@ export default {
       );
     },
     showClearFilters() {
-      const show = Object.keys(this.dataFilters).some(item => {
+      const show = Object.keys(this.dataFilters).some((item) => {
         return this.dataFilters[item].length;
       });
       return show;
@@ -352,22 +389,22 @@ export default {
       return [
         {
           text: "Главная",
-          to: "/"
+          to: "/",
         },
         {
           text: "Каталог",
-          to: "/catalog"
+          to: "/catalog",
         },
         {
           text: this.category.parent[0].name,
-          to: "/catalog/" + this.category.parent[0].slug
+          to: "/catalog/" + this.category.parent[0].slug,
         },
         {
           text: this.category.name,
-          to: { path: this.$route.path, query: this.$route.query }
-        }
+          to: { path: this.$route.path, query: this.$route.query },
+        },
       ];
-    }
+    },
   },
   watch: {
     async showNum(val) {
@@ -385,7 +422,7 @@ export default {
           break;
       }
       this.$router.push({
-        query: {}
+        query: {},
       });
       this.pageCurr = 1;
       await this.$store.dispatch("fetchProducts", {
@@ -393,7 +430,7 @@ export default {
         filters: this.dataFilters,
         size: this.itemsPerPage,
         from: (this.pageCurr - 1) * this.itemsPerPage,
-        manufacturers: this.manufacturerSelected
+        manufacturers: this.manufacturerSelected,
       });
     },
     async manufacturerSelected(val) {
@@ -405,25 +442,25 @@ export default {
         filters: this.dataFilters,
         size: this.itemsPerPage,
         from: (this.pageCurr - 1) * this.itemsPerPage,
-        manufacturers: val
+        manufacturers: val,
       });
       const { filter, ...omitted } = this.$route.params;
 
       if (val && val.length === 1) {
         const manufacturer = this.manufacturers.find(
-          item => item.id === val[0]
+          (item) => item.id === val[0]
         );
         this.$router.push({
           name: "catalog-category-subCategory-filter",
           params: {
-            filter: manufacturer.slug
-          }
+            filter: manufacturer.slug,
+          },
         });
         this.manufacturer = manufacturer;
       } else {
         this.$router.push({
           name: "catalog-category-subCategory",
-          params: {}
+          params: {},
         });
         this.manufacturer = null;
       }
@@ -435,22 +472,22 @@ export default {
         manufacturers: this.manufacturerSelected,
         filters: this.dataFilters,
         size: this.itemsPerPage,
-        from: (this.pageCurr - 1) * this.itemsPerPage
+        from: (this.pageCurr - 1) * this.itemsPerPage,
       });
       if (val && val > 1) {
         this.$router.push({
           // path: this.$route.path,
           query: {
-            page: val
-          }
+            page: val,
+          },
         });
       } else {
         this.$router.push({
           // path: this.$route.path,
-          query: {}
+          query: {},
         });
       }
-    }
+    },
   },
   methods: {
     manufacturerChange(val) {
@@ -475,7 +512,7 @@ export default {
         categoryId: this.category.id,
         filters: this.dataFilters,
         size: this.itemsPerPage,
-        from: (this.pageCurr - 1) * this.itemsPerPage
+        from: (this.pageCurr - 1) * this.itemsPerPage,
       });
       this.manufacturerSelected = [];
     },
@@ -488,9 +525,9 @@ export default {
         manufacturers: this.manufacturerSelected,
         filters: this.dataFilters,
         size: this.itemsPerPage,
-        from: 0
+        from: 0,
       });
-    }
+    },
   },
 
   async asyncData({ params, app, store }) {
@@ -524,21 +561,21 @@ export default {
         }
       `,
       variables: {
-        slug: params.subCategory
-      }
+        slug: params.subCategory,
+      },
     });
     const category = categoryData.categories[0];
     let manufacturer = params.filter
-      ? category.manufacturers.find(item => item.slug === params.filter)
+      ? category.manufacturers.find((item) => item.slug === params.filter)
       : null;
     const products = await store.dispatch("fetchProducts", {
       categoryId: category.id,
       filters: null,
       size: 30,
       from: 0,
-      manufacturers: manufacturer ? [manufacturer.id] : null
+      manufacturers: manufacturer ? [manufacturer.id] : null,
     });
-    await store.dispatch("fetchGeneralInfo");
+    // await store.dispatch("fetchGeneralInfo");
 
     const filters = category.filters
       ? Object.keys(category.filters).reduce((acc, val) => {
@@ -551,8 +588,8 @@ export default {
       manufacturers: category.manufacturers,
       manufacturerSelected: manufacturer ? [manufacturer.id] : [],
       manufacturer: manufacturer,
-      dataFilters: filters
+      dataFilters: filters,
     };
-  }
+  },
 };
 </script>

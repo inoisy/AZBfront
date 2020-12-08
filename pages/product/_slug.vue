@@ -3,7 +3,9 @@
     <section class="grey lighten-2">
       <v-container id="main-wrapper">
         <breadcrumbs class="pl-1 mb-4" :items="breadcrumbs" />
-        <h1 class="mb-12 font-weight-bold" itemprop="name">{{ product.name }}</h1>
+        <h1 class="mb-12 font-weight-bold" itemprop="name">
+          {{ product.name }}
+        </h1>
       </v-container>
     </section>
     <v-container class="py-12" grid-list-lg>
@@ -11,53 +13,65 @@
         <v-flex xs12 md8 lg9 order-xs2 order-md1 class="pr-3">
           <p v-if="product.description" itemprop="description">
             <span class="font-weight-bold">Описание:&nbsp;</span>
-            {{product.description}}
+            {{ product.description }}
           </p>
           <p v-if="product.manufacturer">
             <span class="font-weight-bold">Производитель:&nbsp;</span>
-            <nuxt-link
-              :to="`/manufacturers/${product.manufacturer.slug}`"
-            >{{product.manufacturer.name}}</nuxt-link>
+            <nuxt-link :to="`/manufacturers/${product.manufacturer.slug}`">{{
+              product.manufacturer.name
+            }}</nuxt-link>
           </p>
           <p>
             <span class="font-weight-bold">Артикул:&nbsp;</span>
-            {{product.SKU}}
+            {{ product.SKU }}
           </p>
-          <p v-for="(item,index) in Object.keys(product.filters)" :key="index">
-            <span class="font-weight-bold">{{item}}:&nbsp;</span>
-            {{product.filters[item]}}
+          <p v-for="(item, index) in Object.keys(product.filters)" :key="index">
+            <span class="font-weight-bold">{{ item }}:&nbsp;</span>
+            {{ product.filters[item] }}
           </p>
           <a
             target="_blank"
             v-if="product.document"
             class="mb-3 link-hover display-flex align-center text-decoration-none"
-            :href="imageBaseUrl+product.document.url"
+            :href="imageBaseUrl + product.document.url"
           >
-            <v-icon class="mr-2 text-decoration-none" style="color:currentColor">picture_as_pdf</v-icon>
+            <v-icon
+              class="mr-2 text-decoration-none"
+              style="color: currentColor"
+              >picture_as_pdf</v-icon
+            >
             <u>Техническая документация</u>
           </a>
         </v-flex>
-        <v-flex xs12 md4 lg3 order-xs1 order-md2 class="mb-4" v-if="product.productimage">
+        <v-flex
+          xs12
+          md4
+          lg3
+          order-xs1
+          order-md2
+          class="mb-4"
+          v-if="product.img"
+        >
           <v-card
             class="pa-5 mb-4"
             style="border-radius: 10px"
             hover
             ripple
-            @click="dialogImg=!dialogImg"
+            @click="dialogImg = !dialogImg"
           >
             <img
               class="img-thumbnail d-block mx-auto"
-              v-if="product.productimage.thumbnail"
-              :src="imageBaseUrl+product.productimage.thumbnail.url"
+              v-if="product.img"
+              :src="imageBaseUrl + product.img.url"
               :alt="product.name"
               :title="product.name"
               itemprop="image"
             />
           </v-card>
-          <v-dialog v-model="dialogImg" v-if="product.productimage.img">
+          <v-dialog v-model="dialogImg" v-if="product.img">
             <div
               class="pa-3 fullscreen-img"
-              v-lazy:background-image="imageBaseUrl+product.productimage.img.url"
+              v-lazy:background-image="imageBaseUrl + product.img.url"
             >
               <v-btn
                 class="close-btn"
@@ -67,7 +81,7 @@
                 outlined
                 color="primary"
                 @click="dialogImg = false"
-                style="position:absolute; top:16px; right: 16px; z-index: 10"
+                style="position: absolute; top: 16px; right: 16px; z-index: 10"
               >
                 <v-icon>close</v-icon>
               </v-btn>
@@ -80,7 +94,8 @@
             dark
             style="width: 100%"
             @click="handleOffer"
-          >заказать</v-btn>
+            >заказать</v-btn
+          >
         </v-flex>
       </v-layout>
       <v-layout row wrap class="mt-4">
@@ -93,18 +108,27 @@
           </v-tabs>
           <v-tabs-items v-model="tab">
             <v-tab-item v-if="product.content">
-              <v-card flat class="content-wrapper pa-3" color="#f9f9f9" v-html="product.content"></v-card>
+              <v-card
+                flat
+                class="content-wrapper pa-3"
+                color="#f9f9f9"
+                v-html="product.content"
+              ></v-card>
             </v-tab-item>
             <v-tab-item>
               <v-card flat color="#f9f9f9" class="pa-3">
-                <div class="tabsText" style="display: block;">
+                <div class="tabsText" style="display: block">
                   <p>
                     <b>Самовывоз с нашего склада:</b>
-                    <br />По адресу: г. Москва Загородное шоссе дом 1 корпус 2 офис 212
+                    <br />По адресу: г. Москва Загородное шоссе дом 1 корпус 2
+                    офис 212
                   </p>
                   <p>
                     <b>Доставка до двери</b>
-                    <br />Осуществляется курьерской службой или транспортной компанией (на Ваш выбор). Мы работаем с ведущими транспортными компаниями и доставляем заказы во все регионы России и Казахстана.
+                    <br />Осуществляется курьерской службой или транспортной
+                    компанией (на Ваш выбор). Мы работаем с ведущими
+                    транспортными компаниями и доставляем заказы во все регионы
+                    России и Казахстана.
                   </p>
                   <p>
                     <b>Доставка до терминала</b>
@@ -115,10 +139,10 @@
             </v-tab-item>
             <v-tab-item>
               <v-card flat color="#f9f9f9" class="pa-3">
-                Банковский перевод: счет на оплату формируется после оформления заказа или отправки заявки в произвольной форме на электронную почту
-                <a
-                  :href="`mailto:mail@azb-es.ru`"
-                >mail@azb-es.ru</a>
+                Банковский перевод: счет на оплату формируется после оформления
+                заказа или отправки заявки в произвольной форме на электронную
+                почту
+                <a :href="`mailto:mail@azb-es.ru`">mail@azb-es.ru</a>
                 <br />Специалист свяжется с вами для уточнения деталей.
               </v-card>
             </v-tab-item>
@@ -159,8 +183,6 @@
   table td {
     height: 36px;
     padding: 5px;
-    // display: inline-flex;
-    // box-sizing: border-box;
   }
 
   table thead tr:last-child th {
@@ -217,9 +239,10 @@ export default {
     handleOffer() {
       this.$store.commit("dialog", {
         name: this.product.name,
-        isShow: true
+        isShow: true,
+        isAttachment: false,
       });
-    }
+    },
   },
   head() {
     return {
@@ -228,9 +251,9 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: this.product.description || this.product.name
-        }
-      ]
+          content: this.product.description || this.product.name,
+        },
+      ],
     };
   },
   data() {
@@ -239,11 +262,11 @@ export default {
       dialog: false,
       dialogImg: false,
       tab: null,
-      items: ["Техническое описание", "Доставка", "Оплата"]
+      items: ["Техническое описание", "Доставка", "Оплата"],
     };
   },
   components: {
-    Breadcrumbs
+    Breadcrumbs,
     // DefaultHeader
   },
   computed: {
@@ -255,70 +278,41 @@ export default {
       return [
         {
           text: "Главная",
-          to: "/"
+          to: "/",
         },
         {
           text: "Каталог",
-          to: "/catalog"
+          to: "/catalog",
         },
         {
           text: this.product.category.parent[0].name,
-          to: `/catalog/${this.product.category.parent[0].slug}`
+          to: `/catalog/${this.product.category.parent[0].slug}`,
         },
         {
           text: this.product.category.name,
-          to: `/catalog/${this.product.category.parent[0].slug}/${this.product.category.slug}`
+          to: `/catalog/${this.product.category.parent[0].slug}/${this.product.category.slug}`,
         },
         {
           text: this.product.name,
-          to: this.$route.path
-        }
-        // {
-        //   text: this.category.category.name,
-        //   to: "/catalog/" + this.category.category.slug
-        // },
-        // {
-        //   text: this.category.name,
-        //   to: this.$route.path
-        // }
+          to: this.$route.path,
+        },
       ];
-    }
+    },
   },
   async asyncData(ctx) {
     const params = ctx.route.params;
-    // console.log("TCL: Data -> params", params);
     let client = ctx.app.apolloProvider.defaultClient;
-    // const { data: categoriesData } = await client.query({
-    //   query: gql`
-    //     {
-    //       categories {
-    //         name
-    //         slug
-    //       }
-    //     }
-    //   `
-    // });
-
-    // const categories = categoriesData.categories;
     const { data: productData } = await client.query({
       query: gql`
         query ProductsQuery($slug: String!) {
           products(where: { slug: $slug }) {
-            document {
-              url
-            }
             id
             name
             description
             content
-            productimage {
-              filename
-              img {
-                url
-              }
-              thumbnail {
-                url
-              }
+            img {
+              url
+              formats
             }
             SKU
             filters
@@ -341,18 +335,14 @@ export default {
         }
       `,
       variables: {
-        slug: ctx.route.params.slug
-      }
+        slug: ctx.route.params.slug,
+      },
     });
-    // console.log("TCL: productData", productData);
-    await ctx.store.dispatch("fetchGeneralInfo");
+    // await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
-      product: productData.products[0]
-      //   filters: category.filters || {},
-      //   categories: categories
-      //   category: category
+      product: productData.products[0],
     };
-  }
+  },
 };
 </script>

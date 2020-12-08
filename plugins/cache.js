@@ -1,34 +1,20 @@
-// import axios from './axios'
 const apolloFetch = require('apollo-fetch');
-// let data // simple data cache
-// console.log("data", data)
 import Vue from 'vue'
 const backendUrl = process.env.BACKEND_URL || `https://api.azb-es.ru`
-// console.log("backendUrl", backendUrl)
-
+// import query from "../generalInfo"
+// console.log("🚀 ~ file: cache.js ~ line 5 ~ query", query)
 
 const MyPlugin = {
   install(Vue, options) {
-    Vue.prototype.$myAddedProperty
-    Vue.prototype.$getCachedData = async function () {
-      //   console.log("getCachedData -> getCachedData", Vue.prototype.$myAddedProperty)
-      // return async function () {
-      if (Vue.prototype.$myAddedProperty) { // get data from cache if exists
-        // console.log("data Cached")
-        return Vue.prototype.$myAddedProperty
-      } else { // else get data from API
-        console.log("else get data from API")
-
+    Vue.prototype.$cached
+    Vue.prototype.$getCachedData = async function (fetch) {
+      if (!fetch && Vue.prototype.$cached) {
+        console.log("cached")
+        return Vue.prototype.$cached
+      } else {
+        console.log("get data from API")
         const query = `
           {
-            pages(where: { slug: "about" }) {
-              title
-              slug
-              children {
-                title
-                slug
-              }
-            }
             categories(where: { ismain: true }, sort: "name:asc") {
               id
               name
@@ -39,11 +25,12 @@ const MyPlugin = {
                 slug
               }
             }
-            contacts {
+            contact {
               name
               content
               email
               phone
+              address
             }
             manufacturers {
               id
@@ -65,11 +52,10 @@ const MyPlugin = {
           query
         })
         if (dataFetched) {
-          Vue.prototype.$myAddedProperty = dataFetched
+          Vue.prototype.$cached = dataFetched
           return dataFetched
-          //   resolve(data)
         } else {
-          //   reject()
+
         }
       }
     }

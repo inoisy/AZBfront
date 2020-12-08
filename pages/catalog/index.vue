@@ -72,7 +72,7 @@ export default {
       `
     });
     // # const data = await ctx.store.dispatch("fetchMainCategories");
-    await ctx.store.dispatch("fetchGeneralInfo");
+    // await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
       categories: categoryData.categories

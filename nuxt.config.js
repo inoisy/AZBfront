@@ -3,9 +3,9 @@ const pkg = require('./package')
 const routes = require("./routes")
 
 const siteURL = "https://azb-es.ru"
-const backURL = "https://api.azb-es.ru"
-const backendUrl = process.env.BACKEND_URL || backURL
-const imageBaseUrl = process.env.IMAGE_BASE_URL || backURL
+// const backURL = "https://api.azb-es.ru"
+const backendUrl = process.env.BACKEND_URL || "https://api.azb-es.ru"
+// const imageBaseUrl = process.env.IMAGE_BASE_URL || backURL
 
 
 
@@ -15,7 +15,7 @@ module.exports = {
   env: {
     siteUrl: siteURL,
     baseUrl: backendUrl,
-    imageBaseUrl: imageBaseUrl
+    imageBaseUrl: backendUrl
   },
   router: {
     scrollBehavior: async (to, from, savedPosition) => {
@@ -94,23 +94,23 @@ module.exports = {
     titleTemplate: '%s - Азбука электроснабжения',
     // title: "Азбука электроснабжения",
     meta: [{
-        charset: 'utf-8'
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
-      },
-      {
-        hid: 'description',
-        name: 'description',
-        content: "Электротехника и электрооборудование со склада и на заказ - Азбука электронабжения"
-      }
+      charset: 'utf-8'
+    },
+    {
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1'
+    },
+    {
+      hid: 'description',
+      name: 'description',
+      content: "Электротехника и электрооборудование со склада и на заказ - Азбука электронабжения"
+    }
     ],
     link: [{
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon.ico'
-      },
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: '/favicon.ico'
+    },
       // {
       //   rel: 'stylesheet',
       //   href: 'https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900&amp;subset=cyrillic'

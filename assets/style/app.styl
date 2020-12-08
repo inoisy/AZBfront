@@ -83,6 +83,11 @@ h6
         margin-left: 0 !important;
 
 
+.br-10
+    border-radius: 10px !important;
+
+.cursor-unset
+    cursor: unset !important;
 
 html
     font-size:12px !important
@@ -95,8 +100,14 @@ html
     html
         font-size:16px !important;
 
-.br-10
-    border-radius: 10px !important;
-
-.cursor-unset
-    cursor: unset !important;
+    
+@media (min-width: 1264px) {
+  .container {
+    max-width: 1185px !important;
+  }
+}
+@media (min-width: 1904px) {
+  .container {
+    max-width: 1400px !important;
+  }
+}

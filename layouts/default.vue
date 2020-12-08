@@ -1,40 +1,50 @@
 <template>
   <v-app>
-    <v-app-bar app class="pa-0" fixed :height="$vuetify.breakpoint.smAndDown ? '64px' : '92px'">
+    <v-app-bar
+      app
+      class="pa-0"
+      fixed
+      :height="$vuetify.breakpoint.smAndDown ? '64px' : '92px'"
+    >
       <div class="toolbar-top hidden-sm-and-down fill-height" style>
         <div class="toolbar-top-inner fill-height">
           <v-btn
+            v-if="contacts.phone"
             tile
             small
             :href="`tel:${contacts.phone}`"
             class="toolbar-top-btn white--text ma-0 fill-height"
-            style="text-decoration:none"
+            style="text-decoration: none"
             text
           >
-            <v-icon class="mr-1" style="color:currentcolor">phone</v-icon>
-            <span>{{contacts.phone}}</span>
+            <v-icon class="mr-1" style="color: currentcolor">phone</v-icon>
+            <span>{{ contacts.phone }}</span>
           </v-btn>
           <v-btn
+            v-if="contacts.email"
             tile
             small
             :href="`mailto:${contacts.email}`"
             class="toolbar-top-btn white--text ma-0 fill-height"
-            style="text-decoration:none"
+            style="text-decoration: none"
             text
           >
-            <v-icon class="mr-1" style="color:currentcolor">mail</v-icon>
-            <span>{{contacts.email}}</span>
+            <v-icon class="mr-1" style="color: currentcolor">mail</v-icon>
+            <span>{{ contacts.email }}</span>
           </v-btn>
           <v-btn
             tile
             small
             to="/contacts#map"
             class="toolbar-top-btn white--text ma-0 fill-height"
-            style="text-decoration:none"
+            style="text-decoration: none"
             text
+            v-if="contacts.address"
           >
-            <v-icon class="mr-1" style="color:currentcolor">location_on</v-icon>
-            <span class="hidden-md-and-down">{{contacts.content.address.title}}</span>
+            <v-icon class="mr-1" style="color: currentcolor"
+              >location_on</v-icon
+            >
+            <span class="hidden-md-and-down">{{ contacts.address }}</span>
           </v-btn>
         </div>
       </div>
@@ -54,22 +64,25 @@
           />
         </v-btn>
         <v-spacer v-show="!searchActive"></v-spacer>
-        <v-btn v-show="!searchActive" @click="searchActive=true" class icon>
+        <v-btn v-show="!searchActive" @click="searchActive = true" class icon>
           <v-icon>search</v-icon>
         </v-btn>
-        <autocomplete-search v-if="searchActive" @searchChange="searchActive=$event" />
+        <autocomplete-search
+          v-if="searchActive"
+          @searchChange="searchActive = $event"
+        />
         <v-btn v-show="searchActive" icon @click="searchActive = false">
           <v-icon>close</v-icon>
         </v-btn>
         <div
           v-show="!searchActive"
           class="hidden-sm-and-down fill-height ml-3"
-          style="display:flex"
+          style="display: flex"
         >
-          <template v-for="(item,index) in menuItems">
+          <template v-for="(item, index) in menuItems">
             <v-menu
               :key="index"
-              v-if="item.items && item.items.length>0"
+              v-if="item.items && item.items.length > 0"
               open-on-hover
               offset-y
               left
@@ -86,7 +99,7 @@
                   tile
                   :to="item.to"
                 >
-                  {{item.name}}
+                  {{ item.name }}
                   <v-icon>arrow_drop_down</v-icon>
                 </v-btn>
               </template>
@@ -99,7 +112,8 @@
                   :key="index"
                   nuxt
                   :to="`${item.to}/${child.slug}`"
-                >{{ child.name }}</v-list-item>
+                  >{{ child.name }}</v-list-item
+                >
               </v-list>
             </v-menu>
             <v-btn
@@ -112,7 +126,8 @@
               nuxt
               exact
               tile
-            >{{item.name}}</v-btn>
+              >{{ item.name }}</v-btn
+            >
           </template>
         </div>
         <v-btn
@@ -121,7 +136,7 @@
           icon
           :href="`tel:${contacts.tel}`"
         >
-          <v-icon class style="color:currentcolor">phone</v-icon>
+          <v-icon class style="color: currentcolor">phone</v-icon>
         </v-btn>
         <v-btn
           v-show="!searchActive"
@@ -129,16 +144,34 @@
           icon
           to="/contacts#map"
         >
-          <v-icon class style="color:currentcolor">location_on</v-icon>
+          <v-icon class style="color: currentcolor">location_on</v-icon>
         </v-btn>
         <v-btn
           v-show="!searchActive"
           icon
           class="ml-1 hidden-md-and-up mr-3"
-          @click="drawer=!drawer"
+          @click="drawer = !drawer"
         >
           <v-icon>menu</v-icon>
         </v-btn>
+        <v-btn
+          v-show="!searchActive"
+          class="ma-0 header-link fill-height ml-3 hidden-sm-and-down"
+          style="display: flex; height: 100%"
+          color="#1f5bff"
+          dark
+          tile
+          @click="handleOrder"
+        >
+          <img
+            src="~/assets/clipboard.svg"
+            alt="расчитать заявку"
+            width="42"
+            height="42"
+            class="mr-2"
+          />
+          расчитать заявку</v-btn
+        >
       </div>
     </v-app-bar>
     <v-main>
@@ -146,10 +179,13 @@
     </v-main>
     <v-navigation-drawer v-model="drawer" temporary fixed right>
       <v-list class="pt-0">
-        <template v-for="(item,i) in menuItems">
-          <v-list-group v-if="item.items && item.items.length>0" :key="item.to">
+        <template v-for="(item, i) in menuItems">
+          <v-list-group
+            v-if="item.items && item.items.length > 0"
+            :key="item.to"
+          >
             <v-list-item slot="activator" :to="item.to">
-              <v-list-item-content>{{ item.name}}</v-list-item-content>
+              <v-list-item-content>{{ item.name }}</v-list-item-content>
             </v-list-item>
             <v-list-item
               v-for="product in item.items"
@@ -158,7 +194,9 @@
               exact
               :to="`${item.to}/${product.slug}`"
             >
-              <v-list-item-content class="ml-4">{{ product.name}}</v-list-item-content>
+              <v-list-item-content class="ml-4">{{
+                product.name
+              }}</v-list-item-content>
             </v-list-item>
           </v-list-group>
           <v-list-item
@@ -170,16 +208,16 @@
             ripple
             exact
           >
-            <v-list-item-title>{{item.name}}</v-list-item-title>
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item>
         </template>
       </v-list>
     </v-navigation-drawer>
-    <v-footer
-      height="auto"
-      style="position: relative; background-size: cover; background-position: center;"
-      :style="`background-image: url(${require('~/assets/footer-bg.png')})`"
-    >
+    <v-footer height="auto" style="background-color: #24242c">
+      <!-- position: relative;
+        background-size: cover;
+        background-position: center; -->
+      <!-- :style="`background-image: url(${require('~/assets/footer-bg.png')})`" -->
       <v-container class="pt-12">
         <v-layout row wrap justify-center d-flex class="mb-10">
           <v-btn
@@ -192,7 +230,8 @@
             ripple
             text
             rounded
-          >{{item.name}}</v-btn>
+            >{{ item.name }}</v-btn
+          >
         </v-layout>
         <v-layout row wrap class="mb-4">
           <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
@@ -203,7 +242,7 @@
               <div class="icon-wrapper d-inline-flex">
                 <v-icon class="ma-auto" large dark>phone</v-icon>
               </div>
-              <span class="text-wrapper">{{contacts.phone}}</span>
+              <span class="text-wrapper">{{ contacts.phone }}</span>
             </a>
           </v-flex>
           <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
@@ -214,10 +253,15 @@
               <div class="icon-wrapper">
                 <v-icon class="ma-auto" size="2rem" dark>mail</v-icon>
               </div>
-              <span class="text-wrapper">{{contacts.email}}</span>
+              <span class="text-wrapper">{{ contacts.email }}</span>
             </a>
           </v-flex>
-          <v-flex xs12 md4 class="px-3 display-flex contact-wrapper">
+          <v-flex
+            xs12
+            md4
+            class="px-3 display-flex contact-wrapper"
+            v-if="contacts.address"
+          >
             <nuxt-link
               to="/contacts#map"
               class="contact-link display-flex white--text align-center text-decoration-none link-hover text-xs-left text-md-center"
@@ -225,11 +269,13 @@
               <div class="icon-wrapper">
                 <v-icon class="ma-auto" size="2rem" dark>location_on</v-icon>
               </div>
-              <span class="text-wrapper">{{contacts.content.address.title}}</span>
+              <span class="text-wrapper">{{ contacts.address }}</span>
             </nuxt-link>
           </v-flex>
         </v-layout>
-        <p class="text-center white--text mb-0">©Азбука Электроснабжения. Все права защищены.</p>
+        <p class="text-center white--text mb-0">
+          © Азбука Электроснабжения. Все права защищены.
+        </p>
       </v-container>
     </v-footer>
     <catalog-dialog />
@@ -414,29 +460,39 @@ export default {
       return [
         {
           name: "Главная",
-          to: "/"
+          to: "/",
         },
         {
           name: "Каталог",
           to: "/catalog",
-          items: this.$store.state.generalInfo.categories
+          items: this.$store.state.generalInfo.categories,
         },
         {
           name: "Производители",
           to: "/manufacturers",
-          items: this.$store.state.generalInfo.manufacturers
+          items: this.$store.state.generalInfo.manufacturers,
         },
         {
           name: "О компании",
           to: "/about",
-          items: this.$store.state.generalInfo.aboutPages.map(item => {
-            return { name: item.title, ...item };
-          })
+          items: [
+            {
+              name: "Доставка",
+              slug: "delivery",
+            },
+            {
+              name: "Сертификаты",
+              slug: "certificate",
+            },
+          ],
+          // this.$store.state.generalInfo.aboutPages.map(item => {
+          //   return { name: item.title, ...item };
+          // })
         },
         {
           name: "Контакты",
-          to: "/contacts"
-        }
+          to: "/contacts",
+        },
       ];
     },
     isSearchValid() {
@@ -455,18 +511,21 @@ export default {
           ? this.$store.state.autocompleteSearchItems
           : [];
       return items;
-    }
+    },
   },
   methods: {
+    async handleOrder() {
+      this.$store.commit("dialog", { isShow: true, isAttachment: true });
+    },
     async handleMap() {
       await this.$router.push("/contacts");
-    }
+    },
   },
   data() {
     return {
       drawer: false,
-      searchActive: false
+      searchActive: false,
     };
-  }
+  },
 };
 </script>

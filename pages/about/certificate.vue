@@ -1,26 +1,42 @@
 <template>
   <div>
-    <default-header :breadcrumbs="breadcrumbs" :title="page.title"></default-header>
+    <default-header
+      :breadcrumbs="breadcrumbs"
+      :title="page.title"
+    ></default-header>
     <v-container class="py-12" grid-list-lg>
       <v-layout row wrap>
         <v-flex xs12 md4 class="menu-wrapper mb-4">
           <nav-menu :menuItems="aboutPages" :isAbout="true"></nav-menu>
         </v-flex>
         <v-flex xs12 md8>
-          <card v-for="item in certificates" :key="item.id" :item="item" :href="null">
+          <card
+            v-for="item in certificates"
+            :key="item.id"
+            :item="item"
+            :href="null"
+          >
             <template v-slot:subheader>
               <p class="mb-2 d-inline-block" v-if="item.manufacturer">
                 Производитель:
                 <nuxt-link
                   class="link-hover"
                   :to="`/manufacturers/${item.manufacturer.slug}`"
-                >{{item.manufacturer.name}}</nuxt-link>
+                  >{{ item.manufacturer.name }}</nuxt-link
+                >
               </p>
-              <p
-                class="mb-2"
-              >Срок действия: {{new Date(item.expirationDate).toLocaleDateString("ru-RU", { year: 'numeric', month: 'numeric', day: 'numeric' })}}</p>
+              <p class="mb-2">
+                Срок действия:
+                {{
+                  new Date(item.expirationDate).toLocaleDateString("ru-RU", {
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                  })
+                }}
+              </p>
             </template>
-            <template v-slot:addToHeader>{{item.manufacturer.name}}</template>
+            <template v-slot:addToHeader>{{ item.manufacturer.name }}</template>
           </card>
         </v-flex>
       </v-layout>
@@ -43,42 +59,54 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: "Сертификаты - Азбука электроснабжения"
-        }
-      ]
+          content: "Сертификаты - Азбука электроснабжения",
+        },
+      ],
     };
   },
   components: {
     Breadcrumbs,
     NavMenu,
     Card,
-    DefaultHeader
+    DefaultHeader,
   },
   data() {
     return {
-      baseUrl: process.env.imageBaseUrl
+      baseUrl: process.env.imageBaseUrl,
     };
   },
   computed: {
+    // aboutPages() {
+    //   return this.$store.state.generalInfo.aboutPages;
+    // },
     aboutPages() {
-      return this.$store.state.generalInfo.aboutPages;
+      return [
+        {
+          name: "Доставка",
+          slug: "delivery",
+        },
+        {
+          name: "Сертификаты",
+          slug: "certificate",
+        },
+      ];
     },
     breadcrumbs() {
       return [
         {
           text: "Главная",
-          to: "/"
+          to: "/",
         },
         {
           text: "О компании",
-          to: "/about"
+          to: "/about",
         },
         {
           text: this.page.title,
-          to: this.$route.path
-        }
+          to: this.$route.path,
+        },
       ];
-    }
+    },
   },
   async asyncData(ctx) {
     const params = ctx.route.params;
@@ -88,18 +116,18 @@ export default {
     const { data: certificatesData } = await client.query({
       query: gql`
         {
-          pages(where: { slug: "certificate" }) {
+          certificatesPage {
             title
             slug
             description
             content
-            parent {
-              title
-              children {
-                title
-                slug
-              }
-            }
+            # parent {
+            #   title
+            #   children {
+            #     title
+            #     slug
+            #   }
+            # }
           }
           certificates {
             id
@@ -115,14 +143,14 @@ export default {
             }
           }
         }
-      `
+      `,
     });
-    await ctx.store.dispatch("fetchGeneralInfo");
+    // await ctx.store.dispatch("fetchGeneralInfo");
     return {
       certificates: certificatesData.certificates,
-      page: certificatesData.pages[0]
+      page: certificatesData.certificatesPage,
     };
-  }
+  },
 };
 </script>
 

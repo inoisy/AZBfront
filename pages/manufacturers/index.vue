@@ -12,7 +12,7 @@
         <v-card
           :to="`/manufacturers/${item.slug}`"
           class="flex xs12 mb-4 pa-3 pt-3"
-          v-for="(item,index) in manufacturers"
+          v-for="(item, index) in manufacturers"
           :key="index"
           hover
           ripple
@@ -21,14 +21,14 @@
             <v-flex class="xs12 sm4 justify-center align-center layout">
               <img
                 class="display-block"
-                style="max-width:70%"
+                style="max-width: 70%"
                 v-if="item.img"
-                :src="imageBaseUrl+item.img.url"
+                :src="imageBaseUrl + item.img.url"
                 :alt="item.name"
               />
             </v-flex>
             <v-flex class="xs12 sm8 pb-2">
-              <h2 class="mb-2 font-weight-bold">{{item.name}}</h2>
+              <h2 class="mb-2 font-weight-bold">{{ item.name }}</h2>
               <div v-html="item.description"></div>
             </v-flex>
           </v-layout>
@@ -50,13 +50,13 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: "Производители - Азбука электронабжения"
-        }
-      ]
+          content: "Производители - Азбука электронабжения",
+        },
+      ],
     };
   },
   components: {
-    Breadcrumbs
+    Breadcrumbs,
   },
   computed: {
     breadcrumbs() {
@@ -64,18 +64,18 @@ export default {
       return [
         {
           text: "Главная",
-          to: "/"
+          to: "/",
         },
         {
           text: "Производители",
-          to: this.$route.path
-        }
+          to: this.$route.path,
+        },
       ];
-    }
+    },
   },
   data() {
     return {
-      imageBaseUrl: process.env.imageBaseUrl
+      imageBaseUrl: process.env.imageBaseUrl,
     };
   },
   async asyncData(ctx) {
@@ -93,14 +93,14 @@ export default {
             }
           }
         }
-      `
+      `,
     });
-    await ctx.store.dispatch("fetchGeneralInfo");
+    // await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
-      manufacturers: manufacturersData.manufacturers
+      manufacturers: manufacturersData.manufacturers,
     };
-  }
+  },
 };
 </script>
 

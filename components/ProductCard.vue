@@ -2,56 +2,79 @@
   <v-card
     :class="viewMode ? 'grid-view' : ''"
     class="product-card-wrapper pa-1"
-    style="border-radius: 4px;"
+    style="border-radius: 4px"
     tag="article"
   >
-    <nuxt-link :to="`/product/${item.slug}`" :title="item.name" class="img-wrapper ma-auto px-2">
+    <!-- {{ item.img }} -->
+    <nuxt-link
+      :to="`/product/${item.slug}`"
+      :title="item.name"
+      class="img-wrapper ma-auto px-2"
+    >
       <img
         class="ma-auto d-block"
-        v-lazy="item.productimage && item.productimage.thumbnail.url ? imageBaseUrl+item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
+        v-lazy="imgUrl"
         :alt="item.name"
         :title="item.name"
       />
     </nuxt-link>
-    <!-- <v-divider v-if="viewMode" :class="!viewMode ? 'hidden-md-and-up' : ''" class="mt-3 mb-2 w-100"></v-divider>
-    <v-divider v-if="!viewMode" vertical class="hidden-sm-and-down mx-3"></v-divider>-->
+    <!-- {{ item }} -->
     <v-flex>
-      <nuxt-link :to="`/product/${item.slug}`" :title="item.name" class="mb-1 product-card-header">
-        <h2 class="mb-0 d-inline-block">{{item.name}}</h2>
+      <nuxt-link
+        :to="`/product/${item.slug}`"
+        :title="item.name"
+        class="mb-1 product-card-header"
+      >
+        <h2 class="mb-0 d-inline-block">{{ item.name }}</h2>
       </nuxt-link>
-      <div style="color: #757575; " class="product-card-text mb-1">
+      <div style="color: #757575" class="product-card-text mb-1">
         <span>Артикул:&nbsp;</span>
-        <span class="font-weight-bold">{{item.SKU}}</span>
+        <span class="font-weight-bold">{{ item.SKU }}</span>
       </div>
-      <div class="mb-1 product-card-text" v-if="!viewMode">{{item.description}}</div>
+      <div class="mb-1 product-card-text" v-if="!viewMode">
+        {{ item.description }}
+      </div>
       <div class="mb-1 product-card-text" v-if="item.manufacturer">
         Производитель:
         <nuxt-link
           class="font-weight-bold link-hover"
           :to="`/manufacturers/${item.manufacturer.slug}`"
-        >{{item.manufacturer.name}}</nuxt-link>
+          >{{ item.manufacturer.name }}</nuxt-link
+        >
       </div>
-      <div v-if="!viewMode && Object.keys(item.filters).length>0">
+      <div v-if="!viewMode && Object.keys(item.filters).length > 0">
         <v-btn
           color="#1F5BFF"
           class="ml-0 mb-1 px-1 my-0"
-          style="font-size: 12px !important;"
+          style="font-size: 12px !important"
           v-show="!showDesc"
           dark
           small
           text
-          @click="showDesc=!showDesc"
-        >Технические характеристики</v-btn>
+          @click="showDesc = !showDesc"
+          >Технические характеристики</v-btn
+        >
         <div v-show="showDesc" class="product-card-text">
-          <div class="mb-1" v-for="(filter,index) in Object.keys(item.filters)" :key="index">
-            {{filter}}:
-            <span class="font-weight-bold">{{item.filters[filter]}}</span>
+          <div
+            class="mb-1"
+            v-for="(filter, index) in Object.keys(item.filters)"
+            :key="index"
+          >
+            {{ filter }}:
+            <span class="font-weight-bold">{{ item.filters[filter] }}</span>
           </div>
         </div>
       </div>
 
       <!-- <div> :class="viewMode ? 'w-100' : ''"-->
-      <v-btn small class="offer-button ml-0 mt-2" dark @click="handleOffer" color="#1F5BFF">Заказать</v-btn>
+      <v-btn
+        small
+        class="offer-button ml-0 mt-2"
+        dark
+        @click="handleOffer"
+        color="#1F5BFF"
+        >Заказать</v-btn
+      >
       <!-- <v-btn
           class="ml-0"
           dark
@@ -71,23 +94,42 @@ export default {
     item: Object,
     viewMode: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
     handleOffer() {
       this.$store.commit("dialog", {
         name: this.item.name,
-        isShow: true
+        isShow: true,
       });
-    }
+    },
+  },
+  computed: {
+    imgUrl() {
+      if (!this.item.img) {
+        return require("~/assets/no-image1.png");
+      }
+      // const isThumb = this.item.img.formats && this.item.img.formats.thumbnail.url
+      if (
+        this.item.img.formats &&
+        this.item.img.formats.thumbnail &&
+        this.item.img.formats.thumbnail.url
+      ) {
+        return this.imageBaseUrl + this.item.img.formats.thumbnail.url;
+      }
+      return this.imageBaseUrl + this.item.img.url;
+      //  this.item.img && this.item.img.formats && this.item.img.formats.thumbnail.url
+      //       ? this.imageBaseUrl + this.item.img.formats.thumbnail.url
+      //       : require('~/assets/no-image1.png')
+    },
   },
   data() {
     return {
       imageBaseUrl: process.env.imageBaseUrl,
-      showDesc: false
+      showDesc: false,
     };
-  }
+  },
 };
 </script>
 

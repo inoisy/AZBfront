@@ -1,6 +1,9 @@
 <template>
   <div>
-    <default-header :breadcrumbs="breadcrumbs" :title="page.title"></default-header>
+    <default-header
+      :breadcrumbs="breadcrumbs"
+      :title="page.title"
+    ></default-header>
     <v-container class="py-12" grid-list-lg>
       <v-layout row wrap>
         <v-flex xs12 md4 class="menu-wrapper mb-4">
@@ -28,41 +31,53 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: this.page.title + " - Азбука электроснабжения"
-        }
-      ]
+          content: this.page.title + " - Азбука электроснабжения",
+        },
+      ],
     };
   },
   components: {
     Breadcrumbs,
     NavMenu,
-    DefaultHeader
+    DefaultHeader,
   },
   data() {
     return {
-      title: "Доставка"
+      title: "Доставка",
     };
   },
   computed: {
+    // aboutPages() {
+    //   return this.$store.state.generalInfo.aboutPages;
+    // },
     aboutPages() {
-      return this.$store.state.generalInfo.aboutPages;
+      return [
+        {
+          name: "Доставка",
+          slug: "delivery",
+        },
+        {
+          name: "Сертификаты",
+          slug: "certificate",
+        },
+      ];
     },
     breadcrumbs() {
       return [
         {
           text: "Главная",
-          to: "/"
+          to: "/",
         },
         {
           text: "О компании",
-          to: "/about"
+          to: "/about",
         },
         {
           text: this.title,
-          to: this.$route.path
-        }
+          to: this.$route.path,
+        },
       ];
-    }
+    },
   },
   async asyncData(ctx) {
     const params = ctx.route.params;
@@ -70,25 +85,25 @@ export default {
 
     const baseUrl = process.env.baseUrl;
     const { data: pagesData } = await client.query({
-      variables: {
-        slug: params.slug
-      },
+      // variables: {
+      //   slug: params.slug
+      // },
       query: gql`
-        query PagesQuery($slug: String!) {
-          pages(where: { slug: $slug }) {
+        {
+          delivery {
             title
             slug
             description
             content
           }
         }
-      `
+      `,
     });
-    await ctx.store.dispatch("fetchGeneralInfo");
+    // await ctx.store.dispatch("fetchGeneralInfo");
     return {
-      page: pagesData.pages[0]
+      page: pagesData.delivery,
     };
-  }
+  },
 };
 </script>
 

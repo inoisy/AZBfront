@@ -57,14 +57,14 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: "Поиск - Азбука электронабжения"
-        }
-      ]
+          content: "Поиск - Азбука электронабжения",
+        },
+      ],
     };
   },
   components: {
     Breadcrumbs,
-    ProductCard
+    ProductCard,
   },
   data() {
     return {
@@ -73,7 +73,7 @@ export default {
       total: null,
       // items: [],
       loading: false,
-      delay: 1000
+      delay: 1000,
       // rules: {
       //   required: value => !!value || "Required.",
       //   counterMax: value =>
@@ -87,16 +87,16 @@ export default {
       if (!val || val.length < 4) {
         await this.$store.commit("autocompleteSearchItems", []);
       }
-    }
+    },
   },
   async asyncData(ctx) {
     if (ctx.route.query.q) {
       await ctx.store.dispatch("autocompleteSearch", ctx.route.query.q);
     }
-    await ctx.store.dispatch("fetchGeneralInfo");
+    // await ctx.store.dispatch("fetchGeneralInfo");
     // await ctx.store.dispatch("autocompleteSearch", ctx.route.query.q);
     return {
-      search: ctx.route.query.q
+      search: ctx.route.query.q,
     };
   },
 
@@ -108,17 +108,17 @@ export default {
       return [
         {
           text: "Главная",
-          to: "/"
+          to: "/",
         },
         {
           text: "Поиск",
-          to: { path: this.$route.path, query: this.$route.query }
-        }
+          to: { path: this.$route.path, query: this.$route.query },
+        },
       ];
     },
     searchItems() {
       return this.$store.state.autocompleteSearchItems;
-    }
+    },
   },
   methods: {
     async searchFunc() {
@@ -136,11 +136,11 @@ export default {
         this.$router.push({ path: this.$route.path, query: {} });
         // this.items = [];
       }
-    }
+    },
     // async throttledMethod(input) {
     //   console.log("throttledMethod -> input", input);
     //   await this.$store.dispatch("autocompleteSearch", input);
     // }
-  }
+  },
 };
 </script>

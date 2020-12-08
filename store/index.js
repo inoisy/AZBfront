@@ -44,6 +44,7 @@ export const state = () => ({
   category: "",
   generalInfo: {
     contacts: {
+      phone: "",
       content: {
         address: {}
       }
@@ -54,19 +55,20 @@ export const state = () => ({
   },
   dialog: {
     isShow: false,
-    name: ''
+    name: '',
+    isAttachment: false
   }
 })
 
 export const mutations = {
   dialog(state, item) {
-    state.dialog = item
+    // console.log("🚀 ~ file: index.js ~ line 65 ~ dialog ~ item", item)
+    state.dialog.isShow = item.isShow || false
+    state.dialog.name = item.name || null
+    state.dialog.isAttachment = item.isAttachment || false
   },
   generalInfo(state, item) {
     state.generalInfo = item
-  },
-  search(state, item) {
-    state.search = item
   },
   search(state, item) {
     state.search = item
@@ -105,71 +107,52 @@ export const mutations = {
 }
 export const strict = false
 export const actions = {
+  async nuxtServerInit(state, ctx) {
+    try {
+      // let client = this.app.apolloProvider.defaultClient;
+      // TODO REPLACE false to this.app.context.isDev
+      const generalData = await this._vm.$getCachedData(false && this.app.context.isDev)
+      // console.log("🚀 ~ file: index.js ~ line 117 ~ nuxtServerInit ~ generalData", generalData)
+
+      state.commit('generalInfo', {
+        manufacturers: generalData.manufacturers,
+        // aboutPages: generalData.pages[0].children,
+        categories: generalData.categories,
+        contacts: generalData.contact
+      })
+    } catch (error) {
+      console.log("🚀 ~ file: index.js ~ line 133 ~ nuxtServerInit ~ error", error)
+
+    }
+  },
   async fetchGeneralInfo(ctx) {
-    let client = this.app.apolloProvider.defaultClient;
-    const generalData = await this._vm.$getCachedData()
-    // console.log("fetchGeneralInfo -> generalData", generalData)
+    // console.log(this.isDev)
+    // console.log("isDev", this.app.context.isDev)
+    try {
+      // let client = this.app.apolloProvider.defaultClient;
+      // TODO REPLACE false to this.app.context.isDev
+      const generalData = await this._vm.$getCachedData(false && this.app.context.isDev)
+      // console.log("🚀 ~ file: index.js ~ line 117 ~ fetchGeneralInfo ~ generalData", generalData)
 
-    // const {
-    //   data: generalData
-    // } = await client.query({
-    //   query: gql `
-    //     {
-    //        pages(where: {
-    //          slug: "about"
-    //        }) {
-    //          title
-    //          slug
+      await ctx.commit('generalInfo', {
+        manufacturers: generalData.manufacturers,
+        // aboutPages: generalData.pages[0].children,
+        categories: generalData.categories,
+        contacts: generalData.contact
+      })
+    } catch (error) {
+      console.log("🚀 ~ file: index.js ~ line 133 ~ fetchGeneralInfo ~ error", error)
 
-    //          children {
-    //            title
-    //            slug
-    //          }
-    //        }
-    //        categories(where:{
-    //          ismain: true
-    //        }, sort: "name:asc"){
-    //           id
-    //           name
-    //           slug
-    //           child{
-    //             id
-    //             name
-    //             slug
-    //           }
-    //        }
-    //        contacts {
-    //          name
-    //          content
-    //          email
-    //          phone
-    //        }
-    //       manufacturers {
-    //         id
-    //         name
-    //         slug
-    //         img{
-    //           url
-    //         }
-    //       }
-    //     }
-    //     `
-    // });
-    const returnData = {
-      manufacturers: generalData.manufacturers,
-      aboutPages: generalData.pages[0].children,
-      categories: generalData.categories,
-      contacts: generalData.contacts[0]
     }
 
-    await ctx.commit('generalInfo', returnData)
+
   },
   async fetchManufacturers(ctx) {
     let client = this.app.apolloProvider.defaultClient;
     const {
       data: manufacturerData
     } = await client.query({
-      query: gql `
+      query: gql`
         {
           manufacturers {
             id
@@ -305,14 +288,14 @@ export const actions = {
         pre_tags: ["<span class='highlight'>"],
         post_tags: ["</span>"],
         fields: [{
-            "SKU": {}
-          },
-          {
-            "name": {}
-          },
-          {
-            "description": {}
-          }
+          "SKU": {}
+        },
+        {
+          "name": {}
+        },
+        {
+          "description": {}
+        }
         ]
       }
     };

@@ -1,13 +1,13 @@
 <template>
   <v-autocomplete
     class="search d-flex"
-    style="align-items: center !important;"
-    :menu-props="{transition:'slide-x-reverse-transition'}"
+    style="align-items: center !important"
+    :menu-props="{ transition: 'slide-x-reverse-transition' }"
     v-model="model"
     :items="autocompleteItems"
     :loading="isLoading"
     :search-input.sync="search"
-    :filter="v => v"
+    :filter="(v) => v"
     item-text="name"
     item-value="SKU"
     placeholder="Поиск по каталогу"
@@ -24,7 +24,8 @@
     @change="handleChange"
   >
     <template v-slot:item="data">
-      <div class="autocomplete-item-img-wrap align-center justify-center mr-3" style>
+      <autocomplete-search-item :data="data"></autocomplete-search-item>
+      <!-- <div class="autocomplete-item-img-wrap align-center justify-center mr-3" style>
         <img
           class="autocomplete-item-img"
           :src="data.item.productimage && data.item.productimage.thumbnail ? imageBaseUrl+data.item.productimage.thumbnail.url : require('~/assets/no-image1.png')"
@@ -48,10 +49,15 @@
           style="font-size: 0.9rem"
           v-html="data.item.highlight.description && data.item.highlight.description.length > 0 ? data.item.highlight.description[0] : data.item.description"
         ></div>
-      </div>
+      </div> -->
     </template>
     <template v-slot:prepend>
-      <v-btn class="my-0 mx-2" @click="handleSearch" icon :disabled="!isSearchValid">
+      <v-btn
+        class="my-0 mx-2"
+        @click="handleSearch"
+        icon
+        :disabled="!isSearchValid"
+      >
         <v-icon>search</v-icon>
       </v-btn>
     </template>
@@ -59,15 +65,19 @@
 </template>
 
 <script>
+import AutocompleteSearchItem from "~/components/AutocompleteSearcItem";
+// import AutocompleteSearcItem from './AutocompleteSearcItem.vue';
+
 export default {
   data() {
     return {
       imageBaseUrl: process.env.imageBaseUrl,
       model: {},
       search: null,
-      showMobileSearch: false
+      showMobileSearch: false,
     };
   },
+  components: { AutocompleteSearchItem },
   computed: {
     // showSearch() {
     //   return this.$route.name !== "search";
@@ -86,7 +96,7 @@ export default {
           ? this.$store.state.autocompleteSearchItems
           : [];
       return items;
-    }
+    },
     // fields() {
     //   if (!this.model) return [];
 
@@ -115,7 +125,7 @@ export default {
       } else if (val && val.length > 3) {
         await this.$store.dispatch("autocompleteSearch", val);
       }
-    }
+    },
     // async model(val) {
     //   // if (Object.keys(val).length > 0 && val.slug) {
     //   //   this.$router.push(`/product/${val.slug}`);
@@ -141,7 +151,7 @@ export default {
     //   // }
     // },
     async handleChange(val) {
-      console.log("change", val);
+      // console.log("change", val);
       if (Object.keys(val).length > 0 && val.slug) {
         this.$router.push(`/product/${val.slug}`);
         this.clear();
@@ -166,32 +176,7 @@ export default {
       this.$emit("searchChange", false);
       // console.log("TCL: clear -> this.$parent", this.$parent.searchActive);
       await this.$store.commit("autocompleteSearchItems", []);
-    }
-  }
+    },
+  },
 };
 </script>
-
-<style lang="stylus" >
-.autocomplete-item-img-wrap {
-  min-width: 50px;
-  display: inline-flex;
-
-  .autocomplete-item-img {
-    max-width: 50px;
-    max-height: 50px;
-    width: 50px;
-    object-fit: contain;
-    padding: 3px;
-  }
-}
-
-.highlight {
-  color: #1F5BFF;
-  font-weight: bold;
-}
-
-// }
-.v-text-field.v-text-field--solo .v-input__prepend-outer {
-  margin: 0 !important;
-}
-</style>

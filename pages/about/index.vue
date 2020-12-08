@@ -1,6 +1,9 @@
 <template>
   <div>
-    <default-header :breadcrumbs="breadcrumbs" :title="page.title"></default-header>
+    <default-header
+      :breadcrumbs="breadcrumbs"
+      :title="page.title"
+    ></default-header>
     <section>
       <v-container class="py-12" grid-list-lg>
         <v-layout row wrap>
@@ -30,14 +33,14 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: this.title + " - Азбука электроснабжения"
-        }
-      ]
+          content: this.title + " - Азбука электроснабжения",
+        },
+      ],
     };
   },
   components: {
     NavMenu,
-    DefaultHeader
+    DefaultHeader,
   },
   async asyncData(ctx) {
     const params = ctx.route.params;
@@ -45,44 +48,53 @@ export default {
     const { data: pagesData } = await client.query({
       query: gql`
         {
-          pages(where: { slug: "about" }) {
+          about {
             title
             slug
             description
             content
           }
         }
-      `
+      `,
     });
-    await ctx.store.dispatch("fetchGeneralInfo");
+    // await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
-      page: pagesData.pages[0]
+      page: pagesData.about,
     };
   },
   data() {
     return {
-      title: "О компании"
+      title: "О компании",
     };
   },
 
   computed: {
     aboutPages() {
-      return this.$store.state.generalInfo.aboutPages;
+      return [
+        {
+          name: "Доставка",
+          slug: "delivery",
+        },
+        {
+          name: "Сертификаты",
+          slug: "certificate",
+        },
+      ];
     },
     breadcrumbs() {
       return [
         {
           text: "Главная",
-          to: "/"
+          to: "/",
         },
         {
           text: this.title,
-          to: this.$route.path
-        }
+          to: this.$route.path,
+        },
       ];
-    }
-  }
+    },
+  },
 };
 </script>
 

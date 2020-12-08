@@ -1,22 +1,27 @@
 <template>
-  <v-sheet color="white" elevation="3" style="position: sticky; top: 110px;">
+  <v-sheet color="white" elevation="3" style="position: sticky; top: 110px">
     <v-list
       class="navigation pa-0"
-      style="background-color:transparent !important"
+      style="background-color: transparent !important"
       color="transparent"
     >
-      <template v-for="(category,index) in menuItems">
+      <template v-for="(category, index) in menuItems">
         <v-list-group
           v-if="category && category.child && category.child.length > 0"
           :key="category.slug"
           color="accent"
           class="main-cat"
         >
-          <v-list-item slot="activator" :to="`/catalog/${category.slug}`" :title="category.name">
+          <v-list-item
+            slot="activator"
+            :to="`/catalog/${category.slug}`"
+            :title="category.name"
+          >
             <v-list-item-content
               class="py-1"
-              style="line-height: normal; font-size: 14px;"
-            >{{ category.name}}</v-list-item-content>
+              style="line-height: normal; font-size: 14px"
+              >{{ category.name }}</v-list-item-content
+            >
           </v-list-item>
           <v-divider></v-divider>
           <template v-for="subcategory in category.child">
@@ -27,8 +32,9 @@
             >
               <v-list-item-content
                 class="pl-5 py-1"
-                style="line-height: normal; font-size: 14px;"
-              >{{subcategory.name}}</v-list-item-content>
+                style="line-height: normal; font-size: 14px"
+                >{{ subcategory.name }}</v-list-item-content
+              >
             </v-list-item>
           </template>
           <v-divider></v-divider>
@@ -38,11 +44,13 @@
           :key="index"
           v-else
           color="accent"
-          :to="!isAbout ? `/catalog/${category.slug}` : `/about/${category.slug}`"
+          :to="
+            !isAbout ? `/catalog/${category.slug}` : `/about/${category.slug}`
+          "
         >
-          <span
-            style="line-height: 100% !important;font-size: 14px;"
-          >{{category.name || category.title}}</span>
+          <span style="line-height: 100% !important; font-size: 14px">{{
+            category.name || category.title
+          }}</span>
         </v-list-item>
       </template>
     </v-list>
@@ -57,12 +65,12 @@
 export default {
   props: {
     menuItems: {
-      type: Array
+      type: Array,
     },
     isAbout: {
-      type: String,
-      default: false
-    }
-  } //["menuItems", "type"]
+      type: Boolean,
+      default: false,
+    },
+  }, //["menuItems", "type"]
 };
 </script>

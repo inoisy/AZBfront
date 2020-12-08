@@ -1,6 +1,9 @@
 <template>
   <div>
-    <default-header :breadcrumbs="breadcrumbs" :title="category.name"></default-header>
+    <default-header
+      :breadcrumbs="breadcrumbs"
+      :title="category.name"
+    ></default-header>
 
     <v-container class="pt-8" grid-list-lg>
       <v-layout row wrap>
@@ -18,18 +21,28 @@
           >
             <h2
               class="font-weight-bold mb-0"
-              style="font-size: 1.3rem; line-height: normal;"
-            >{{item.name}}</h2>
-            <div class="mt-3" v-show="item.description">{{item.description}}</div>
+              style="font-size: 1.3rem; line-height: normal"
+            >
+              {{ item.name }}
+            </h2>
+            <div class="mt-3" v-show="item.description">
+              {{ item.description }}
+            </div>
           </v-card>
         </v-flex>
       </v-layout>
     </v-container>
-    <section class="grey lighten-2" v-if="category.content && category.content.length>0">
+    <section
+      class="grey lighten-2"
+      v-if="category.content && category.content.length > 0"
+    >
       <v-container class="py-10" grid-list-lg>
         <v-layout row wrap>
           <v-flex xs12>
-            <h2 class="mb-4">Купить {{category.name.toLowerCase()}} в Москве с доставкой по всей РФ.</h2>
+            <h2 class="mb-4">
+              Купить {{ category.name.toLowerCase() }} в Москве с доставкой по
+              всей РФ.
+            </h2>
             <div v-html="$md.render(category.content)"></div>
           </v-flex>
         </v-layout>
@@ -57,39 +70,39 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: description
-        }
-      ]
+          content: description,
+        },
+      ],
     };
   },
   data() {
     return {
-      imageBaseUrl: process.env.imageBaseUrl
+      imageBaseUrl: process.env.imageBaseUrl,
     };
   },
   components: {
     Breadcrumbs,
     NavMenu,
     DefaultHeader,
-    CategoryCard
+    CategoryCard,
   },
   computed: {
     breadcrumbs() {
       return [
         {
           text: "Главная",
-          to: "/"
+          to: "/",
         },
         {
           text: "Каталог",
-          to: "/catalog"
+          to: "/catalog",
         },
         {
           text: this.category ? this.category.name : null,
-          to: this.$route.path
-        }
+          to: this.$route.path,
+        },
       ];
-    }
+    },
   },
 
   async asyncData(ctx) {
@@ -123,19 +136,19 @@ export default {
         }
       `,
       variables: {
-        slug: ctx.route.params.category
-      }
+        slug: ctx.route.params.category,
+      },
     });
     const category = categoryData.categories[0];
     // console.log("TCL: categoryData", categoryData);
-    await ctx.store.dispatch("fetchGeneralInfo");
+    // await ctx.store.dispatch("fetchGeneralInfo");
 
     return {
       filters: category.filters || {},
       categories: ctx.store.state.generalInfo.categories, //categoryData.categoriesMain, //await ctx.store.dispatch("fetchMainCategories"),
-      category: category
+      category: category,
     };
-  }
+  },
 };
 </script>
 <style lang="stylus" scoped>

@@ -7,25 +7,28 @@
           <v-flex xs12 class="mb-3">
             <a :href="`tel:${contacts.phone}`" class="link font-weight-medium">
               <v-icon class="mr-3">phone</v-icon>
-              {{contacts.phone}}
+              {{ contacts.phone }}
             </a>
           </v-flex>
           <v-flex xs12 class="mb-3">
-            <a :href="`mailto:${contacts.email}`" class="link font-weight-medium">
+            <a
+              :href="`mailto:${contacts.email}`"
+              class="link font-weight-medium"
+            >
               <v-icon class="mr-3">mail</v-icon>
-              {{contacts.email}}
+              {{ contacts.email }}
             </a>
           </v-flex>
           <v-flex xs12 class="mb-3">
             <a @click="$vuetify.goTo('#map')" class="link font-weight-medium">
               <v-icon class="mr-3">location_on</v-icon>
-              {{contacts.content.address.title}}
+              {{ contacts.content.address.title }}
             </a>
           </v-flex>
           <v-flex xs12 class="mb-3">
             <div class="link font-weight-medium no-select">
               <v-icon class="mr-3">access_time</v-icon>
-              {{contacts.content.accessTime}}
+              {{ contacts.content.accessTime }}
             </div>
           </v-flex>
           <client-only>
@@ -34,7 +37,7 @@
               id="map"
               :coords="contacts.content.address.coords"
               zoom="16"
-              style="width: 100%; height: 35rem;"
+              style="width: 100%; height: 35rem"
             >
               <ymap-marker
                 marker-id="1"
@@ -61,14 +64,14 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: "Контакты - Азбука электронабжения"
-        }
-      ]
+          content: "Контакты - Азбука электронабжения",
+        },
+      ],
     };
   },
   components: {
     Breadcrumbs,
-    DefaultHeader
+    DefaultHeader,
   },
   computed: {
     contacts() {
@@ -78,23 +81,23 @@ export default {
       return [
         {
           text: "Главная",
-          to: "/"
+          to: "/",
         },
         {
           text: this.title,
-          to: this.$route.path
-        }
+          to: this.$route.path,
+        },
       ];
-    }
+    },
   },
   async asyncData(ctx) {
-    await ctx.store.dispatch("fetchGeneralInfo");
+    // await ctx.store.dispatch("fetchGeneralInfo");
   },
   data() {
     return {
-      title: "Контакты"
+      title: "Контакты",
     };
-  }
+  },
 };
 </script>
 <style lang="stylus" scoped>
