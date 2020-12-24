@@ -18,7 +18,8 @@
         :title="item.name"
       />
     </nuxt-link>
-    <!-- {{ item }} -->
+    <!-- {{ item.img }} -->
+    {{imgUrl}}
     <v-flex>
       <nuxt-link
         :to="`/product/${item.slug}`"
